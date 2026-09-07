@@ -16,15 +16,6 @@
 // Haversine bei mittlerer Breite reicht als Näherung für einen Ausschnitt.
 // ---------------------------------------------------------------------------
 
-function haversineMeter(lon1, lat1, lon2, lat2) {
-  const R = 6371000;
-  const toRad = d => d * Math.PI / 180;
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
-  return 2 * R * Math.asin(Math.sqrt(a));
-}
-
 // Rundwerte für die Balkenlänge in Metern, Übersicht bis Kapitel-Zoom.
 const MASSSTAB_SCHRITTE = [10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000, 2500, 5000, 10000, 20000, 25000, 50000, 100000];
 
@@ -45,6 +36,15 @@ const MASSSTAB_SCHRITTE = [10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000, 2500,
 // data-prep/05 bereinigen/schneide-kapitelkarten.py — wer eines ändert, muss
 // das andere nachrechnen.
 const MASSSTAB_MAX_PX = 240;
+
+function haversineMeter(lon1, lat1, lon2, lat2) {
+  const R = 6371000;
+  const toRad = d => d * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
 
 function zeichneMassstabsleiste(bbox, offsetX, offsetY = 0) {
   let mapPixelWidth = width - offsetX;
@@ -115,6 +115,7 @@ function zeichneScrollFortschritt(anteil) {
 // ---------------------------------------------------------------------------
 // Die Route: eine Farbe, nach hinten verblassend. Gezeichnet wird in einen
 // eigenen Puffer, weil nur dort Deckkraft geschrieben statt gemischt wird.
+// ---------------------------------------------------------------------------
 
 // Jede Stufe wird DECKEND gezogen und überschreibt die vorherige; den Verlauf
 // macht ein Waschgang davor (erase = destination-out).
