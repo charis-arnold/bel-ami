@@ -11,6 +11,8 @@
 // 34 von 37 Namen intern, 3 exportiert. Konvention: docs/architektur.md.
 (function () {
 
+// --- Vergleichsknoten und Durchlauf ---------------------------------------
+
 const VERGLEICHS_KNOTEN = [
   { label: 'Redaktion La Vie Française',
     text: 'Zwölf Kapitel führen hierher. Hier wird geschrieben, was Paris für wahr hält — und hier misst sich, wer er geworden ist. Der einzige Ort, der ihn weder hebt noch senkt.',
@@ -48,7 +50,11 @@ const VERGLEICHS_KNOTEN = [
       'Boulevard-Cafés (unterwegs), Paris'] },
 ];
 
-// ── Layout ────────────────────────────────────────────────────────────────
+// Kapitel, die der Play-Knopf durchzählt. Auch spine-horizontal.js rechnet
+// damit die Abspieldauer aus.
+const OV_KAPITEL_ZAHL = 18;
+
+// --- Layout-Masse ---------------------------------------------------------
 
 // Ränder wie bei der Kapitel-Spine: rechts hält der Rand das Kapitelregister
 // frei, links steht gleich viel Luft, damit die Linie mittig im Bild bleibt.
@@ -57,10 +63,6 @@ const OV_RAND_RECHTS = 200;
 const OV_RAND_OBEN = 24;
 const OV_RAND_UNTEN = 76;    // Play-Knopf und Fortschrittsbalken
 const OV_KREIS_LUFT = 1.06;  // Mindestabstand zwischen benachbarten Kreisen
-
-// Kapitel, die der Play-Knopf durchzählt. Auch spine-horizontal.js rechnet
-// damit die Abspieldauer aus.
-const OV_KAPITEL_ZAHL = 18;
 
 // Ortsbeschriftung unter dem Kreis, darunter die Kapitelzeile.
 const OV_LABEL_MAX_BREITE = 200; // ab dieser Breite wird zweizeilig gesetzt
@@ -79,6 +81,17 @@ const OV_DATEN_GROESSE = 9.5;
 const OV_DATEN_ZEILE = 14;
 const OV_DATEN_ABSTAND = 12;     // Luft zwischen Fliesstext und Datenzeile
 const OV_DATEN_TRENNER = '  ·  ';
+
+// --- Vorberechnete Daten je Knoten ----------------------------------------
+
+// Je Knoten und Kapitel vorberechnet — live wären es 126 Scans pro Frame.
+let ovProKapitel = null;    // [knoten][kapitelNr] -> { bandCounts, fwerte }
+let ovRohradien = null;     // Endstand-Rohradius je Knoten (ohne Deckel)
+let ovErstesKapitel = null; // Kapitelnummer des ersten Auftretens, je Knoten
+let ovFilter = null;        // Namensmenge je Knoten, für den Scan im laufenden Kapitel
+let ovReihenfolge = null;   // Knotenindizes, nach erstem Auftreten sortiert
+let ovElemente = null;      // { annotation, kreis, stand } je Element, aufsteigend
+let ovLayout = null;        // { breite, hoehe, startX, abstand, kreisSkala, linienY, Zeilen }
 
 // Bricht einen Fliesstext auf eine Maximalbreite um. Setzt voraus, dass
 // Schrift und Grösse gesetzt sind (textWidth misst mit dem aktuellen Zustand).
@@ -122,15 +135,6 @@ function ovAddiere(ziel, quelle) {
     ['neg', 'pos', 'neutral', 'unrated'].forEach(v => { ziel[cat][v] += quelle[cat][v]; });
   });
 }
-
-// Je Knoten und Kapitel vorberechnet — live wären es 126 Scans pro Frame.
-let ovProKapitel = null;    // [knoten][kapitelNr] -> { bandCounts, fwerte }
-let ovRohradien = null;     // Endstand-Rohradius je Knoten (ohne Deckel)
-let ovErstesKapitel = null; // Kapitelnummer des ersten Auftretens, je Knoten
-let ovFilter = null;        // Namensmenge je Knoten, für den Scan im laufenden Kapitel
-let ovReihenfolge = null;   // Knotenindizes, nach erstem Auftreten sortiert
-let ovElemente = null;      // { annotation, kreis, stand } je Element, aufsteigend
-let ovLayout = null;        // { breite, hoehe, startX, abstand, kreisSkala, linienY, Zeilen }
 
 // Datensatz zu einer Kapitelnummer. Kapitel 1 liegt in stationenData, alle
 // anderen kommen über datenFuerKapitel() — hier gebündelt, weil ovBaueDaten()
