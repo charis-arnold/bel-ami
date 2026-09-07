@@ -4,12 +4,8 @@
    Zeichnet im Übersichtsakt die Routen 02–18 nacheinander auf die rausgezoomte
    Karte, bei geöffnetem Kapitel stattdessen dessen genaue Route, Kreise und
    Annotation. Hält zoomedKapitel / kapitelZoomAmount / kapitelHover — nur hier
-   geschrieben, nach aussen Lesebindung. Rest: docs/architektur.md.
+   geschrieben, von anderen Modulen nur gelesen. Rest: docs/architektur.md.
 ============================================================================= */
-
-// --- Modulkapselung ---------------------------------------------------
-// 8 von 20 Namen intern, 12 exportiert. Konvention: docs/architektur.md.
-(function () {
 
 let zoomedKapitel = null;      // z.B. '03', oder null (Übersicht)
 let kapitelZoomAmount = 0;     // 0 = Übersicht, 1 = voll in Kapitelausschnitt gezoomt
@@ -385,31 +381,3 @@ function waehleAnsichtsModus(modus) {
   if (modus === 'grafik') springeZumOrtsvergleich();
   else springeZurUebersicht();
 }
-
-
-// --- Export ------------------------------------------------------------
-// Neun Funktionen als Wert.
-window.kapitelScheiben = kapitelScheiben;
-window.zeichneUebersichtsrouten = zeichneUebersichtsrouten;
-window.aktualisiereKapitelZoom = aktualisiereKapitelZoom;
-window.scrolleZuKapitel1 = scrolleZuKapitel1;
-window.schliesseKapitelZoom = schliesseKapitelZoom;
-window.springeZuKapitelZoom = springeZuKapitelZoom;
-window.springeZurUebersicht = springeZurUebersicht;
-window.waehleAnsichtsModus = waehleAnsichtsModus;
-window.laeuftOrtsvergleich = laeuftOrtsvergleich;
-
-// Lesebindung statt Wertkopie: alle drei werden laufend umgeschaltet, eine
-// Kopie nagelte die Leser auf null bzw. 0 fest. Schreiben von aussen wirkt nicht.
-['zoomedKapitel', 'kapitelZoomAmount', 'kapitelHover'].forEach(function (name) {
-  Object.defineProperty(window, name, {
-    get: function () {
-      return name === 'zoomedKapitel' ? zoomedKapitel
-           : name === 'kapitelZoomAmount' ? kapitelZoomAmount
-           : kapitelHover;
-    },
-    configurable: true,
-  });
-});
-
-})(); // Ende der Modulkapselung, siehe Kommentar oben

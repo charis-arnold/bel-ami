@@ -7,13 +7,11 @@
    Annotation. Winkel-Konvention und Abhängigkeiten: docs/architektur.md.
 ============================================================================= */
 
-// --- Modulkapselung ---------------------------------------------------
-// 103 von 116 Namen intern, 13 exportiert. Konvention: docs/architektur.md.
-// ACHTUNG Ladezeit: hexZuRgb() und baueDemoAnnotationen() laufen schon in der
-// IIFE — diese Datei muss nach datenbereinigung.js stehen, sonst ReferenceError.
+// ACHTUNG Ladezeit: hexZuRgb() und baueDemoAnnotationen() laufen schon beim
+// Laden dieser Datei — sie muss nach datenbereinigung.js stehen, sonst
+// ReferenceError.
 // p5s Konstanten (PI, HALF_PI) gibt es hier noch nicht, die setzt p5 erst beim
 // Start des Sketches. Auf Modulebene deshalb nur Math.PI.
-(function () {
 
 // ACHTUNG p5s text()/arc()/ellipse() bleiben bei laufender Animation
 // manchmal unsichtbar — deshalb wird hier direkt in drawingContext
@@ -1498,22 +1496,3 @@ function reiterGetroffen(mx, my) {
   let l = letzteReiterLagen.find(r => mx >= r.x0 && mx <= r.x1 && my >= r.y0 && my <= r.y1);
   return l ? l.name : null;
 }
-
-
-// --- Export ------------------------------------------------------------
-// Dreizehn Namen. Leser: docs/architektur.md.
-window.leereBandCounts = leereBandCounts;
-window.zeichneSchleier = zeichneSchleier;
-window.zeichneKreisLabels = zeichneKreisLabels;
-window.zeichneKreiseOrtRuns = zeichneKreiseOrtRuns;
-window.zeichneKreiseFuerRun = zeichneKreiseFuerRun;
-window.zeichneFwertPunkte = zeichneFwertPunkte;
-window.zeichneDemoKreisgrafik = zeichneDemoKreisgrafik;
-window.klangZeileGetroffen = klangZeileGetroffen;
-window.zeichneRegisterleiste = zeichneRegisterleiste;
-window.zeichneInfoLeiste = zeichneInfoLeiste;
-window.reiterGetroffen = reiterGetroffen;
-window.legendenLeisteHoehe = legendenLeisteHoehe;
-window.registerHoehe = registerHoehe;
-
-})(); // Ende der Modulkapselung, siehe Kommentar oben

@@ -14,10 +14,6 @@
      den Block "Prototyp" weiter unten.
 ============================================================================= */
 
-// --- Modulkapselung ---------------------------------------------------
-// 39 von 46 Namen intern, 7 exportiert. Konvention: docs/architektur.md.
-(function () {
-
 // --- Strudel-Anbindung ----------------------------------------------------
 
 // Dieselben zwei CDN-Quellen, die strudel.cc selbst lädt. @strudel/web bringt
@@ -1046,26 +1042,3 @@ async function schalteIntroTon(an) {
 function introTonLaeuft() {
   return introTonErlaubt;
 }
-
-
-// --- Export ------------------------------------------------------------
-// Zehn Namen, die drei obersten fürs Introstück. Leser: docs/architektur.md.
-window.aktualisiereIntroKlang = aktualisiereIntroKlang;
-window.schalteIntroTon = schalteIntroTon;
-window.introTonLaeuft = introTonLaeuft;
-window.SONIFIKATION_GESAMTDAUER_SEK = SONIFIKATION_GESAMTDAUER_SEK;
-window.ELEMENT_INSTRUMENTE = ELEMENT_INSTRUMENTE;
-window.ELEMENT_FWERT_INSTRUMENT = ELEMENT_FWERT_INSTRUMENT;
-window.spieleLegendenKlang = spieleLegendenKlang;
-window.spieleSonifikationFuer = spieleSonifikationFuer;
-window.sonifikationElementDauerMs = sonifikationElementDauerMs;
-window.beendeSonifikationAudio = beendeSonifikationAudio;
-
-// Lesebindung statt Wertkopie: die Flagge fröre sonst auf false ein und der
-// Ton liefe beim Ansichtswechsel weiter.
-Object.defineProperty(window, 'sonifikationSpieltGerade', {
-  get: function () { return sonifikationSpieltGerade; },
-  configurable: true,
-});
-
-})(); // Ende der Modulkapselung, siehe Kommentar oben

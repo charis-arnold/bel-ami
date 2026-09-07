@@ -7,10 +7,6 @@
    Aufbau wie die Kapitel-Spine, siehe spine-horizontal.js.
 ============================================================================= */
 
-// --- Modulkapselung ---------------------------------------------------
-// 34 von 37 Namen intern, 3 exportiert. Konvention: docs/architektur.md.
-(function () {
-
 // --- Vergleichsknoten und Durchlauf ---------------------------------------
 
 const VERGLEICHS_KNOTEN = [
@@ -481,13 +477,3 @@ function ortsvergleichAnnotationen() {
     fortschritt: i / letzter,
   }));
 }
-
-
-// --- Export ------------------------------------------------------------
-// Die Zeichenfunktion für draw(), die Kapitelzahl für die Abspieldauer in
-// spine-horizontal.js und die Annotationsfolge für sonifikation.js.
-window.zeichneOrtsveraenderung = zeichneOrtsveraenderung;
-window.OV_KAPITEL_ZAHL = OV_KAPITEL_ZAHL;
-window.ortsvergleichAnnotationen = ortsvergleichAnnotationen;
-
-})(); // Ende der Modulkapselung, siehe Kommentar oben

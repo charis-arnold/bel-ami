@@ -11,10 +11,6 @@
    Top-Level-Initialisierer hier darf je eine fremde Funktion aufrufen.
 ============================================================================= */
 
-// --- Modulkapselung ---------------------------------------------------
-// 15 von 26 Namen intern, 11 exportiert. Konvention: docs/architektur.md.
-(function () {
-
 // --- Play-Animation: Zustand ----------------------------------------------
 
 let grafikSpielt = false;       // läuft die Wachstums-Animation gerade?
@@ -345,32 +341,3 @@ function zeichneSpineHorizontal(eintraege, fortschritt, daten = stationenData) {
 
   textStyle(NORMAL);
 }
-
-
-// --- Export ------------------------------------------------------------
-// Acht Funktionen als Wert.
-window.setzeKapitelAnsichtModus = setzeKapitelAnsichtModus;
-window.setzeGrafikZurueck = setzeGrafikZurueck;
-window.toggleGrafikPlay = toggleGrafikPlay;
-window.aktualisiereGrafikFortschritt = aktualisiereGrafikFortschritt;
-window.aktuelleGrafikAnimationDauer = aktuelleGrafikAnimationDauer;
-window.stelleSpineDatenBereit = stelleSpineDatenBereit;
-window.spineEintraegeFuer = spineEintraegeFuer;
-window.zeichneSpineHorizontal = zeichneSpineHorizontal;
-
-// Lesebindung statt Wertkopie: sonst sieht draw() dauerhaft false/0/null.
-['grafikSpielt', 'grafikFortschritt', 'grafikPlayAusblendStart'].forEach(function (name) {
-  Object.defineProperty(window, name, {
-    get: function () {
-      return name === 'grafikSpielt' ? grafikSpielt
-           : name === 'grafikFortschritt' ? grafikFortschritt
-           : grafikPlayAusblendStart;
-    },
-    configurable: true,
-  });
-});
-
-// Die beiden Caches gehen nicht hinaus, gelesen wird über
-// spineEintraegeFuer() — sonst bliebe die Objektreferenz beschreibbar.
-
-})(); // Ende der Modulkapselung, siehe Kommentar oben

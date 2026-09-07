@@ -8,10 +8,6 @@
    springt. ANNOTATION_BOX_FEST übergeht die Rechnung für zwei Kapitel.
 ============================================================================= */
 
-// --- Modulkapselung ---------------------------------------------------
-// 6 von 8 Namen intern, 2 exportiert. Konvention: docs/architektur.md.
-(function () {
-
 // --- Lage und Masse der Box -----------------------------------------------
 
 // Die Box steht immer links, oben oder unten — dort ist Platz, und der Blick
@@ -100,11 +96,3 @@ function annotationBoxPosition(kapitelNr, daten, bbox) {
   annotationBoxPositionCache.set(schluessel, bester);
   return bester;
 }
-
-
-// --- Export ------------------------------------------------------------
-// Zwei Namen. Leser: docs/architektur.md.
-window.ANNOTATION_BOX_POSITIONEN = ANNOTATION_BOX_POSITIONEN;
-window.annotationBoxPosition = annotationBoxPosition;
-
-})(); // Ende der Modulkapselung, siehe Kommentar oben

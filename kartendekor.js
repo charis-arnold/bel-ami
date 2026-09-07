@@ -7,10 +7,6 @@
    einziger Aufrufer ist.
 ============================================================================= */
 
-// --- Modulkapselung ---------------------------------------------------
-// 14 von 17 Namen intern, 3 exportiert. Konvention: docs/architektur.md.
-(function () {
-
 // ---------------------------------------------------------------------------
 // Massstabsleiste unten rechts, skaliert live mit der sichtbaren Bbox.
 // Haversine bei mittlerer Breite reicht als Näherung für einen Ausschnitt.
@@ -239,12 +235,3 @@ function zeichneRoute(punkte, upToIndex, bbox, strichstaerke = 2, offsetX = mapO
   image(pg, 0, 0);
   if (alphaMultiplier < 1) noTint();
 }
-
-
-// --- Export ------------------------------------------------------------
-// Drei Zeichenfunktionen. Leser: docs/architektur.md.
-window.zeichneMassstabsleiste = zeichneMassstabsleiste;
-window.zeichneScrollFortschritt = zeichneScrollFortschritt;
-window.zeichneRoute = zeichneRoute;
-
-})(); // Ende der Modulkapselung, siehe Kommentar oben

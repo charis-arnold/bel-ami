@@ -6,10 +6,6 @@
    ruft die Zeichenmodule in fester Reihenfolge.
 ============================================================================= */
 
-// --- Modulkapselung ---------------------------------------------------
-// 58 von 88 Namen intern, 30 exportiert. Konvention: docs/architektur.md.
-(function () {
-
 // ---------------------------------------------------------------------------
 // Modulweiter Zustand
 // ---------------------------------------------------------------------------
@@ -1047,52 +1043,3 @@ function naehereRegister(wert, ziel) {
   let neu = lerp(wert, ziel, REGISTER_TEMPO);
   return Math.abs(ziel - neu) < 0.002 ? ziel : neu;
 }
-
-// --- Export ------------------------------------------------------------
-// 30 Namen: 12 als Wert, 5 p5-Hooks, 13 als Lesebindung.
-
-// Konstanten, Funktionen und die vier nur befüllten Container: Die Bindung
-// ändert sich nie, deshalb Wertzuweisung.
-window.WEITERE_KAPITEL_NUMMERN = WEITERE_KAPITEL_NUMMERN;
-window.kapitelEinstiegWeg = kapitelEinstiegWeg;
-window.kapitelRegisterEintraege = kapitelRegisterEintraege;
-window.markierungsEintraege = markierungsEintraege;
-window.stationsMarker = stationsMarker;
-window.zwischenMarker = zwischenMarker;
-window.datenFuerKapitel = datenFuerKapitel;
-window.kapitelHatEigeneAnsicht = kapitelHatEigeneAnsicht;
-window.setzeAnsichtsModus = setzeAnsichtsModus;
-window.loeseKapitel1Klemme = loeseKapitel1Klemme;
-window.klemmeKapitel1 = klemmeKapitel1;
-window.starteKapitelEinstieg = starteKapitelEinstieg;
-
-// Die fünf p5-Hooks. Nicht optional: p5 sucht sie am window. Fehlt einer,
-// bleibt das Bild schwarz, ohne Fehlermeldung.
-window.preload = preload;
-window.setup = setup;
-window.draw = draw;
-window.mousePressed = mousePressed;
-window.windowResized = windowResized;
-
-// Lesebindung für alles, was erst nach dem IIFE-Lauf gesetzt wird — eine
-// Wertkopie wäre hier durchweg undefined.
-function lesebindung(name, lies) {
-  Object.defineProperty(window, name, { get: lies, configurable: true });
-}
-lesebindung('stationenData', () => stationenData);
-lesebindung('uebersichtsRouten', () => uebersichtsRouten);
-lesebindung('kapitelAnsichtsModus', () => kapitelAnsichtsModus);
-// Für waehleAnsichtsModus() in uebersichtsrouten.js: solange die Klemme steht,
-// gilt "Plan"/"Graph" der Kapitel-1-Ansicht, danach der Übersicht.
-lesebindung('kapitel1Geklemmt', () => kapitel1Geklemmt);
-lesebindung('kapitel1ZoomAmount', () => kapitel1ZoomAmount);
-lesebindung('annotationText', () => annotationText);
-lesebindung('kartenMarkierungenEl', () => kartenMarkierungenEl);
-lesebindung('kapitelRegister', () => kapitelRegister);
-lesebindung('modusZeile', () => modusZeile);
-lesebindung('planEintrag', () => planEintrag);
-lesebindung('graphEintrag', () => graphEintrag);
-lesebindung('leerzeile', () => leerzeile);
-lesebindung('alleEintrag', () => alleEintrag);
-
-})(); // Ende der Modulkapselung, siehe Kommentar oben

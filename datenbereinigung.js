@@ -5,11 +5,8 @@
    Enthält ausschliesslich reine Datenfunktionen — keine p5-Zeichenaufrufe.
 ============================================================================= */
 
-// --- Modulkapselung ---------------------------------------------------
-// 14 von 53 Namen intern, 39 exportiert. Konvention: docs/architektur.md.
 // ACHTUNG Skript 1 in index.html. kreisgrafik.js liest hexZuRgb beim Laden
 // — diese Datei nach hinten schieben bricht kreisgrafik.js.
-(function () {
 
 // --- Farbumrechnung -------------------------------------------------------
 
@@ -460,60 +457,3 @@ function baueSpineDaten(daten, hauptorte) {
 
   return eintraege;
 }
-
-
-// --- Export ------------------------------------------------------------
-// 40 Namen, die grösste Schnittstelle im Projekt. Leser: docs/architektur.md.
-
-// Farben, Kategorien, Punktgrössen
-window.CATEGORY_COLORS = CATEGORY_COLORS;
-window.CATEGORY_LABELS = CATEGORY_LABELS;
-window.KREIS_KATEGORIEN = KREIS_KATEGORIEN;
-window.ROUTE_COLOR = ROUTE_COLOR;
-window.ROUTE_COLOR_RGB = ROUTE_COLOR_RGB;
-window.FWERT_COLOR = FWERT_COLOR;
-window.FWERT_COLOR_RGB = FWERT_COLOR_RGB;
-window.FWERT_PUNKTGROESSE = FWERT_PUNKTGROESSE;
-window.FWERT_PUNKT_DURCHMESSER = FWERT_PUNKT_DURCHMESSER;
-window.FWERT_LABELS = FWERT_LABELS;
-window.WAHRNEHMUNG_LABELS = WAHRNEHMUNG_LABELS;
-window.LEGENDE_BLOCK_TITEL = LEGENDE_BLOCK_TITEL;
-window.LEGENDE_KREISGROESSE = LEGENDE_KREISGROESSE;
-window.LEGENDE_VALENZ = LEGENDE_VALENZ;
-window.LEGENDE_ORTSBESCHRIFTUNG = LEGENDE_ORTSBESCHRIFTUNG;
-window.LEGENDE_TITEL = LEGENDE_TITEL;
-window.LEGENDE_UNTERTITEL = LEGENDE_UNTERTITEL;
-window.FOTO_MARKER_FARBE_RGB = FOTO_MARKER_FARBE_RGB;
-window.FOTO_MARKER_KERN_FARBE_RGB = FOTO_MARKER_KERN_FARBE_RGB;
-window.SCHRIFT_SANS = SCHRIFT_SANS;
-window.SCHRIFT_SERIF = SCHRIFT_SERIF;
-
-// Stammdaten: welche Kapitel, welche Scroll-Marken, welcher Sammelpunkt
-window.KAPITEL_MIT_SPINE_PANEL = KAPITEL_MIT_SPINE_PANEL;
-window.SCROLL_MEILENSTEINE = SCROLL_MEILENSTEINE;
-window.SCROLL_TRACK_VH = SCROLL_TRACK_VH;
-window.WOHNUNG_SAMMELPUNKT_ANKER = WOHNUNG_SAMMELPUNKT_ANKER;
-
-// Eingangsdaten bereinigen (nur preload/setup in sketch.js)
-window.bereinigeStationenDaten = bereinigeStationenDaten;
-window.bereinigeFotoMarker = bereinigeFotoMarker;
-window.bereinigeUebersichtsrouten = bereinigeUebersichtsrouten;
-
-// Annotationen sammeln und zählen (die heissen Pfade, siehe draw())
-window.sammleAnnotationenNachOrtBasis = sammleAnnotationenNachOrtBasis;
-window.zaehleBandCounts = zaehleBandCounts;
-window.zaehleAnnotationenLiveNachOrtBasis = zaehleAnnotationenLiveNachOrtBasis;
-
-// Kreisgeometrie und Farbumrechnung
-window.hexZuRgb = hexZuRgb;
-window.rgbZuHex = rgbZuHex;
-window.kreisRadius = kreisRadius;
-window.groessterKreisRadius = groessterKreisRadius;
-
-// Orte, Sichtbarkeit, Spine-Aufbau
-window.wohnungFilterFuerOrt = wohnungFilterFuerOrt;
-window.ortRunSichtbar = ortRunSichtbar;
-window.ortRunsFuerSpine = ortRunsFuerSpine;
-window.baueSpineDaten = baueSpineDaten;
-
-})(); // Ende der Modulkapselung, siehe Kommentar oben
