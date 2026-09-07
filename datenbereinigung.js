@@ -11,15 +11,7 @@
 // — diese Datei nach hinten schieben bricht kreisgrafik.js.
 (function () {
 
-// Wortlaut wie in docs/topografie-der-gefuehle-grafik.pdf. Gelesen von der
-// Legende (kreisgrafik.js) und der Annotationsleiste (sketch.js) — beide
-// müssen dasselbe Wort zeigen.
-const CATEGORY_LABELS = {
-  raum_umwelt: 'Raum und Umwelt',
-  stimmung_emotion: 'Stimmung und Emotion',
-  gesellschaft_soziales: 'Gesellschaft und Soziales',
-};
-const ROUTE_COLOR = '#63561F';
+// --- Farbumrechnung -------------------------------------------------------
 
 // Hex-Farbstring zu r/g/b. Nötig, weil p5s stroke() Hex und Alpha nicht
 // gemeinsam annimmt, die Route aber variables Alpha braucht.
@@ -31,7 +23,6 @@ function hexZuRgb(hex) {
     b: parseInt(bereinigt.substring(4, 6), 16),
   };
 }
-const ROUTE_COLOR_RGB = hexZuRgb(ROUTE_COLOR);
 
 // Gegenrichtung: r/g/b-Tripel zu Hexstring. Nötig, wo eine Farbe als String
 // gebraucht wird — der CSS-Verlauf der Annotationsleiste und
@@ -40,6 +31,11 @@ function rgbZuHex(rgb) {
   return '#' + rgb.map(v => Math.round(v).toString(16).padStart(2, '0').toUpperCase()).join('');
 }
 
+// --- Farben ---------------------------------------------------------------
+
+const ROUTE_COLOR = '#63561F';
+const ROUTE_COLOR_RGB = hexZuRgb(ROUTE_COLOR);
+
 // Ein einziges Orange für alles, was F-Wert heisst: die Punkte an den Kreisen,
 // ihre Beschriftungen in der Legende, die Kapitelpunkte und die Routen-Hitze im
 // Übersichtsakt, der Balken der Annotationsbox. Früher standen hier drei
@@ -47,6 +43,44 @@ function rgbZuHex(rgb) {
 // dadurch zeigte die Legende eine andere Farbe als die Karte daneben.
 const FWERT_COLOR = '#C2511C';
 const FWERT_COLOR_RGB = hexZuRgb(FWERT_COLOR);
+
+// Fotomarker: dunkles Blaugrau, bewusst NICHT aus der Orange-Reihe. Sonst
+// stünden auf derselben Karte drei runde orange Zeichen mit drei Bedeutungen
+// — F-Wert-Punkte, Kapitelpunkte und Fotomarker.
+const FOTO_MARKER_FARBE = '#3A5058';
+const FOTO_MARKER_FARBE_RGB = hexZuRgb(FOTO_MARKER_FARBE);
+// Heller Kern im Marker, damit er auch auf dunklem Untergrund als Ring liest.
+// Derselbe Ton wie der Grund der Graph-Ansicht, aber eine eigene Entscheidung.
+const FOTO_MARKER_KERN_FARBE = '#E2E6E1';
+const FOTO_MARKER_KERN_FARBE_RGB = hexZuRgb(FOTO_MARKER_KERN_FARBE);
+
+// Die drei Gefühlskategorien, in Zeichenreihenfolge von innen nach aussen.
+//
+// Keine Farbreihe: die drei Töne trennen sich in Hue UND Helligkeit — Gold
+// (HSL 46° 64% 47%), Altrosa (7° 25% 65%), Nachtblau (222° 28% 28%). Früher
+// standen hier drei Goldtöne, die nur 5° Hue und 4 Punkte Helligkeit
+// auseinanderlagen. docs/Legende.pdf zeigt noch diese alte Reihe
+// (#BA9E00 / #C49600 / #CCAA00) und ist entsprechend nachzuziehen.
+//
+// ACHTUNG die Schlüssel stehen wörtlich in den Daten — als
+// annotation.category und als Schlüssel in ortRuns[].bandCounts in allen
+// kapitelXX-stationen.json sowie in kreisvergleich-orte.json. Geschrieben
+// werden sie von den Skripten in "data-prep/05 bereinigen/". Umbenennen
+// heisst also: JS, JSON und Python gemeinsam anfassen.
+const KREIS_KATEGORIEN = [
+  { key: 'raum_umwelt', farbe: [198, 162, 43] },
+  { key: 'stimmung_emotion', farbe: [188, 148, 143] },
+  { key: 'gesellschaft_soziales', farbe: [52, 64, 92] },
+];
+
+// Dieselben drei Farben als Hexstrings, für die Aufrufer, die keine Tripel
+// nehmen (Annotationsleiste in sketch.js, Legendenzeilen in kreisgrafik.js).
+// ACHTUNG abgeleitet, nicht zweitgeschrieben: als eigene Liste driften die
+// beiden Schreibweisen auseinander, sobald jemand nur eine davon anfasst.
+const CATEGORY_COLORS = Object.fromEntries(
+  KREIS_KATEGORIEN.map(kat => [kat.key, rgbZuHex(kat.farbe)]));
+
+// --- Masse der F-Wert-Punkte ----------------------------------------------
 
 // Punktgrösse 1..3 je F-Wert-Typ. Der seltene vierte Typ
 // (persoenliche_sehnsucht, 1 Annotation) fehlt und fällt auf 1 zurück.
@@ -60,6 +94,24 @@ const FWERT_PUNKTGROESSE = {
 // beide dasselbe Mass in zwei Schritten ausdrücken; gelesen von kreisgrafik.js
 // (die Punkte selbst) und fotomarker.js (leitet daraus seine Markergrösse ab).
 const FWERT_PUNKT_DURCHMESSER = { 1: 5, 2: 7.5, 3: 10 };
+
+// --- Schriften fürs Canvas ------------------------------------------------
+
+// Schriften fürs Canvas. Spiegeln --sans/--serif in style.css; p5 kennt die
+// CSS-Variablen nicht, deshalb hier als Literal.
+const SCHRIFT_SANS = "'Source Sans 3', sans-serif";
+const SCHRIFT_SERIF = "'Source Serif 4', serif";
+
+// --- Beschriftungen (Wortlaut aus dem PDF) --------------------------------
+
+// Wortlaut wie in docs/topografie-der-gefuehle-grafik.pdf. Gelesen von der
+// Legende (kreisgrafik.js) und der Annotationsleiste (sketch.js) — beide
+// müssen dasselbe Wort zeigen.
+const CATEGORY_LABELS = {
+  raum_umwelt: 'Raum und Umwelt',
+  stimmung_emotion: 'Stimmung und Emotion',
+  gesellschaft_soziales: 'Gesellschaft und Soziales',
+};
 
 // Ausformulierte Namen der drei F-Wert-Typen, Gegenstück zu CATEGORY_LABELS.
 // Wortlaut wie im PDF, ohne das frühere Präfix «Wechselwirkung:».
@@ -107,46 +159,7 @@ const LEGENDE_ORTSBESCHRIFTUNG = 'ORTSBESCHRIFTUNG';
 const LEGENDE_TITEL = 'TOPOGRAFIE DER GEFÜHLE';
 const LEGENDE_UNTERTITEL = 'Legende';
 
-// Fotomarker: dunkles Blaugrau, bewusst NICHT aus der Orange-Reihe. Sonst
-// stünden auf derselben Karte drei runde orange Zeichen mit drei Bedeutungen
-// — F-Wert-Punkte, Kapitelpunkte und Fotomarker.
-const FOTO_MARKER_FARBE = '#3A5058';
-const FOTO_MARKER_FARBE_RGB = hexZuRgb(FOTO_MARKER_FARBE);
-// Heller Kern im Marker, damit er auch auf dunklem Untergrund als Ring liest.
-// Derselbe Ton wie der Grund der Graph-Ansicht, aber eine eigene Entscheidung.
-const FOTO_MARKER_KERN_FARBE = '#E2E6E1';
-const FOTO_MARKER_KERN_FARBE_RGB = hexZuRgb(FOTO_MARKER_KERN_FARBE);
-
-// Schriften fürs Canvas. Spiegeln --sans/--serif in style.css; p5 kennt die
-// CSS-Variablen nicht, deshalb hier als Literal.
-const SCHRIFT_SANS = "'Source Sans 3', sans-serif";
-const SCHRIFT_SERIF = "'Source Serif 4', serif";
-
-// Die drei Gefühlskategorien, in Zeichenreihenfolge von innen nach aussen.
-//
-// Keine Farbreihe: die drei Töne trennen sich in Hue UND Helligkeit — Gold
-// (HSL 46° 64% 47%), Altrosa (7° 25% 65%), Nachtblau (222° 28% 28%). Früher
-// standen hier drei Goldtöne, die nur 5° Hue und 4 Punkte Helligkeit
-// auseinanderlagen. docs/Legende.pdf zeigt noch diese alte Reihe
-// (#BA9E00 / #C49600 / #CCAA00) und ist entsprechend nachzuziehen.
-//
-// ACHTUNG die Schlüssel stehen wörtlich in den Daten — als
-// annotation.category und als Schlüssel in ortRuns[].bandCounts in allen
-// kapitelXX-stationen.json sowie in kreisvergleich-orte.json. Geschrieben
-// werden sie von den Skripten in "data-prep/05 bereinigen/". Umbenennen
-// heisst also: JS, JSON und Python gemeinsam anfassen.
-const KREIS_KATEGORIEN = [
-  { key: 'raum_umwelt', farbe: [198, 162, 43] },
-  { key: 'stimmung_emotion', farbe: [188, 148, 143] },
-  { key: 'gesellschaft_soziales', farbe: [52, 64, 92] },
-];
-
-// Dieselben drei Farben als Hexstrings, für die Aufrufer, die keine Tripel
-// nehmen (Annotationsleiste in sketch.js, Legendenzeilen in kreisgrafik.js).
-// ACHTUNG abgeleitet, nicht zweitgeschrieben: als eigene Liste driften die
-// beiden Schreibweisen auseinander, sobald jemand nur eine davon anfasst.
-const CATEGORY_COLORS = Object.fromEntries(
-  KREIS_KATEGORIEN.map(kat => [kat.key, rgbZuHex(kat.farbe)]));
+// --- Kapitelinventar ------------------------------------------------------
 
 // Hat Kapitel X ein Spine-Panel? Kapitel 01 fehlt, es hat sein eigenes.
 // Welche Orte darin stehen, entscheidet ortRunsFuerSpine() weiter unten.
@@ -154,6 +167,8 @@ const KAPITEL_MIT_SPINE_PANEL = new Set([
   '02', '03', '04', '05', '06', '07', '08', '09', '10',
   '11', '12', '13', '14', '15', '16', '17', '18',
 ]);
+
+// --- Kapitel 1: Wohnung-Split ---------------------------------------------
 
 // "Wohnung Duroy" und vier Mini-Erwähnungen daneben werden zu einem Punkt
 // zusammengefasst; "Rue Notre-Dame de Lorette" bleibt ein eigener.
@@ -169,24 +184,10 @@ const WOHNUNG_SAMMELPUNKT_ABSORBIERTE_ORTRUNS = new Set([
   'Rue Notre-Dame de Lorette / Paris',
 ]);
 
-// Erzählposition der Split-Annotation, siehe ACHTUNG oben.
-function wohnungSplitAi(daten = stationenData) {
-  let ai = daten.annotationen.findIndex(a => a.id === WOHNUNG_SPLIT_ANNOTATION_ID);
-  return ai === -1 ? Infinity : ai;
-}
-
 const WOHNUNG_VOR_SPLIT_FILTER = (a, ai) => a.station === 0 && ai < wohnungSplitAi();
 const RUE_NOTRE_DAME_FILTER = (a, ai) => a.station === 0 && ai >= wohnungSplitAi();
 
-// Liefert je Ort den passenden Filter: Positions-Filter beim Wohnung-Split,
-// Set aus Ort plus zugehörigen Gedanken-Orten, sonst der ortBasis-String.
-function wohnungFilterFuerOrt(ort) {
-  if (ort === WOHNUNG_SAMMELPUNKT_ANKER) return WOHNUNG_VOR_SPLIT_FILTER;
-  if (ort === RUE_NOTRE_DAME_DE_LORETTE_ORT) return RUE_NOTRE_DAME_FILTER;
-  let gedankenQuellen = Object.keys(GEDANKEN_ZIEL_ORT).filter(quelle => GEDANKEN_ZIEL_ORT[quelle] === ort);
-  if (gedankenQuellen.length > 0) return new Set([ort, ...gedankenQuellen]);
-  return ort;
-}
+// --- Kapitel 1: gedachte Orte ---------------------------------------------
 
 // Die fünf gedachten Orte in Kapitel 1. Nur die Werte werden gelesen, die
 // Schlüssel nennen den ortBasis-Text im Datensatz.
@@ -214,27 +215,7 @@ const GEDANKEN_ZIEL_ORT = {
   'imaginierter Sommergarten': 'Café Américain',
 };
 
-// Unterdrückt dieser Ort seinen eigenen Auftritt? Betrifft die absorbierten
-// Wohnung-Erwähnungen und die Gedanken-Orte.
-
-// ACHTUNG das Gate daten === stationenData muss bleiben: beide Sets sind
-// reine Namenslisten ohne Kapitelbezug, sonst verschluckt z.B. Kapitel 3
-// seinen echten "Parc Monceau".
-function istKapitel1Unterdrueckt(ort, daten) {
-  if (daten !== stationenData) return false;
-  return WOHNUNG_SAMMELPUNKT_ABSORBIERTE_ORTRUNS.has(ort)
-      || GEDANKEN_ORTRUN_UNTERDRUECKT.has(ort);
-}
-
-// ortRun-Namen mit eigenem Spine-Eintrag: jeder Kartenkreis, ohne die oben
-// unterdrückten.
-function ortRunsFuerSpine(daten) {
-  return new Set(
-    (daten.ortRuns || [])
-      .map(r => r.ort)
-      .filter(ort => !istKapitel1Unterdrueckt(ort, daten))
-  );
-}
+// --- Scrollstrecke --------------------------------------------------------
 
 // Höhe der Scrollstrecke, wie .scroll-track sie in index.html setzt. Wer in vh
 // statt in Anteilen rechnet, braucht sie — etwa der Kapiteltakt in sketch.js.
@@ -296,6 +277,45 @@ const SCROLL_MEILENSTEINE = {
   // sitzt auf dieser Klemme und läuft über den Play-Knopf.
   uebersichtRoutenStart: 0.356977, uebersichtRoutenEnd: 0.657432,
 };
+
+
+// Erzählposition der Split-Annotation, siehe ACHTUNG oben.
+function wohnungSplitAi(daten = stationenData) {
+  let ai = daten.annotationen.findIndex(a => a.id === WOHNUNG_SPLIT_ANNOTATION_ID);
+  return ai === -1 ? Infinity : ai;
+}
+
+// Liefert je Ort den passenden Filter: Positions-Filter beim Wohnung-Split,
+// Set aus Ort plus zugehörigen Gedanken-Orten, sonst der ortBasis-String.
+function wohnungFilterFuerOrt(ort) {
+  if (ort === WOHNUNG_SAMMELPUNKT_ANKER) return WOHNUNG_VOR_SPLIT_FILTER;
+  if (ort === RUE_NOTRE_DAME_DE_LORETTE_ORT) return RUE_NOTRE_DAME_FILTER;
+  let gedankenQuellen = Object.keys(GEDANKEN_ZIEL_ORT).filter(quelle => GEDANKEN_ZIEL_ORT[quelle] === ort);
+  if (gedankenQuellen.length > 0) return new Set([ort, ...gedankenQuellen]);
+  return ort;
+}
+
+// Unterdrückt dieser Ort seinen eigenen Auftritt? Betrifft die absorbierten
+// Wohnung-Erwähnungen und die Gedanken-Orte.
+
+// ACHTUNG das Gate daten === stationenData muss bleiben: beide Sets sind
+// reine Namenslisten ohne Kapitelbezug, sonst verschluckt z.B. Kapitel 3
+// seinen echten "Parc Monceau".
+function istKapitel1Unterdrueckt(ort, daten) {
+  if (daten !== stationenData) return false;
+  return WOHNUNG_SAMMELPUNKT_ABSORBIERTE_ORTRUNS.has(ort)
+      || GEDANKEN_ORTRUN_UNTERDRUECKT.has(ort);
+}
+
+// ortRun-Namen mit eigenem Spine-Eintrag: jeder Kartenkreis, ohne die oben
+// unterdrückten.
+function ortRunsFuerSpine(daten) {
+  return new Set(
+    (daten.ortRuns || [])
+      .map(r => r.ort)
+      .filter(ort => !istKapitel1Unterdrueckt(ort, daten))
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Datenbereinigung (läuft einmal in setup(), bevor gezeichnet wird)
