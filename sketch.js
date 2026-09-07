@@ -178,102 +178,9 @@ let modusZeile, leerzeile, alleEintrag; // Plan/Graph-Zeile + Abstandshalter + "
 let grafikPlayButton;
 
 
-// Nummer des folgenden Kapitels, oder null bei 18. Gilt für 02–18; Kapitel 1
-// hat seinen eigenen Scroll-Akt.
-function naechstesKapitel(nr) {
-  if (!nr) return null;
-  let ziel = String(parseInt(nr, 10) + 1).padStart(2, '0');
-  return kapitelHatEigeneAnsicht(ziel) ? ziel : null;
-}
-
-// Hält einen Klick beim DOM-Element und lässt ihn nicht zu p5 durch.
-
-// ACHTUNG stopPropagation muss am mousedown hängen, nicht am click: p5 löst
-// mousePressed schon beim mousedown aus, der click kommt erst danach. Am
-// click abgefangen liefe der Klick trotzdem durch die Prüfungen in
-// mousePressed — er schlösse etwa den Einblender, in dem gerade gelesen wird.
-function haltKlickAuf(el, beiKlick) {
-  el.addEventListener('mousedown', ev => ev.stopPropagation());
-  if (beiKlick) el.addEventListener('click', beiKlick);
-}
-
-// Setzt die Einstiegstext-Uhr neu, gerufen von uebersichtsrouten.js beim
-// Kapitelwechsel.
-function starteKapitelEinstieg() {
-  kapitelEinstiegsStartMillis = millis();
-}
-
-// Annotationszahl eines Kapitels, 0 wenn keines offen ist.
-function annotationsZahl(kapitelNr) {
-  let daten = datenFuerKapitel(kapitelNr);
-  return daten && daten.annotationen ? daten.annotationen.length : 0;
-}
-
-// Länge des Kapitelakts in vh: Einstiegstext plus eine Taktlänge je Annotation.
-function kapitelAktVh(kapitelNr) {
-  return KAPITEL_EINSTIEG_WEG_VH + annotationsZahl(kapitelNr) * KAPITEL_TAKT_VH;
-}
-
-// Scrollmarke, an der ein geöffnetes Kapitel endet; dort steht seine Klemme.
-function kapitelAktEnde(kapitelNr) {
-  return SCROLL_MEILENSTEINE.uebersichtRoutenStart + kapitelAktVh(kapitelNr) / SCROLL_TRACK_VH;
-}
-
-// Anteile des Kapitelakts, zwischen denen der Einstiegstext ausblendet. Keine
-// festen Zahlen mehr: der Akt ist je Kapitel verschieden lang, der Text soll
-// aber überall gleich lange stehen.
-function kapitelEinstiegHalt(kapitelNr) {
-  return annotationsZahl(kapitelNr) ? KAPITEL_EINSTIEG_HALT_VH / kapitelAktVh(kapitelNr) : 0;
-}
-function kapitelEinstiegWeg(kapitelNr) {
-  return annotationsZahl(kapitelNr) ? KAPITEL_EINSTIEG_WEG_VH / kapitelAktVh(kapitelNr) : 0;
-}
-
-// Gerufen von uebersichtsrouten.js aus den beiden Sprungzielen hinter
-// Kapitel 1 ("Übersicht"/"Alle" und jeder Kapitel-Zoom).
-// Zurück in Kapitel 1, gerufen aus scrolleZuKapitel1(). Gegenstück zu
-// loeseKapitel1Klemme().
-function klemmeKapitel1() {
-  kapitel1Geklemmt = true;
-}
-
-function loeseKapitel1Klemme() {
-  kapitel1Geklemmt = false;
-}
-
-function schliesseProjekttext() {
-  projekttextPerRegister = false;
-}
-
-// Register fahren geglättet aus. Am Ende auf den Sollwert einrasten, sonst
-// bliebe die Fläche für immer knapp unter 1 bzw. knapp über 0 stehen.
-function naehereRegister(wert, ziel) {
-  let neu = lerp(wert, ziel, REGISTER_TEMPO);
-  return Math.abs(ziel - neu) < 0.002 ? ziel : neu;
-}
-
-// Nur das Setzen liegt hier; den restlichen Zustand setzt jedes Modul selbst
-// zurück (setzeGrafikZurueck, starteKapitelEinstieg).
-function setzeAnsichtsModus(modus) {
-  kapitelAnsichtsModus = modus;
-}
-
-// Datensatz zu einer Kapitelnummer. Kapitel 3 hat eine eigene Variable,
-// alle anderen liegen in weitereKapitelDaten.
-function datenFuerKapitel(nr) {
-  return nr === '03' ? kapitel03Data : weitereKapitelDaten[nr];
-}
-
-// Hat dieses Kapitel eine öffenbare Ansicht? Eigener Kartenausschnitt oder
-// zumindest ein Spine-Panel. sketch.js hält das Kapitelinventar.
-
-// ACHTUNG !!kapitelKarten[nr] prüft die Inventarzugehörigkeit, nicht ob das
-// Bild geladen ist — .bild füllt erst preload(). Die ODER-Klausel greift
-// heute nie: beide Listen führen dieselben 17 Kapitel. Zwei handgepflegte
-// Listen für dasselbe sind der eigentliche Mangel, ungelöst.
-function kapitelHatEigeneAnsicht(nr) {
-  return !!kapitelKarten[nr] || KAPITEL_MIT_SPINE_PANEL.has(nr);
-}
+// ---------------------------------------------------------------------------
+// preload()
+// ---------------------------------------------------------------------------
 
 function preload() {
   bgImage = loadImage('bilder-karten/paris-startkarte-web.png');
@@ -307,16 +214,9 @@ function preload() {
   });
 }
 
-function bereinigeEingangsdaten() {
-  [stationenData, kapitel03Data, ...WEITERE_KAPITEL_NUMMERN.map(nr => weitereKapitelDaten[nr])]
-    .filter(Boolean)
-    .forEach(daten => {
-      bereinigeStationenDaten(daten);
-    });
-
-  fotoMarkerListe = bereinigeFotoMarker(fotoMarkerListe);
-  uebersichtsRouten = bereinigeUebersichtsrouten(uebersichtsRouten);
-}
+// ---------------------------------------------------------------------------
+// setup()
+// ---------------------------------------------------------------------------
 
 function setup() {
   bereinigeEingangsdaten();
@@ -407,46 +307,6 @@ function setup() {
   ({ modusZeile, planEintrag, graphEintrag, leerzeile, alleEintrag } = baueKapitelRegister());
   baueStationsMarker();
   baueZwischenMarker();
-}
-
-function windowResized() {
-  resizeCanvas(stage.offsetWidth, stage.offsetHeight);
-}
-
-// Hält die Scrollposition an einer Marke fest und gibt sie zurück. Nach oben
-// bleibt sie frei — der Weg zurück.
-function klemmeScroll(marke) {
-  let trackEl = document.querySelector('.scroll-track');
-  window.scrollTo(0, trackEl.offsetHeight * marke);
-  return marke;
-}
-
-function getScrollProgress() {
-  let trackEl = document.querySelector('.scroll-track');
-  return constrain(window.scrollY / trackEl.offsetHeight, 0, 1);
-}
-
-// Deckkraft eines scrollgebundenen Fensters: Rampe rein, Plateau, Rampe raus.
-// Rampe höchstens 35% des Fensters, sonst erreicht ein kurzes Fenster nie
-// volle Deckkraft. Auch die Beschriftungen am Demo-Kreis hängen daran.
-function fadeDauerFuer(von, bis) {
-  let fadeDauerMax = 0.187156; // 0.2 der ursprünglichen Strecke, auf die heutige umgerechnet
-  return Math.min(fadeDauerMax, (bis - von) * 0.35);
-}
-
-function begleittextDeckkraft(progress, von, bis) {
-  let fadeDauer = fadeDauerFuer(von, bis);
-  return constrain(Math.min(
-    map(progress, von, von + fadeDauer, 0, 1),
-    map(progress, bis - fadeDauer, bis, 1, 0)), 0, 1);
-}
-
-// Wie begleittextDeckkraft, aber ohne das Ausblenden: der Legendenaufbau ist
-// kumulativ wie im PDF — was einmal steht, bleibt stehen, bis der Schleier am
-// Ende alles zusammen mitnimmt. Gleiche Einblenddauer, damit ein Schritt und
-// sein Erklärtext gemeinsam kommen.
-function legendenSchrittDeckkraft(progress, von, bis) {
-  return constrain(map(progress, von, von + fadeDauerFuer(von, bis), 0, 1), 0, 1);
 }
 
 // ---------------------------------------------------------------------------
@@ -853,7 +713,7 @@ function draw() {
     el.style.opacity = opacity;
   });
   // Kapitel-Einstiegstexte 02–18: zeitbasierter Fade ab Klick-Zeitpunkt
-  // (kapitelEinstiegsStartMillis, gesetzt von starteKapitelEinstieg oben).
+  // (kapitelEinstiegsStartMillis, gesetzt von starteKapitelEinstieg).
 
   // Im Übersichtsakt bekommt jedes Kapitel die Scheibe seiner Route: der Text
   // blendet ein und aus, bevor das nächste an die Reihe kommt.
@@ -1021,6 +881,174 @@ function mousePressed() {
       return;
     }
   }
+}
+
+// ---------------------------------------------------------------------------
+// Fenstergrösse
+// ---------------------------------------------------------------------------
+
+function windowResized() {
+  resizeCanvas(stage.offsetWidth, stage.offsetHeight);
+}
+
+// ---------------------------------------------------------------------------
+// Hilfsfunktionen
+// ---------------------------------------------------------------------------
+
+// --- Aufbau beim Start ----------------------------------------------------
+
+function bereinigeEingangsdaten() {
+  [stationenData, kapitel03Data, ...WEITERE_KAPITEL_NUMMERN.map(nr => weitereKapitelDaten[nr])]
+    .filter(Boolean)
+    .forEach(daten => {
+      bereinigeStationenDaten(daten);
+    });
+
+  fotoMarkerListe = bereinigeFotoMarker(fotoMarkerListe);
+  uebersichtsRouten = bereinigeUebersichtsrouten(uebersichtsRouten);
+}
+
+// Hält einen Klick beim DOM-Element und lässt ihn nicht zu p5 durch.
+
+// ACHTUNG stopPropagation muss am mousedown hängen, nicht am click: p5 löst
+// mousePressed schon beim mousedown aus, der click kommt erst danach. Am
+// click abgefangen liefe der Klick trotzdem durch die Prüfungen in
+// mousePressed — er schlösse etwa den Einblender, in dem gerade gelesen wird.
+function haltKlickAuf(el, beiKlick) {
+  el.addEventListener('mousedown', ev => ev.stopPropagation());
+  if (beiKlick) el.addEventListener('click', beiKlick);
+}
+
+// --- Kapitelinventar und Datenzugriff -------------------------------------
+
+// Datensatz zu einer Kapitelnummer. Kapitel 3 hat eine eigene Variable,
+// alle anderen liegen in weitereKapitelDaten.
+function datenFuerKapitel(nr) {
+  return nr === '03' ? kapitel03Data : weitereKapitelDaten[nr];
+}
+
+// Hat dieses Kapitel eine öffenbare Ansicht? Eigener Kartenausschnitt oder
+// zumindest ein Spine-Panel. sketch.js hält das Kapitelinventar.
+
+// ACHTUNG !!kapitelKarten[nr] prüft die Inventarzugehörigkeit, nicht ob das
+// Bild geladen ist — .bild füllt erst preload(). Die ODER-Klausel greift
+// heute nie: beide Listen führen dieselben 17 Kapitel. Zwei handgepflegte
+// Listen für dasselbe sind der eigentliche Mangel, ungelöst.
+function kapitelHatEigeneAnsicht(nr) {
+  return !!kapitelKarten[nr] || KAPITEL_MIT_SPINE_PANEL.has(nr);
+}
+
+// Nummer des folgenden Kapitels, oder null bei 18. Gilt für 02–18; Kapitel 1
+// hat seinen eigenen Scroll-Akt.
+function naechstesKapitel(nr) {
+  if (!nr) return null;
+  let ziel = String(parseInt(nr, 10) + 1).padStart(2, '0');
+  return kapitelHatEigeneAnsicht(ziel) ? ziel : null;
+}
+
+// --- Scroll: Aktlängen und Marken -----------------------------------------
+
+// Annotationszahl eines Kapitels, 0 wenn keines offen ist.
+function annotationsZahl(kapitelNr) {
+  let daten = datenFuerKapitel(kapitelNr);
+  return daten && daten.annotationen ? daten.annotationen.length : 0;
+}
+
+// Länge des Kapitelakts in vh: Einstiegstext plus eine Taktlänge je Annotation.
+function kapitelAktVh(kapitelNr) {
+  return KAPITEL_EINSTIEG_WEG_VH + annotationsZahl(kapitelNr) * KAPITEL_TAKT_VH;
+}
+
+// Scrollmarke, an der ein geöffnetes Kapitel endet; dort steht seine Klemme.
+function kapitelAktEnde(kapitelNr) {
+  return SCROLL_MEILENSTEINE.uebersichtRoutenStart + kapitelAktVh(kapitelNr) / SCROLL_TRACK_VH;
+}
+
+// Anteile des Kapitelakts, zwischen denen der Einstiegstext ausblendet. Keine
+// festen Zahlen mehr: der Akt ist je Kapitel verschieden lang, der Text soll
+// aber überall gleich lange stehen.
+function kapitelEinstiegHalt(kapitelNr) {
+  return annotationsZahl(kapitelNr) ? KAPITEL_EINSTIEG_HALT_VH / kapitelAktVh(kapitelNr) : 0;
+}
+function kapitelEinstiegWeg(kapitelNr) {
+  return annotationsZahl(kapitelNr) ? KAPITEL_EINSTIEG_WEG_VH / kapitelAktVh(kapitelNr) : 0;
+}
+
+// Hält die Scrollposition an einer Marke fest und gibt sie zurück. Nach oben
+// bleibt sie frei — der Weg zurück.
+function klemmeScroll(marke) {
+  let trackEl = document.querySelector('.scroll-track');
+  window.scrollTo(0, trackEl.offsetHeight * marke);
+  return marke;
+}
+
+function getScrollProgress() {
+  let trackEl = document.querySelector('.scroll-track');
+  return constrain(window.scrollY / trackEl.offsetHeight, 0, 1);
+}
+
+// --- Deckkraft scrollgebundener Texte -------------------------------------
+
+// Deckkraft eines scrollgebundenen Fensters: Rampe rein, Plateau, Rampe raus.
+// Rampe höchstens 35% des Fensters, sonst erreicht ein kurzes Fenster nie
+// volle Deckkraft. Auch die Beschriftungen am Demo-Kreis hängen daran.
+function fadeDauerFuer(von, bis) {
+  let fadeDauerMax = 0.187156; // 0.2 der ursprünglichen Strecke, auf die heutige umgerechnet
+  return Math.min(fadeDauerMax, (bis - von) * 0.35);
+}
+
+function begleittextDeckkraft(progress, von, bis) {
+  let fadeDauer = fadeDauerFuer(von, bis);
+  return constrain(Math.min(
+    map(progress, von, von + fadeDauer, 0, 1),
+    map(progress, bis - fadeDauer, bis, 1, 0)), 0, 1);
+}
+
+// Wie begleittextDeckkraft, aber ohne das Ausblenden: der Legendenaufbau ist
+// kumulativ wie im PDF — was einmal steht, bleibt stehen, bis der Schleier am
+// Ende alles zusammen mitnimmt. Gleiche Einblenddauer, damit ein Schritt und
+// sein Erklärtext gemeinsam kommen.
+function legendenSchrittDeckkraft(progress, von, bis) {
+  return constrain(map(progress, von, von + fadeDauerFuer(von, bis), 0, 1), 0, 1);
+}
+
+// --- Ansichtszustand umschalten -------------------------------------------
+
+// Zurück in Kapitel 1, gerufen aus scrolleZuKapitel1(). Gegenstück zu
+// loeseKapitel1Klemme().
+function klemmeKapitel1() {
+  kapitel1Geklemmt = true;
+}
+
+// Gerufen von uebersichtsrouten.js aus den beiden Sprungzielen hinter
+// Kapitel 1 ("Übersicht"/"Alle" und jeder Kapitel-Zoom).
+function loeseKapitel1Klemme() {
+  kapitel1Geklemmt = false;
+}
+
+// Nur das Setzen liegt hier; den restlichen Zustand setzt jedes Modul selbst
+// zurück (setzeGrafikZurueck, starteKapitelEinstieg).
+function setzeAnsichtsModus(modus) {
+  kapitelAnsichtsModus = modus;
+}
+
+// Setzt die Einstiegstext-Uhr neu, gerufen von uebersichtsrouten.js beim
+// Kapitelwechsel.
+function starteKapitelEinstieg() {
+  kapitelEinstiegsStartMillis = millis();
+}
+
+// --- Register «Legende» und «Info» ----------------------------------------
+
+function schliesseProjekttext() {
+  projekttextPerRegister = false;
+}
+
+// Register fahren geglättet aus. Am Ende auf den Sollwert einrasten, sonst
+// bliebe die Fläche für immer knapp unter 1 bzw. knapp über 0 stehen.
+function naehereRegister(wert, ziel) {
+  let neu = lerp(wert, ziel, REGISTER_TEMPO);
+  return Math.abs(ziel - neu) < 0.002 ? ziel : neu;
 }
 
 // --- Export ------------------------------------------------------------
