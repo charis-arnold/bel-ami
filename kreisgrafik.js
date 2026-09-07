@@ -20,6 +20,8 @@
 // gezeichnet. Das lässt p5s Farb-Zwischenspeicher veralten; nur pop()
 // gleicht ihn wieder ab, ctx.restore() nicht. Jede Zeichenfunktion klammert.
 
+// --- Masse für Schraffur und Beschriftungen -------------------------------
+
 // Zeilenabstand der Schraffur in den Gesamtkreisen.
 const HATCH_SPACING = 3;
 
@@ -40,7 +42,7 @@ const LABEL_FLAECHE_H = 20;
 const LABEL_GROESSE = 13;
 
 // ---------------------------------------------------------------------------
-// Kreise
+// Schraffur
 // ---------------------------------------------------------------------------
 
 // Waagrechte Schraffur in die gesetzte Clip-Fläche; Gesamtkreise und
@@ -75,8 +77,36 @@ function drawHatchedCircle(cx, cy, r, color, alphaSkala = 1) {
 }
 
 // ---------------------------------------------------------------------------
-// Route
+// Kreise
 // ---------------------------------------------------------------------------
+
+// --- Masse der Kreisformen und F-Wert-Punkte ------------------------------
+
+// Ringabstände der F-Wert-Punkte; die Durchmesser selbst stehen als
+// FWERT_PUNKT_DURCHMESSER in datenbereinigung.js, weil fotomarker.js sie
+// ebenfalls liest.
+// Versatz für deckungsgleiche Formen: gleich viele Annotationen ergeben
+// denselben Radius, und ohne diesen Abstand sähe man nur die oberste.
+const KREIS_GLEICHSTAND_VERSATZ = 3;
+
+const FWERT_PUNKT_RAND_ABSTAND = 6; // Luft zwischen Kreisrand und erstem Punkte-Ring
+const FWERT_PUNKT_RING_ABSTAND = 8; // Abstand zwischen zwei Punkte-Ringen, falls ein Abschnitt nicht in einen Ring passt
+const FWERT_PUNKT_LUECKE = 2;       // Mindestabstand zwischen benachbarten Punkten
+
+// Mitte des 120°-Drittels je Valenzgruppe: neg unten, pos oben, neutral rechts.
+// Einzige Quelle dieser Konvention — zeichneFwertPunkte() setzt die Punkte
+// danach, und der Wahrnehmungsbogen der Legende zeigt auf dieselben Stellen.
+// Math.PI statt HALF_PI: siehe ACHTUNG zur Ladezeit oben.
+// Jede Valenzgruppe bekommt einen Bogenabschnitt von 100°, dazwischen 20°
+// Luft — 3 × 100° + 3 × 20° ergeben die vollen 360°. Neutral zeigt nach
+// rechts, positiv nach links oben, negativ nach links unten (Bildschirmwinkel:
+// 0 = rechts, im Uhrzeigersinn). Siehe docs/topografie-der-gefuehle-grafik.pdf.
+// Math.PI statt radians(): die Konstanten entstehen beim Laden des Moduls,
+// p5-Globals stehen da noch nicht sicher bereit.
+const FWERT_GRUPPEN_SPANNE = Math.PI * 100 / 180;
+const FWERT_GRUPPEN_LUECKE = Math.PI * 20 / 180;
+const FWERT_GRUPPEN_VERSATZ = FWERT_GRUPPEN_SPANNE + FWERT_GRUPPEN_LUECKE;
+const FWERT_GRUPPEN_WINKEL = { neg: FWERT_GRUPPEN_VERSATZ, pos: -FWERT_GRUPPEN_VERSATZ, neutral: 0 };
 
 function leereBandCounts() {
   return {
@@ -315,32 +345,6 @@ function zeichneKreiseFuerRun(cx, cy, bandCounts, alphaSkala = 1, winkel = -HALF
   if (groessterKreisRadius(bandCounts, maxRadius, radiusSkala) > 0) zeichneMittelpunkt(cx, cy, alphaSkala);
 }
 
-// Ringabstände der F-Wert-Punkte; die Durchmesser selbst stehen als
-// FWERT_PUNKT_DURCHMESSER in datenbereinigung.js, weil fotomarker.js sie
-// ebenfalls liest.
-// Versatz für deckungsgleiche Formen: gleich viele Annotationen ergeben
-// denselben Radius, und ohne diesen Abstand sähe man nur die oberste.
-const KREIS_GLEICHSTAND_VERSATZ = 3;
-
-const FWERT_PUNKT_RAND_ABSTAND = 6; // Luft zwischen Kreisrand und erstem Punkte-Ring
-const FWERT_PUNKT_RING_ABSTAND = 8; // Abstand zwischen zwei Punkte-Ringen, falls ein Abschnitt nicht in einen Ring passt
-const FWERT_PUNKT_LUECKE = 2;       // Mindestabstand zwischen benachbarten Punkten
-
-// Mitte des 120°-Drittels je Valenzgruppe: neg unten, pos oben, neutral rechts.
-// Einzige Quelle dieser Konvention — zeichneFwertPunkte() setzt die Punkte
-// danach, und der Wahrnehmungsbogen der Legende zeigt auf dieselben Stellen.
-// Math.PI statt HALF_PI: siehe ACHTUNG zur Ladezeit oben.
-// Jede Valenzgruppe bekommt einen Bogenabschnitt von 100°, dazwischen 20°
-// Luft — 3 × 100° + 3 × 20° ergeben die vollen 360°. Neutral zeigt nach
-// rechts, positiv nach links oben, negativ nach links unten (Bildschirmwinkel:
-// 0 = rechts, im Uhrzeigersinn). Siehe docs/topografie-der-gefuehle-grafik.pdf.
-// Math.PI statt radians(): die Konstanten entstehen beim Laden des Moduls,
-// p5-Globals stehen da noch nicht sicher bereit.
-const FWERT_GRUPPEN_SPANNE = Math.PI * 100 / 180;
-const FWERT_GRUPPEN_LUECKE = Math.PI * 20 / 180;
-const FWERT_GRUPPEN_VERSATZ = FWERT_GRUPPEN_SPANNE + FWERT_GRUPPEN_LUECKE;
-const FWERT_GRUPPEN_WINKEL = { neg: FWERT_GRUPPEN_VERSATZ, pos: -FWERT_GRUPPEN_VERSATZ, neutral: 0 };
-
 // Ein Punkt je Annotation mit F-Wert, Grösse nach Typ, Lage im 120°-Drittel
 // der eigenen Valenz. Bei Andrang wachsen weitere Ringe nach aussen.
 
@@ -439,23 +443,6 @@ const DEMO_FWERTE = { pos: 'ort_loest_emotion_aus', neg: 'emotion_faerbt_raum', 
 // entlang der Route. maxRadius ist der Vorgabewert von kreisRadius().
 const DEMO_MAX_RADIUS = 100;
 
-// Tinte der Legende: Schrift, Striche und Klammern in beiden Fassungen, der
-// Registerleiste wie dem Legendenaufbau. Dasselbe Blaugrau trägt das
-// Kapitelmenü (--menue in style.css). Die Ortsbeschriftungen auf der Karte
-// bleiben davon unberührt, sie setzen ihre Farbe in zeichneKreisLabels selbst.
-const LEGENDE_TINTE = '#3A5058';
-
-// Lage der Kategorienzeilen im Legendenblock. Der Legendenaufbau und die
-// Registerleiste tragen sie ein, siehe klangZeileGetroffen().
-
-// ACHTUNG die Liste wird je Frame beim ERSTEN Eintrag geleert, nicht beim
-// Zeichnen des Blocks. Der Block wird nämlich zweimal pro Frame gezeichnet,
-// wenn der Legendenbalken während des Onboardings offen ist — einmal für den
-// Balken, einmal für die Legende im Bild. Beim zweiten Mal geleert, wären die
-// Flächen weg, bevor mousePressed() sie lesen kann.
-let letzteKlangZeilen = [];
-let klangZeilenFrame = -1;
-
 // Oberkante des Begleittexts. Aus seinen CSS-Werten gerechnet, nicht gemessen:
 // getBoundingClientRect() je Frame wäre ein erzwungenes Layout, und die
 // Zeilenzahl wechselt ohnehin mit jeder Stufe — gerechnet wird darum immer mit
@@ -546,10 +533,13 @@ function baueDemoAnnotationen() {
 
 const DEMO_ANNOTATIONEN = baueDemoAnnotationen();
 
+
 // ---------------------------------------------------------------------------
 // Legendenaufbau (Onboarding)
 // ---------------------------------------------------------------------------
 
+
+// --- Masse ----------------------------------------------------------------
 
 const LEGENDE_ZEILE = 22;           // Zeilenabstand in den beiden Blöcken
 const LEGENDE_TITEL_ABSTAND = 26;   // Überschrift zur ersten Zeile
@@ -574,7 +564,17 @@ const LEGENDE_RING_RADIUS = 7;      // offene Ringe auf dem Bogen
 const LEGENDE_MITTELPUNKT = 4;      // dunkler Punkt in der Kreismitte, wie in zeichneKreiseFuerRun
 const LEGENDE_STRICHEL = [3, 4];    // Strichelmass von Klammern und Bogen
 const LEGENDE_SICHTBAR = 0.002;     // darunter lohnt das Zeichnen nicht
+
+// --- Tinte ----------------------------------------------------------------
+
+// Tinte der Legende: Schrift, Striche und Klammern in beiden Fassungen, der
+// Registerleiste wie dem Legendenaufbau. Dasselbe Blaugrau trägt das
+// Kapitelmenü (--menue in style.css). Die Ortsbeschriftungen auf der Karte
+// bleiben davon unberührt, sie setzen ihre Farbe in zeichneKreisLabels selbst.
+const LEGENDE_TINTE = '#3A5058';
 const LEGENDE_TINTE_RGB = hexZuRgb(LEGENDE_TINTE);
+
+// --- Zeilen des Blocks «Körper und Raum» ----------------------------------
 
 // Zeilen des Blocks «Körper und Raum»
 // klang: Name der Stimme, die diese Zeile vorspielt. Bei den F-Werten ist es
@@ -583,6 +583,19 @@ const LEGENDE_TINTE_RGB = hexZuRgb(LEGENDE_TINTE);
 const LEGENDE_FWERT_ZEILEN = Object.keys(FWERT_PUNKTGROESSE)
   .sort((a, b) => FWERT_PUNKTGROESSE[b] - FWERT_PUNKTGROESSE[a])
   .map(typ => ({ text: FWERT_LABELS[typ], punkt: FWERT_PUNKT_DURCHMESSER[FWERT_PUNKTGROESSE[typ]], klang: typ }));
+
+// --- Klangzeilen: Lage für den Treffertest --------------------------------
+
+// Lage der Kategorienzeilen im Legendenblock. Der Legendenaufbau und die
+// Registerleiste tragen sie ein, siehe klangZeileGetroffen().
+
+// ACHTUNG die Liste wird je Frame beim ERSTEN Eintrag geleert, nicht beim
+// Zeichnen des Blocks. Der Block wird nämlich zweimal pro Frame gezeichnet,
+// wenn der Legendenbalken während des Onboardings offen ist — einmal für den
+// Balken, einmal für die Legende im Bild. Beim zweiten Mal geleert, wären die
+// Flächen weg, bevor mousePressed() sie lesen kann.
+let letzteKlangZeilen = [];
+let klangZeilenFrame = -1;
 
 // Instrumentname erst beim Zeichnen anhängen: sonifikation.js wird nach dieser
 // Datei geladen, beim Auswerten der Liste oben gibt es den Namen noch nicht.
@@ -672,6 +685,9 @@ function beschriftungsSchrift(groesse) {
   textStyle(BOLD);
 }
 
+
+const SCHRIFT_LEICHT_GEWICHT = 300;
+
 // Leichter Schnitt (300) für die erläuternden Legendenzeilen — «Der Kreis
 // wächst mit jedem geäusserten Gefühl.» steht damit unter der Regel, die es
 // erläutert, statt gleichrangig daneben.
@@ -685,8 +701,6 @@ function beschriftungsSchrift(groesse) {
 // hier. Beide Aufrufer zeichnen vorher die fetten Zeilen mit p5s text(), das
 // die Werte setzt. Wer das als erste Zeile ruft, muss textAlign und fill
 // selbst mitbringen.
-const SCHRIFT_LEICHT_GEWICHT = 300;
-
 function beschriftungLeicht(txt, x, y, groesse = LABEL_GROESSE) {
   drawingContext.font = `${SCHRIFT_LEICHT_GEWICHT} ${groesse}px ${SCHRIFT_SANS}`;
   drawingContext.fillText(txt, x, y);
@@ -1086,6 +1100,7 @@ function zeichneDemoKreisgrafik(fortschritt, alphaSkala, schritte, schleier) {
     schritte.map(a => a * alphaSkala * schleier), sichtbar.length > 0));
 }
 
+
 // ---------------------------------------------------------------------------
 // Schleier
 // ---------------------------------------------------------------------------
@@ -1114,6 +1129,8 @@ function klangZeileGetroffen(mx, my) {
 // Register am unteren Fensterrand (docs/Legende.pdf)
 // ---------------------------------------------------------------------------
 
+// --- Balken und Reiter: Masse ---------------------------------------------
+
 // Zwei Register nebeneinander, beide fahren von unten aus. «Legende» bringt
 // einen flachen Balken mit den fünf Gruppen der Legende, «Info» fährt über die
 // ganze Seite und trägt am Ende den Projekttext (#projekttext im DOM).
@@ -1137,6 +1154,9 @@ const LEISTE_REITER_RAND_R = 19;    // hinter dem Pfeil
 const LEISTE_REITER_H = 30;
 const LEISTE_REITER_LUECKE = 6;     // Fuge zwischen den beiden Reitern
 const LEISTE_REITER_INFO = 'Info';  // Beschriftung des zweiten Registers
+
+// --- Farben ---------------------------------------------------------------
+
 const LEISTE_GRUND = hexZuRgb('#E2E6E1');
 // Der Projekttext liegt dunkel auf, damit die helle Serifenschrift trägt —
 // im selben Blaugrau wie die Legendentinte und das Kapitelmenü.
@@ -1158,6 +1178,9 @@ const LEISTE_REITER_ZU_TINTE = LEISTE_GRUND;
 // nichts — in Tintenstärke las sie sich als Rahmen und nahm den Gruppen
 // daneben das Gewicht.
 const LEISTE_TRENNLINIE = hexZuRgb('#CDD5CF');
+
+// --- Kreiszeichen im Balken -----------------------------------------------
+
 const LEISTE_KREIS_R = 34;          // Platz, den der Beispielkreis im Layout belegt
 // Gezeichnete Grösse und optischer Versatz des Beispielkreises. Getrennt vom
 // Layoutmass darüber: der Kreis soll kleiner und nach oben links rücken, ohne
@@ -1193,6 +1216,8 @@ const LEISTE_BOGEN_ABSTAND = 18;    // enger als im Vollbild, der Balken ist fla
 // länger. Die Gruppenbreite rechnet damit, siehe leisteWahrnehmung.
 const LEISTE_WAHRNEHMUNG_LABEL_LUFT = 22;
 const LEISTE_RING_R = 4.5;          // die drei offenen Ringe auf dem Bogen
+
+// --- Zustand --------------------------------------------------------------
 
 let letzteReiterLagen = [];
 
