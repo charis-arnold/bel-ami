@@ -15,7 +15,8 @@
 // 15 von 26 Namen intern, 11 exportiert. Konvention: docs/architektur.md.
 (function () {
 
-// Zustand der Play-Animation.
+// --- Play-Animation: Zustand ----------------------------------------------
+
 let grafikSpielt = false;       // läuft die Wachstums-Animation gerade?
 let grafikStartZeit = 0;        // millis() bei Play-Start (bzw. rechnerisch zurückversetzt bei Resume)
 let grafikFortschritt = 0;      // 0..1, letzter berechneter Animationsstand (bleibt bei Pause stehen)
@@ -23,13 +24,38 @@ let grafikFortschritt = 0;      // 0..1, letzter berechneter Animationsstand (bl
 // Scrollen. null = noch kein Play in dieser Ansicht.
 let grafikPlayAusblendStart = null;
 
-// ---------------------------------------------------------------------------
-// Spine in p5
-// ---------------------------------------------------------------------------
+// --- Spine-Daten: Caches --------------------------------------------------
 
-// Spine-Daten: einmal berechnen und halten.
+// Einmal berechnen und halten.
 let spineEintraegep5 = [];  // { typ, text, rv, stationIdx, kreisId }
 let spineEintraegeKapitel = {}; // Cache je Kapitelnummer (02–18), lazy befüllt beim ersten Zoom
+
+// --- Spine-Layout: Masse --------------------------------------------------
+
+// Fester Abstand je Ortspunkt, Gesamtbreite ist n * Abstand; reicht der
+// Platz nicht, wird gestaucht. Rechts hält der Rand das Kapitelregister frei
+// (5vw), links steht nur Luft — beide gleich breit, damit die Spine mittig
+// im Bild bleibt.
+const SPINE_PUNKT_ABSTAND = 70;
+const SPINE_RAND_LINKS = 200;
+const SPINE_RAND_RECHTS = 200;
+// Vertikale Linie vom Ortspunkt nach unten zur (horizontalen) Beschriftung.
+const SPINE_LABEL_LINIE_LAENGE = 16;
+const SPINE_LABEL_TEXT_ABSTAND = 6;
+
+// Label-Zeilen werden EINMAL je Kapitel und Breite aus dem Endstand
+// berechnet, damit sie beim Scrollen stillstehen.
+const SPINE_LABEL_HOEHE = 16;
+const SPINE_LABEL_ZEILEN_ABSTAND = 30;
+// Freizuhaltender Rand für die vertikale Lage der Spine. Unten mehr wegen
+// Play-Button und Scroll-Fortschrittsbalken.
+const SPINE_RAND_OBEN = 24;
+const SPINE_RAND_UNTEN = 76;
+const spineLayoutCache = new WeakMap(); // eintraege-Array -> { breite, hoehe, versatz, breiten, linienY }
+
+// ---------------------------------------------------------------------------
+// Spine-Daten: Caches füllen und lesen
+// ---------------------------------------------------------------------------
 
 // Baut die beiden Caches auf. kapitelNr ist letzterZoomKapitel, nicht
 // zoomedKapitel: das Panel braucht beim Ausblenden noch seine Daten.
@@ -50,6 +76,10 @@ function stelleSpineDatenBereit(kapitelNr) {
 function spineEintraegeFuer(kapitelNr) {
   return kapitelNr ? spineEintraegeKapitel[kapitelNr] : spineEintraegep5;
 }
+
+// ---------------------------------------------------------------------------
+// Ansichtsmodus und Play-Steuerung
+// ---------------------------------------------------------------------------
 
 // Menübalken "Plan"/"Graph". Jeder Wechsel in die Graph-Ansicht beginnt bei
 // 0, die Animation muss per Play gestartet werden.
@@ -117,26 +147,9 @@ function aktualisiereGrafikFortschritt() {
   if (grafikFortschritt >= 1) grafikSpielt = false; // Ende erreicht, Button springt zurück auf Play
 }
 
-// Fester Abstand je Ortspunkt, Gesamtbreite ist n * Abstand; reicht der
-// Platz nicht, wird gestaucht. Rechts hält der Rand das Kapitelregister frei
-// (5vw), links steht nur Luft — beide gleich breit, damit die Spine mittig
-// im Bild bleibt.
-const SPINE_PUNKT_ABSTAND = 70;
-const SPINE_RAND_LINKS = 200;
-const SPINE_RAND_RECHTS = 200;
-// Vertikale Linie vom Ortspunkt nach unten zur (horizontalen) Beschriftung.
-const SPINE_LABEL_LINIE_LAENGE = 16;
-const SPINE_LABEL_TEXT_ABSTAND = 6;
-
-// Label-Zeilen werden EINMAL je Kapitel und Breite aus dem Endstand
-// berechnet, damit sie beim Scrollen stillstehen.
-const SPINE_LABEL_HOEHE = 16;
-const SPINE_LABEL_ZEILEN_ABSTAND = 30;
-// Freizuhaltender Rand für die vertikale Lage der Spine. Unten mehr wegen
-// Play-Button und Scroll-Fortschrittsbalken.
-const SPINE_RAND_OBEN = 24;
-const SPINE_RAND_UNTEN = 76;
-const spineLayoutCache = new WeakMap(); // eintraege-Array -> { breite, hoehe, versatz, breiten, linienY }
+// ---------------------------------------------------------------------------
+// Spine zeichnen
+// ---------------------------------------------------------------------------
 
 function spineLayout(eintraege, daten, abstand, startX) {
   let vorhanden = spineLayoutCache.get(eintraege);
