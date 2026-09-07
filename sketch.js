@@ -10,18 +10,172 @@
 // 58 von 88 Namen intern, 30 exportiert. Konvention: docs/architektur.md.
 (function () {
 
-let stage, heroText, begleitTexte, kapitelEinstiegsTexte;
-let scrollHinweisEl; // «Scrollen»: im Intro mit dem Titel, danach zu Beginn jedes Akts
-let introTonEl;      // Tonschalter des Introstücks, nur über der dunklen Karte
-let demoGruppenTexte; // die neun .begleittext mit data-demo-gruppe — ihre Fenster steuern auch die Stufen des Legendenaufbaus
-let fotoHinweisText;  // der .begleittext mit data-foto-hinweis — sein Fenster und sein Zielmarker steuern den Bedienhinweis an der Karte
+// ---------------------------------------------------------------------------
+// Modulweiter Zustand
+// ---------------------------------------------------------------------------
+
+// --- Eingangsdaten ---------------------------------------------------------
+// Alles hier lädt preload(), bereinigeEingangsdaten() putzt es durch.
+
+// bgImage: Startseite und Schlusskarte. bgImage2: Übersichtsakt.
+// ACHTUNG die beiden haben NICHT dieselbe Bbox — 568 m versetzt, deshalb
+// startBbox und uebersichtBbox getrennt. Siehe docs/bugfix-log.md, Fix 2.
+let bgImage, bgImage2, ch1Image;
+
+let stationenData;
+let kapitel03Data; // eigenes Datenset fürs Kapitel-3-Spine-Panel (Kartenausschnitt-Zoom)
+
+// Erstentwurf-Datensätze für Kapitel 2, 4–18 (baue-kapitel-stationen.py).
+// Zugriff nur über datenFuerKapitel(), auch aus vier anderen Modulen.
+const WEITERE_KAPITEL_NUMMERN = ['02', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18'];
+let weitereKapitelDaten = {}; // z.B. weitereKapitelDaten['04'].ortRuns
+
+// Routen der Kapitel 02–18, nur in der rausgezoomten Übersicht gezeichnet.
+let uebersichtsRouten = {};
+
+// Kapitel mit eigenem Kartenausschnitt (bilder-karten/kapitelXX-*): alle
+// ausser 01, das sein eigenes System hat. Die Ausschlussliste ist leer.
+const OHNE_EIGENEN_KARTENAUSSCHNITT = [];
+
+// vAnchor/hAnchor verschieben den sichtbaren Ausschnitt im Kapitelbild
+// (0 = oben/links, 1 = unten/rechts, 0.5 = Default), siehe coverCrop.
+let kapitelKarten = {
+  '02': { bild: null, bboxRaw: null },
+  '03': { bild: null, bboxRaw: null, vAnchor: 0.15 },
+  '04': { bild: null, bboxRaw: null },
+  '05': { bild: null, bboxRaw: null },
+  '06': { bild: null, bboxRaw: null },
+  '07': { bild: null, bboxRaw: null },
+  '08': { bild: null, bboxRaw: null },
+  '09': { bild: null, bboxRaw: null },
+  '10': { bild: null, bboxRaw: null },
+  '11': { bild: null, bboxRaw: null },
+  '12': { bild: null, bboxRaw: null },
+  '13': { bild: null, bboxRaw: null },
+  '14': { bild: null, bboxRaw: null },
+  '15': { bild: null, bboxRaw: null },
+  '16': { bild: null, bboxRaw: null },
+  '17': { bild: null, bboxRaw: null },
+  '18': { bild: null, bboxRaw: null },
+};
+
+// --- Scroll-Takt: Aktlängen und Ausblendwege -------------------------------
+
+// Ein Takt für alle: jede Annotation bekommt denselben Scrollweg wie die
+// Einstiegstexte des Intros untereinander (dreizehn Schritte auf 1276vh).
+// Daraus folgt, wie lang ein Kapitel ist — und wie lang die Strecke sein muss,
+// die das längste fassen soll.
+// ACHTUNG wer diese Zahl ändert, muss die Meilensteine nachrechnen: routeEnd
+// und alles dahinter sowie die Höhe von .scroll-track hängen daran. Der
+// Rechenweg steht in docs/architektur.md, «Ein Takt für alle Kapitel».
+const KAPITEL_TAKT_VH = 98.2;
+
+// Der Einstiegstext blendet zeitbasiert ein, dann übernimmt das Scrollen: nach
+// diesen Wegen beginnt er zu weichen und ist er weg, danach setzen Route und
+// Annotationen ein. Kurz gehalten — steht der Text einmal, soll ein knapper
+// Scroll genügen. Dasselbe Mass hat der Einstieg von Kapitel 1, dort über
+// data-von/data-bis in index.html.
+const KAPITEL_EINSTIEG_HALT_VH = 26;
+const KAPITEL_EINSTIEG_WEG_VH = 59;
+
+// Kapitel 02–18 öffnen per Klick, nicht per Scroll — daher kein
+// data-von/data-bis, sondern ein Zeitfenster-Fade ab dem Klick.
+const KAPITEL_EINSTIEG_FADE_MS = 800;
+
+// Ausblendweg des «Scrollen»-Hinweises am Anfang eines Akts.
+const SCROLL_HINWEIS_VH = 100;
+
+// --- Ansichtszustand: welcher Akt läuft ------------------------------------
+
+// Kapitel 1 endet, wo der Übersichtsakt beginnt: dort ist die Scrollposition
+// festgehalten, die Überblickskarte kommt nur noch per Klick. Jeder Sprung
+// dahinter löst die Klemme, ein Zurückscrollen in Kapitel 1 setzt sie neu.
+let kapitel1Geklemmt = true;
+
+// Zoomstand des Kapitel-1-Ausschnitts (0..1), je Frame in draw() gesetzt.
+// kreisgrafik.js blendet daran das Label des Routen-Startpunkts ein.
+let kapitel1ZoomAmount = 0;
+
+// Zwei Modi je Kapitel-Ansicht: 'karte' (Ausschnitt und Route) und 'grafik'
+// (horizontale Spine mit Play). Umschalten über "Plan"/"Graph" im Menübalken.
+let kapitelAnsichtsModus = 'karte';
+
+let letzterZoomKapitel = null; // bleibt waehrend des Ausblendens gesetzt, siehe draw()
+
+// Uhr des Kapitel-Einstiegstexts, gesetzt von starteKapitelEinstieg().
+let kapitelEinstiegsStartMillis = null;
+
+// --- Register «Legende» und «Info» am unteren Rand -------------------------
+
+// Die beiden Register am unteren Fensterrand (docs/Legende.pdf). Eingeklappt
+// stehen nur ihre Reiter da; «Info» deckt ausgefahren alles zu.
+let legendenLeisteOffen = false;
+// Ausfahrgrad 0..1, je Frame an den Sollwert herangeführt.
+let legendeAus = 0;
+let infoAus = 0;
+const REGISTER_TEMPO = 0.18;   // Anteil des Rests je Frame, wie kapitelZoomAmount
+
+// Der Projekttext hat genau einen Weg hinein: das Register «Info». Früher ging
+// er am Routenende zusätzlich von selbst auf; dafür brauchte es einen zweiten
+// Merker, der den automatischen für den laufenden Durchgang abhakte. Mit dem
+// Einblender ist auch der Merker weg.
+let projekttextPerRegister = false; // über den Reiter geholt, bleibt bis zum nächsten Klick
+let projekttextOffen = false;       // je Frame daraus abgeleitet
+let projekttextEl;                  // #projekttext, die Textfläche des Registers «Info»
+
+// Heller Schleier unter dem Legendenaufbau. Derselbe Ton wie der Grund der
+// Registerleiste in kreisgrafik.js: die helle Karte bleibt darunter als
+// Karte erkennbar, tritt aber hinter die Legende zurück.
+const LEGENDE_SCHLEIER = '#E2E6E1';
+const LEGENDE_SCHLEIER_ALPHA = 0.8;
+
+// --- Kartenmarkierungen (stillgelegt) --------------------------------------
+// Ortspunkte/Labels der Kapitel-1-Ansicht sind stillgelegt: dom-aufbau.js baut
+// die Knoten weiter, draw() überspringt ihre Positionierung.
+
+// ACHTUNG zum Wiedereinschalten reicht true nicht — zusätzlich muss
+// .karten-markierung .label { display: none } in style.css fallen, sonst
+// erscheinen nur Punkte ohne Beschriftung.
+const KARTEN_MARKER_SICHTBAR = false;
+let kartenMarkierungenEl;
+let markierungsEintraege = [];
+let stationsMarker = [];
+let zwischenMarker = [];
+
+// --- Bedienhinweis am Fotomarker -------------------------------------------
+
+let fotoHinweisText; // der .begleittext mit data-foto-hinweis — sein Fenster und sein Zielmarker steuern den Bedienhinweis an der Karte
 
 // Text des Bedienhinweises am Fotomarker. Auf welchen Marker er zeigt und
 // wann, steht am Begleittext in index.html — hier nur der Wortlaut.
 const FOTO_HINWEIS_TEXT = 'Diese Punkte lassen sich anklicken, um ein historisches Foto zu sehen.';
+
+// --- DOM-Handles, alle in setup() gesetzt ----------------------------------
+
+// Bühne und scrollgebundene Texte
+let stage, heroText, begleitTexte, kapitelEinstiegsTexte;
+let scrollHinweisEl; // «Scrollen»: im Intro mit dem Titel, danach zu Beginn jedes Akts
+let introTonEl;      // Tonschalter des Introstücks, nur über der dunklen Karte
+let demoGruppenTexte; // die neun .begleittext mit data-demo-gruppe — ihre Fenster steuern auch die Stufen des Legendenaufbaus
+
+// Annotationsbox
 let annotationBoxEl; // #annotationBox — trägt die Positionsklasse (pos-oben-links etc.), siehe annotationBoxPosition()
-let kapitelEndeEl, kapitelEndeWeiterEl, kapitelEndeTextEl; // Kapitelende: Buttonpaar und der Hinweis darüber (nur Kapitel 1), siehe draw()
-let projekttextEl; // #projekttext, die Textfläche des Registers «Info»
+let annotationText;
+let annotationInner;
+let annotationTag;
+let annotationBar;
+
+// Kapitelende: Buttonpaar und der Hinweis darüber (nur Kapitel 1), siehe draw()
+let kapitelEndeEl, kapitelEndeWeiterEl, kapitelEndeTextEl;
+
+// Kapitelregister und Menübalken
+let kapitelRegister; // Kapitelregister rechts (inkl. Plan/Graph + Alle), sichtbar während eines Kapitel-Zooms
+let kapitelRegisterRahmen; // schneidet es an der Oberkante des Legendenbalkens ab
+let registerSchnitt = -1;  // zuletzt gesetzte Unterkante, spart Stilschreiben
+let kapitelRegisterEintraege = {}; // nr -> Eintrags-Element, fürs Aktiv-Highlighting in draw()
+let planEintrag, graphEintrag; // "Plan"/"Graph"-Hälften oben im Register, fürs Aktiv-Highlighting in draw()
+let modusZeile, leerzeile, alleEintrag; // Plan/Graph-Zeile + Abstandshalter + "Alle" — in der Übersicht (kein Kapitel gezoomt) blendet draw() modusZeile/leerzeile aus und markiert alleEintrag als aktiv
+let grafikPlayButton;
 
 
 // Nummer des folgenden Kapitels, oder null bei 18. Gilt für 02–18; Kapitel 1
@@ -31,10 +185,6 @@ function naechstesKapitel(nr) {
   let ziel = String(parseInt(nr, 10) + 1).padStart(2, '0');
   return kapitelHatEigeneAnsicht(ziel) ? ziel : null;
 }
-// Kapitel 02–18 öffnen per Klick, nicht per Scroll — daher kein
-// data-von/data-bis, sondern ein Zeitfenster-Fade ab dem Klick.
-let kapitelEinstiegsStartMillis = null;
-const KAPITEL_EINSTIEG_FADE_MS = 800;
 
 // Hält einen Klick beim DOM-Element und lässt ihn nicht zu p5 durch.
 
@@ -52,27 +202,6 @@ function haltKlickAuf(el, beiKlick) {
 function starteKapitelEinstieg() {
   kapitelEinstiegsStartMillis = millis();
 }
-
-
-// Der Einstiegstext blendet zeitbasiert ein, dann übernimmt das Scrollen: nach
-// diesen Wegen beginnt er zu weichen und ist er weg, danach setzen Route und
-// Annotationen ein. Kurz gehalten — steht der Text einmal, soll ein knapper
-// Scroll genügen. Dasselbe Mass hat der Einstieg von Kapitel 1, dort über
-// data-von/data-bis in index.html.
-// Ausblendweg des «Scrollen»-Hinweises am Anfang eines Akts.
-const SCROLL_HINWEIS_VH = 100;
-
-const KAPITEL_EINSTIEG_HALT_VH = 26;
-const KAPITEL_EINSTIEG_WEG_VH = 59;
-
-// Ein Takt für alle: jede Annotation bekommt denselben Scrollweg wie die
-// Einstiegstexte des Intros untereinander (dreizehn Schritte auf 1276vh).
-// Daraus folgt, wie lang ein Kapitel ist — und wie lang die Strecke sein muss,
-// die das längste fassen soll.
-// ACHTUNG wer diese Zahl ändert, muss die Meilensteine nachrechnen: routeEnd
-// und alles dahinter sowie die Höhe von .scroll-track hängen daran. Der
-// Rechenweg steht in docs/architektur.md, «Ein Takt für alle Kapitel».
-const KAPITEL_TAKT_VH = 98.2;
 
 // Annotationszahl eines Kapitels, 0 wenn keines offen ist.
 function annotationsZahl(kapitelNr) {
@@ -99,43 +228,6 @@ function kapitelEinstiegHalt(kapitelNr) {
 function kapitelEinstiegWeg(kapitelNr) {
   return annotationsZahl(kapitelNr) ? KAPITEL_EINSTIEG_WEG_VH / kapitelAktVh(kapitelNr) : 0;
 }
-// bgImage: Startseite und Schlusskarte. bgImage2: Übersichtsakt.
-// ACHTUNG die beiden haben NICHT dieselbe Bbox — 568 m versetzt, deshalb
-// startBbox und uebersichtBbox getrennt. Siehe docs/bugfix-log.md, Fix 2.
-let bgImage, bgImage2, ch1Image;
-let kartenMarkierungenEl;
-let stationenData;
-let kapitel03Data; // eigenes Datenset fürs Kapitel-3-Spine-Panel (Kartenausschnitt-Zoom)
-
-// Erstentwurf-Datensätze für Kapitel 2, 4–18 (baue-kapitel-stationen.py).
-// Zugriff nur über datenFuerKapitel(), auch aus vier anderen Modulen.
-const WEITERE_KAPITEL_NUMMERN = ['02', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18'];
-let weitereKapitelDaten = {}; // z.B. weitereKapitelDaten['04'].ortRuns
-// Ortspunkte/Labels der Kapitel-1-Ansicht sind stillgelegt: dom-aufbau.js baut
-// die Knoten weiter, draw() überspringt ihre Positionierung.
-
-// ACHTUNG zum Wiedereinschalten reicht true nicht — zusätzlich muss
-// .karten-markierung .label { display: none } in style.css fallen, sonst
-// erscheinen nur Punkte ohne Beschriftung.
-const KARTEN_MARKER_SICHTBAR = false;
-let markierungsEintraege = [];
-let stationsMarker = [];
-let zwischenMarker = [];
-let annotationText;
-let annotationInner;
-let annotationTag;
-let annotationBar;
-let kapitelRegister; // Kapitelregister rechts (inkl. Plan/Graph + Alle), sichtbar während eines Kapitel-Zooms
-let kapitelRegisterRahmen; // schneidet es an der Oberkante des Legendenbalkens ab
-let registerSchnitt = -1;  // zuletzt gesetzte Unterkante, spart Stilschreiben
-let kapitelRegisterEintraege = {}; // nr -> Eintrags-Element, fürs Aktiv-Highlighting in draw()
-let planEintrag, graphEintrag; // "Plan"/"Graph"-Hälften oben im Register, fürs Aktiv-Highlighting in draw()
-let modusZeile, leerzeile, alleEintrag; // Plan/Graph-Zeile + Abstandshalter + "Alle" — in der Übersicht (kein Kapitel gezoomt) blendet draw() modusZeile/leerzeile aus und markiert alleEintrag als aktiv
-
-// Kapitel 1 endet, wo der Übersichtsakt beginnt: dort ist die Scrollposition
-// festgehalten, die Überblickskarte kommt nur noch per Klick. Jeder Sprung
-// dahinter löst die Klemme, ein Zurückscrollen in Kapitel 1 setzt sie neu.
-let kapitel1Geklemmt = true;
 
 // Gerufen von uebersichtsrouten.js aus den beiden Sprungzielen hinter
 // Kapitel 1 ("Übersicht"/"Alle" und jeder Kapitel-Zoom).
@@ -149,27 +241,6 @@ function loeseKapitel1Klemme() {
   kapitel1Geklemmt = false;
 }
 
-// Die beiden Register am unteren Fensterrand (docs/Legende.pdf). Eingeklappt
-// stehen nur ihre Reiter da; «Info» deckt ausgefahren alles zu.
-let legendenLeisteOffen = false;
-// Ausfahrgrad 0..1, je Frame an den Sollwert herangeführt.
-let legendeAus = 0;
-let infoAus = 0;
-const REGISTER_TEMPO = 0.18;   // Anteil des Rests je Frame, wie kapitelZoomAmount
-
-// Der Projekttext hat genau einen Weg hinein: das Register «Info». Früher ging
-// er am Routenende zusätzlich von selbst auf; dafür brauchte es einen zweiten
-// Merker, der den automatischen für den laufenden Durchgang abhakte. Mit dem
-// Einblender ist auch der Merker weg.
-let projekttextPerRegister = false; // über den Reiter geholt, bleibt bis zum nächsten Klick
-let projekttextOffen = false;       // je Frame daraus abgeleitet
-
-// Heller Schleier unter dem Legendenaufbau. Derselbe Ton wie der Grund der
-// Registerleiste in kreisgrafik.js: die helle Karte bleibt darunter als
-// Karte erkennbar, tritt aber hinter die Legende zurück.
-const LEGENDE_SCHLEIER = '#E2E6E1';
-const LEGENDE_SCHLEIER_ALPHA = 0.8;
-
 function schliesseProjekttext() {
   projekttextPerRegister = false;
 }
@@ -181,49 +252,11 @@ function naehereRegister(wert, ziel) {
   return Math.abs(ziel - neu) < 0.002 ? ziel : neu;
 }
 
-// Zwei Modi je Kapitel-Ansicht: 'karte' (Ausschnitt und Route) und 'grafik'
-// (horizontale Spine mit Play). Umschalten über "Plan"/"Graph" im Menübalken.
-let kapitelAnsichtsModus = 'karte';
-
 // Nur das Setzen liegt hier; den restlichen Zustand setzt jedes Modul selbst
 // zurück (setzeGrafikZurueck, starteKapitelEinstieg).
 function setzeAnsichtsModus(modus) {
   kapitelAnsichtsModus = modus;
 }
-// Zoomstand des Kapitel-1-Ausschnitts (0..1), je Frame in draw() gesetzt.
-// kreisgrafik.js blendet daran das Label des Routen-Startpunkts ein.
-let kapitel1ZoomAmount = 0;
-let grafikPlayButton;
-
-// --- Übersichtsrouten (Kapitel 02–18, nur in der letzten, rausgezoomten Ansicht) ---
-let uebersichtsRouten = {};
-
-// Kapitel mit eigenem Kartenausschnitt (bilder-karten/kapitelXX-*): alle
-// ausser 01, das sein eigenes System hat. Die Ausschlussliste ist leer.
-
-// vAnchor/hAnchor verschieben den sichtbaren Ausschnitt im Kapitelbild
-// (0 = oben/links, 1 = unten/rechts, 0.5 = Default), siehe coverCrop.
-const OHNE_EIGENEN_KARTENAUSSCHNITT = [];
-let kapitelKarten = {
-  '02': { bild: null, bboxRaw: null },
-  '03': { bild: null, bboxRaw: null, vAnchor: 0.15 },
-  '04': { bild: null, bboxRaw: null },
-  '05': { bild: null, bboxRaw: null },
-  '06': { bild: null, bboxRaw: null },
-  '07': { bild: null, bboxRaw: null },
-  '08': { bild: null, bboxRaw: null },
-  '09': { bild: null, bboxRaw: null },
-  '10': { bild: null, bboxRaw: null },
-  '11': { bild: null, bboxRaw: null },
-  '12': { bild: null, bboxRaw: null },
-  '13': { bild: null, bboxRaw: null },
-  '14': { bild: null, bboxRaw: null },
-  '15': { bild: null, bboxRaw: null },
-  '16': { bild: null, bboxRaw: null },
-  '17': { bild: null, bboxRaw: null },
-  '18': { bild: null, bboxRaw: null },
-};
-let letzterZoomKapitel = null; // bleibt waehrend des Ausblendens gesetzt, siehe draw()
 
 // Datensatz zu einer Kapitelnummer. Kapitel 3 hat eine eigene Variable,
 // alle anderen liegen in weitereKapitelDaten.
