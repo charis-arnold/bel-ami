@@ -15,6 +15,8 @@
    mit den vier Rändern west, east, south, north in Grad.
 ============================================================================= */
 
+// --- Bboxen der Kartenbilder ----------------------------------------------
+
 // Zu jedem Kartenbild gehören die Koordinaten seiner vier Ränder. Nur damit
 // weiss das Programm, welcher Punkt im Bild welchem Ort entspricht.
 //
@@ -44,6 +46,8 @@ let uebersichtBbox = { west: 2.2269923194085774, east: 2.4331556771226127, south
 // innerhalb des Bildes bleibt (siehe bboxZuLeinwandCrop unten).
 let ch1ImgBbox = { west: 2.3001939857941989, east: 2.3700206945881144, south: 48.8628664101318222, north: 48.8858350169556459 };
 
+// --- Abgeleitete Ausschnitte ----------------------------------------------
+
 // Das Bild zeigt ganz Paris, Kapitel 1 spielt aber nur im Viertel um die Place
 // de l'Opéra. Diese vier Ränder sagen, welchen Teil des Bildes die
 // Kapitelansicht zeigt — sie sind das Zoomziel. Solange das Kapitelbild selbst
@@ -65,6 +69,8 @@ const UEBERSICHT_SCHNITT_BBOX = {
 // ACHTUNG die .pgw-Dateien in data-prep/export sehen aus, als gehörten sie zu
 // diesen Bildern — sie tun es nicht. Mit ihren Werten läge die ganze Route
 // 1.5 km zu weit östlich. Siehe docs/cleanup-log.md, Schritt 10.
+
+// --- Kartenversatz im Fenster ---------------------------------------------
 
 // Die Karte sitzt nicht mittig im Fenster, sondern 250 px nach links versetzt:
 // rechts steht das Kapitelmenü, links soll trotzdem Paris zu sehen sein.

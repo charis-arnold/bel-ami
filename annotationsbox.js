@@ -12,6 +12,8 @@
 // 6 von 8 Namen intern, 2 exportiert. Konvention: docs/architektur.md.
 (function () {
 
+// --- Lage und Masse der Box -----------------------------------------------
+
 // Die Box steht immer links, oben oder unten — dort ist Platz, und der Blick
 // findet sie an einer festen Kante wieder. Oben bleibt sie, bis dort Kreise
 // oder Route daruntergeraten.
@@ -24,6 +26,8 @@ const ANNOTATION_BOX_RAND_X = 0.05;  // left/right 5%, siehe .annotation-box
 const ANNOTATION_BOX_RAND_OBEN = 0.10;
 const ANNOTATION_BOX_RAND_UNTEN = 0.12;
 const annotationBoxPositionCache = new Map(); // "kapitel|breite|hoehe" -> Position
+
+// --- Handkorrektur je Kapitel ---------------------------------------------
 
 // Handkorrektur je Kapitel: wo die Strafpunktrechnung eine Lage wählt, die im
 // Bild nicht überzeugt, steht sie hier fest. Werte aus ANNOTATION_BOX_POSITIONEN

@@ -10,13 +10,22 @@
    muss nach geo-projektion.js stehen, sonst ReferenceError.
 ============================================================================= */
 
-// DOM-Referenzen des Popups, in setup() geholt.
+// --- DOM-Referenzen des Popups, in setup() geholt -------------------------
+
 let fotoPopup, fotoPopupTitel, fotoPopupPlz, fotoPopupBild, fotoPopupBeschreibung;
 
+// --- Markerdaten, in preload() geladen ------------------------------------
+
 let fotoMarkerListe = [];
-// Zustand des zuletzt gezeichneten Frames, alle drei in draw() gesetzt.
+
+// --- Zustand des zuletzt gezeichneten Frames ------------------------------
+
+// Alle drei in draw() gesetzt.
 let letzteActiveBbox = null;
 let letzterFotoOffsetX = mapOffsetX, letzterFotoOffsetY = mapOffsetY;
+
+// --- Treffergrösse --------------------------------------------------------
+
 // Auch von uebersichtsrouten.js genutzt, damit alle Klickziele gleich gross sind.
 const FOTO_MARKER_TREFFER_RADIUS = 12;
 
