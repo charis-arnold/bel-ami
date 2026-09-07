@@ -1008,7 +1008,3 @@ async function schalteIntroTon(an) {
   introTonErlaubt = true;
   introSchritt = null;   // erzwingt den Aufbau im nächsten Frame
 }
-
-function introTonLaeuft() {
-  return introTonErlaubt;
-}

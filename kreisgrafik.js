@@ -593,7 +593,7 @@ function fwertZeilenMitKlang(alpha) {
 
 // Der Kreis differenziert sich mit der Legende: erst
 // gestreift, dann mit Valenzhälften, dann mit den drei Bändern.
-function stufenBandCounts(bandCounts, mitKategorie, valenzen) {
+function stufenBandCounts(bandCounts, valenzen) {
   // Was noch keine Stufe benannt hat, bleibt Schraffur: der Kreis wächst nicht
   // mehr, es füllt sich nur, was schon erklärt ist.
   let aufteilen = bc => {
@@ -627,7 +627,7 @@ function zeichneDemoStufe(cx, cy, bandCounts, kategorien, valenzen, alphaSkala, 
   let weitere = KREIS_KATEGORIEN.slice(1, kategorien)
     .map(kat => ({ kat, bc: bandCounts[kat.key] }))
     .filter(e => e.bc);
-  zeichneKreiseFuerRun(cx, cy, stufenBandCounts(bandCounts, kategorien > 0, valenzen),
+  zeichneKreiseFuerRun(cx, cy, stufenBandCounts(bandCounts, valenzen),
     alphaSkala, PI, skala, DEMO_MAX_RADIUS, weitere);
 }
 
@@ -639,6 +639,16 @@ function beschriftungsSchrift(groesse) {
   textFont(SCHRIFT_SANS);
   textSize(groesse);
   textStyle(BOLD);
+}
+
+// Vorspann der drei Legendentexte: Zeichenzustand sichern und die
+// Beschriftungsschrift setzen. Die Farbe bringt jeder Aufrufer selbst mit,
+// weil sie an unterschiedlichen Stellen gesetzt wird — pop() ebenfalls.
+function legendenTextVorspann() {
+  push();
+  noStroke();
+  textAlign(LEFT, CENTER);
+  beschriftungsSchrift(LABEL_GROESSE);
 }
 
 
@@ -688,10 +698,7 @@ function beschriftungsBreite(text, groesse = LABEL_GROESSE) {
 // Gefühle».
 function zeichneLegendenTitel(x, y, alpha) {
   if (alpha <= LEGENDE_SICHTBAR) return;
-  push();
-  noStroke();
-  textAlign(LEFT, CENTER);
-  beschriftungsSchrift(LABEL_GROESSE);
+  legendenTextVorspann();
   fill(LEGENDE_TINTE_RGB.r, LEGENDE_TINTE_RGB.g, LEGENDE_TINTE_RGB.b, 255 * alpha);
   text(LEGENDE_TITEL, x, y);
   // Zurückgenommen wie im PDF: der Untertitel benennt nur, was das Bild ist.
@@ -712,10 +719,7 @@ function zeichneKreisgroessenBlock(cx, cy, aussen, alpha) {
     line(cx, cy - aussen, cx, ecke);
     line(cx, ecke, x - 8, ecke);
   });
-  push();
-  noStroke();
-  textAlign(LEFT, CENTER);
-  beschriftungsSchrift(LABEL_GROESSE);
+  legendenTextVorspann();
   LEGENDE_KREISGROESSE.forEach((zeile, i) => {
     // Die ersten drei Zeilen benennen die Regel, die letzten beiden erläutern
     // sie — im PDF derselbe Gewichtswechsel.
@@ -837,10 +841,7 @@ function legendenBlockBreite(titel, zeilen) {
 // mitbringen — die Kategorien kommen einzeln, mit dem Band, das sie benennen.
 function zeichneLegendenBlock(x, y, titel, zeilen, alpha) {
   if (alpha <= LEGENDE_SICHTBAR) return;
-  push();
-  noStroke();
-  textAlign(LEFT, CENTER);
-  beschriftungsSchrift(LABEL_GROESSE);
+  legendenTextVorspann();
   fill(LEGENDE_TINTE_RGB.r, LEGENDE_TINTE_RGB.g, LEGENDE_TINTE_RGB.b, 255 * alpha);
   text(titel, x, y);
   let textSpalte = legendenTextSpalte(zeilen);

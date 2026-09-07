@@ -58,18 +58,26 @@ function baueKapitelRegister() {
   return { modusZeile, planEintrag, graphEintrag, leerzeile, alleEintrag };
 }
 
+// Ein Markerknoten: Punkt und Beschriftung in einem Wrapper, gleich an die
+// Markerebene gehängt. Die drei baue*-Funktionen unterscheiden sich nur in
+// Datenquelle, CSS-Klasse, Beschriftungsfeld und Zielliste.
+function baueMarkerKnoten(klasse, beschriftung) {
+  let wrap = document.createElement('div');
+  wrap.className = klasse;
+  let dot = document.createElement('div');
+  dot.className = 'ortspunkt';
+  let label = document.createElement('div');
+  label.className = 'label';
+  label.textContent = beschriftung;
+  wrap.appendChild(dot);
+  wrap.appendChild(label);
+  kartenMarkierungenEl.appendChild(wrap);
+  return wrap;
+}
+
 function baueKartenMarkierungen() {
   stationenData.markierungen.filter(m => !m.deaktiviert).forEach(m => {
-    let wrap = document.createElement('div');
-    wrap.className = 'karten-markierung';
-    let dot = document.createElement('div');
-    dot.className = 'ortspunkt';
-    let label = document.createElement('div');
-    label.className = 'label';
-    label.textContent = m.ort;
-    wrap.appendChild(dot);
-    wrap.appendChild(label);
-    kartenMarkierungenEl.appendChild(wrap);
+    let wrap = baueMarkerKnoten('karten-markierung', m.ort);
     markierungsEintraege.push({ el: wrap, lon: m.lon, lat: m.lat, revealIndex: m.revealIndex });
   });
 }
@@ -78,32 +86,14 @@ function baueStationsMarker() {
   stationenData.route.forEach((station, i) => {
     if (i === 0) return;
     if (station.deaktiviert) return;
-    let wrap = document.createElement('div');
-    wrap.className = 'karten-markierung stations-marker';
-    let dot = document.createElement('div');
-    dot.className = 'ortspunkt';
-    let label = document.createElement('div');
-    label.className = 'label';
-    label.textContent = station.ort;
-    wrap.appendChild(dot);
-    wrap.appendChild(label);
-    kartenMarkierungenEl.appendChild(wrap);
+    let wrap = baueMarkerKnoten('karten-markierung stations-marker', station.ort);
     stationsMarker.push({ el: wrap, lon: station.lon, lat: station.lat, revealIndex: station.revealIndex });
   });
 }
 
 function baueZwischenMarker() {
   (stationenData.zwischenPunkte || []).filter(z => !z.deaktiviert).forEach(z => {
-    let wrap = document.createElement('div');
-    wrap.className = 'karten-markierung zwischen-marker';
-    let dot = document.createElement('div');
-    dot.className = 'ortspunkt';
-    let label = document.createElement('div');
-    label.className = 'label';
-    label.textContent = z.name;
-    wrap.appendChild(dot);
-    wrap.appendChild(label);
-    kartenMarkierungenEl.appendChild(wrap);
+    let wrap = baueMarkerKnoten('karten-markierung zwischen-marker', z.name);
     zwischenMarker.push({ el: wrap, lon: z.lon, lat: z.lat, revealIndex: z.revealIndex });
   });
 }
