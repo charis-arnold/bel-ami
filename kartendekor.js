@@ -64,13 +64,13 @@ function zeichneMassstabsleiste(bbox, offsetX, offsetY = 0) {
   let y = height - randY - offsetY;
 
   push();
-  stroke(26, 26, 26, 220);
+  stroke(GRUNDTINTE.r, GRUNDTINTE.g, GRUNDTINTE.b, 220);
   strokeWeight(2);
   line(x1, y, x2, y);
   line(x1, y - tickHoehe, x1, y);
   line(x2, y - tickHoehe, x2, y);
   noStroke();
-  fill(26, 26, 26, 220);
+  fill(GRUNDTINTE.r, GRUNDTINTE.g, GRUNDTINTE.b, 220);
   textFont(SCHRIFT_SANS);
   textStyle(NORMAL);
   textSize(11);

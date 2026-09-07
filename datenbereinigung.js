@@ -47,6 +47,14 @@ const FOTO_MARKER_FARBE_RGB = hexZuRgb('#3A5058');
 // Derselbe Ton wie der Grund der Graph-Ansicht, aber eine eigene Entscheidung.
 const FOTO_MARKER_KERN_FARBE_RGB = hexZuRgb('#E2E6E1');
 
+// Tinte aller Beschriftungen auf der Karte: Kapitelnummern, Ortsnamen und die
+// Labels im Ortsvergleich. Spiegelt --label in style.css.
+const LABEL_TINTE = hexZuRgb('#212B2E');
+
+// Grundtinte für Zeichnungen, die keine Beschriftung sind: Massstabsleiste
+// und die Beschriftungen der Spine. Spiegelt --ink in style.css.
+const GRUNDTINTE = hexZuRgb('#1A1A1A');
+
 // Die drei Gefühlskategorien, in Zeichenreihenfolge von innen nach aussen.
 //
 // Keine Farbreihe: die drei Töne trennen sich in Hue UND Helligkeit — Gold

@@ -240,7 +240,7 @@ function zeichneUebersichtsrouten(bbox, fortschritt, imAkt) {
     // Verbindungsstrich vom versetzten Badge zum echten Routenanfang, sonst
     // wirkt es wie ein Punkt ohne Route.
     if (dupAnker) {
-      stroke(33, 43, 46, labelAlpha * 0.55);
+      stroke(LABEL_TINTE.r, LABEL_TINTE.g, LABEL_TINTE.b, labelAlpha * 0.55);
       strokeWeight(1);
       line(dupAnker.x, dupAnker.y, start.x, start.y);
       noStroke();
@@ -249,8 +249,9 @@ function zeichneUebersichtsrouten(bbox, fortschritt, imAkt) {
     // ACHTUNG fill(hexString, alpha) ist keine verlässliche p5-Signatur —
     // deshalb hier wie überall RGB statt Hex+Alpha.
     if (hover) fill(FWERT_COLOR_RGB.r, FWERT_COLOR_RGB.g, FWERT_COLOR_RGB.b, labelAlpha); // #C2511C
-    else fill(lerp(33, FWERT_COLOR_RGB.r, hitze), lerp(43, FWERT_COLOR_RGB.g, hitze),
-      lerp(46, FWERT_COLOR_RGB.b, hitze), labelAlpha); // #212B2E .. #C2511C
+    else fill(lerp(LABEL_TINTE.r, FWERT_COLOR_RGB.r, hitze),
+      lerp(LABEL_TINTE.g, FWERT_COLOR_RGB.g, hitze),
+      lerp(LABEL_TINTE.b, FWERT_COLOR_RGB.b, hitze), labelAlpha);
     ellipse(start.x, start.y, hover ? 11 : 8, hover ? 11 : 8);
     // p5s text() bleibt beim Scrollen manchmal unsichtbar — direkt über den
     // Canvas-Context, fillStyle kommt vom fill() oben.
@@ -273,7 +274,7 @@ function zeichneUebersichtsrouten(bbox, fortschritt, imAkt) {
     let ch1Hover = dist(mouseX, mouseY, ch1Start.x, ch1Start.y) < FOTO_MARKER_TREFFER_RADIUS;
     if (ch1Hover) kapitelHover = '01';
     if (ch1Hover) fill(FWERT_COLOR_RGB.r, FWERT_COLOR_RGB.g, FWERT_COLOR_RGB.b, ch1Alpha); // #C2511C
-    else fill(33, 43, 46, ch1Alpha); // #212B2E
+    else fill(LABEL_TINTE.r, LABEL_TINTE.g, LABEL_TINTE.b, ch1Alpha);
     ellipse(ch1Start.x, ch1Start.y, ch1Hover ? 11 : 8, ch1Hover ? 11 : 8);
     drawingContext.fillText('01', ch1Start.x + 8, ch1Start.y); // siehe Kommentar oben (p5s text()-Bug)
   }

@@ -10,6 +10,11 @@
   --ink: #1A1A1A;
   /* Tinte des Kapitelmenüs: Schrift, Haarlinien und die aktive Fläche */
   --menue: #3A5058;
+  /* Schrift auf der Menüfläche, siehe LEISTE_AKTIV_TINTE in kreisgrafik.js */
+  --menue-tinte: #C6D2D7;
+  /* Tinte der Beschriftungen: Kapitelnummern, Ortsnamen, Kreis-Labels.
+     Dieselbe Farbe führt LABEL_TINTE in datenbereinigung.js fürs Canvas. */
+  --label: #212B2E;
   --gold: #63561F;
   --grey: #8F8F8F;
   --sans: 'Source Sans 3', -apple-system, sans-serif;
@@ -302,7 +307,7 @@ h2 {
   visibility: visible;
 }
 
-/* Farbe wie die Kapitelnummern und die Kreis-Labels (#212B2E) — anders als
+/* Farbe wie die Kapitelnummern und die Kreis-Labels (--label) — anders als
    der weisse "Scrollen"-Hinweis der Startseite, der auf dem dunklen
    Startbild steht. Das Kapitelende liegt über der hellen Kapitelkarte. */
 /* Optik wie die Einträge des Kapitelregisters, aber umgekehrt: die Knöpfe
@@ -318,7 +323,7 @@ h2 {
   border-bottom: 1px solid rgba(58, 80, 88, 0.15);
   background: var(--menue);
   padding: 10px 20px;
-  color: #C6D2D7;
+  color: var(--menue-tinte);
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
@@ -381,7 +386,7 @@ h2 {
 .begleittext.begleittext-dunkel,
 .kapitel-einstiegstext,
 .kapitel-ende-text {
-  color: #212B2E;
+  color: var(--label);
 }
 
 /* Der Text am Kapitelende steht höher als die übrigen: auf denselben 42 %
@@ -590,7 +595,7 @@ body.legende-offen .annotation-box.pos-unten-links {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   text-align: center;
-  color: #212B2E;
+  color: var(--label);
 }
 
 .annotation-tag:empty {
@@ -601,7 +606,7 @@ body.legende-offen .annotation-box.pos-unten-links {
   font-family: var(--serif-text);
   font-size: 22px;
   line-height: 1.35;
-  color: #212B2E;
+  color: var(--label);
   text-align: center;
   max-width: 520px;
   padding: 6px 26px 18px 26px;
@@ -682,7 +687,7 @@ body.legende-offen .annotation-box.pos-unten-links {
 
 .kapitel-register-item.aktiv {
   background: var(--menue);
-  color: #C6D2D7;
+  color: var(--menue-tinte);
 }
 
 /* "Plan"/"Graph"-Zeile: ersetzt den ehemaligen ansicht-wechseln-btn
@@ -723,7 +728,7 @@ body.legende-offen .annotation-box.pos-unten-links {
 
 .kapitel-register-modus-item.aktiv {
   background: var(--menue);
-  color: #C6D2D7;
+  color: var(--menue-tinte);
 }
 
 /* Leerzeile zwischen Plan/Graph+Alle (oben) und der Kapitelliste
@@ -847,7 +852,7 @@ body.legende-offen .annotation-box.pos-unten-links {
   transform: translateX(-50%);
   margin-bottom: 10px;
   white-space: nowrap;
-  color: #212B2E;
+  color: var(--label);
   pointer-events: none;
 }
 

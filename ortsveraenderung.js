@@ -65,6 +65,8 @@ const OV_LABEL_MAX_BREITE = 200; // ab dieser Breite wird zweizeilig gesetzt
 const OV_LABEL_ZEILE = 15;
 const OV_LABEL_ABSTAND = 34;     // Luft zwischen Kreisrand und Beschriftung
 const OV_KAPITEL_ABSTAND = 16;   // Luft zwischen Beschriftung und Kapitelzeile
+// Die Kapitelzeile steht zurückgenommen unter dem Ortsnamen.
+const OV_KAPITELZEILE_TINTE = hexZuRgb('#5A5A5A');
 
 // Erläuterungstext ÜBER dem Kreis, Serifenschrift wie die Einstiegstexte.
 const OV_TEXT_GROESSE = 11;
@@ -398,7 +400,7 @@ function zeichneOrtsveraenderung(p) {
     drawingContext.arc(o.x, layout.linienY, 3.5, 0, TWO_PI);
     drawingContext.fill();
 
-    stroke(33, 43, 46, 110 * o.alphaSkala);
+    stroke(LABEL_TINTE.r, LABEL_TINTE.g, LABEL_TINTE.b, 110 * o.alphaSkala);
     strokeWeight(1);
     line(o.x, layout.linienY + rand, o.x, layout.linienY + rand + OV_LABEL_ABSTAND - 8);
     line(o.x, layout.linienY - rand, o.x, layout.linienY - rand - OV_TEXT_ABSTAND + 8);
@@ -416,13 +418,13 @@ function zeichneOrtsveraenderung(p) {
     // Zuweisung bei gleichbleibendem Wert. zeichneFwertPunkte schreibt oben
     // direkt in fillStyle und umgeht den Zwischenspeicher — der Ortsname
     // wurde dadurch rot, sobald sich seine Deckkraft nicht mehr änderte.
-    drawingContext.fillStyle = `rgba(33, 43, 46, ${o.alphaSkala})`;
+    drawingContext.fillStyle = `rgba(${LABEL_TINTE.r}, ${LABEL_TINTE.g}, ${LABEL_TINTE.b}, ${o.alphaSkala})`;
     let labelY = layout.linienY + rand + OV_LABEL_ABSTAND;
     zeilen.forEach((zeile, z) => drawingContext.fillText(zeile, o.x, labelY + z * OV_LABEL_ZEILE));
 
     textStyle(NORMAL);
     textSize(11);
-    drawingContext.fillStyle = `rgba(90, 90, 90, ${o.alphaSkala})`;
+    drawingContext.fillStyle = `rgba(${OV_KAPITELZEILE_TINTE.r}, ${OV_KAPITELZEILE_TINTE.g}, ${OV_KAPITELZEILE_TINTE.b}, ${o.alphaSkala})`;
     drawingContext.fillText(o.stand.letztes ? `Kapitel ${o.stand.letztes}` : 'Kapitel –',
       o.x, labelY + (zeilen.length - 1) * OV_LABEL_ZEILE + OV_KAPITEL_ABSTAND);
   });
@@ -439,7 +441,7 @@ function zeichneOrtsveraenderung(p) {
     textStyle(BOLD);
     textSize(OV_DATEN_GROESSE);
     drawingContext.letterSpacing = '0.06em';
-    drawingContext.fillStyle = `rgba(33, 43, 46, ${o.alphaSkala * 0.7})`;
+    drawingContext.fillStyle = `rgba(${LABEL_TINTE.r}, ${LABEL_TINTE.g}, ${LABEL_TINTE.b}, ${o.alphaSkala * 0.7})`;
     daten.forEach((zeile, z) => drawingContext.fillText(
       zeile, o.x, unterkante - (daten.length - 1 - z) * OV_DATEN_ZEILE));
     drawingContext.letterSpacing = '0px';
@@ -448,7 +450,7 @@ function zeichneOrtsveraenderung(p) {
     let textUnterkante = unterkante - (daten.length ? daten.length * OV_DATEN_ZEILE + OV_DATEN_ABSTAND : 0);
     textFont(SCHRIFT_SERIF);
     textSize(OV_TEXT_GROESSE);
-    drawingContext.fillStyle = `rgba(33, 43, 46, ${o.alphaSkala * 0.85})`;
+    drawingContext.fillStyle = `rgba(${LABEL_TINTE.r}, ${LABEL_TINTE.g}, ${LABEL_TINTE.b}, ${o.alphaSkala * 0.85})`;
     erlaeuterung.forEach((zeile, z) => drawingContext.fillText(
       zeile, o.x, textUnterkante - (erlaeuterung.length - 1 - z) * OV_TEXT_ZEILE));
   });

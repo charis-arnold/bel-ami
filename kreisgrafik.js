@@ -170,7 +170,7 @@ function zeichneKreisLabels(kandidaten) {
 
   push(); // sechs Zeichenzustände plus direkte fillStyle-Schreibzugriffe
   noStroke();
-  fill(33, 43, 46, 255); // #212B2E, wie die Kapitelnummern
+  fill(LABEL_TINTE.r, LABEL_TINTE.g, LABEL_TINTE.b, 255);
   beschriftungsSchrift(LABEL_GROESSE);
   textAlign(LEFT, CENTER);
 
@@ -219,7 +219,7 @@ function zeichneKreisLabels(kandidaten) {
       // Direkt statt fill(): die Farbe wechselt je Label (alpha).
       drawingContext.fillStyle = k.farbe
         ? k.farbe
-        : `rgba(33, 43, 46, ${alpha})`;
+        : `rgba(${LABEL_TINTE.r}, ${LABEL_TINTE.g}, ${LABEL_TINTE.b}, ${alpha})`;
       // Siehe ACHTUNG oben.
       drawingContext.fillText(k.text, k.x, y);
     });
