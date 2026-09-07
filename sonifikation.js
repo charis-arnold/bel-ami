@@ -18,6 +18,8 @@
 // 39 von 46 Namen intern, 7 exportiert. Konvention: docs/architektur.md.
 (function () {
 
+// --- Strudel-Anbindung ----------------------------------------------------
+
 // Dieselben zwei CDN-Quellen, die strudel.cc selbst lädt. @strudel/web bringt
 // keine Samples mit; gm_*-Sounds brauchen ein Extrapaket und bleiben draussen.
 const SONIFIKATION_SAMPLE_BAENKE = [
@@ -34,6 +36,14 @@ const SONIFIKATION_INSTRUMENTE = {
   emotion_faerbt_raum: { sound: 'pipeorgan_quiet', attack: 0.25, release: 1.2, octave: 4 },
   koerper_als_sensor: { sound: 'sax', attack: 0.12, release: 0.8, octave: 4 },
 };
+
+// ACHTUNG initStrudel() muss im Klick-Handler laufen (Autoplay-Policy) und
+// gibt in @strudel/web@1.0.3 nichts zurück — setcps/cpm sind von aussen nicht
+// erreichbar. Tempo liegt deshalb fest bei cps=0.5, die Gesamtdauer wird
+// über .slow() gesteuert.
+const SONIFIKATION_STANDARD_CPS = 0.5;
+
+// --- Stationsmodell: Zeitplan ---------------------------------------------
 
 // Gesamtdauer des Stücks — bewusst hier (nicht in Python) als gestalterischer
 // Wert; erste Annahme, per Ohr anzupassen.
@@ -201,12 +211,21 @@ const ELEMENT_POS_OKTAVEN = 1;
 const ELEMENT_NEG_OKTAVEN = -1;
 
 
+// --- Laufzeitzustand ------------------------------------------------------
+
 let sonifikationDaten = null;
 let sonifikationBereit = false;
 let sonifikationSpieltGerade = false;
 
 // Zeitplan in Sekunden ab Start, nur modulintern für den Audio-Aufbau.
 let sonifikationSpielplan = null;
+
+let sonifikationTimeoutId = null;
+
+// Ein Eintrag je Element, in Erzählreihenfolge, mit dem Kreisstand, den es
+// gerade erzeugt. Keine neue Datei nötig: alles steht in den
+// kapitelXX-stationen.json, die auch das Bild liest.
+let elementCache = {};
 
 async function ladeSonifikationDaten() {
   if (sonifikationDaten) return sonifikationDaten;
@@ -251,12 +270,6 @@ function baueGainFolge(stationen, spielplan, kategorie, maxAnzahl) {
     .join(' ');
 }
 
-// ACHTUNG initStrudel() muss im Klick-Handler laufen (Autoplay-Policy) und
-// gibt in @strudel/web@1.0.3 nichts zurück — setcps/cpm sind von aussen nicht
-// erreichbar. Tempo liegt deshalb fest bei cps=0.5, die Gesamtdauer wird
-// über .slow() gesteuert.
-const SONIFIKATION_STANDARD_CPS = 0.5;
-
 async function stelleSonifikationBereit() {
   if (sonifikationBereit) return;
 
@@ -289,8 +302,6 @@ async function stelleSonifikationBereit() {
 
   sonifikationBereit = true;
 }
-
-let sonifikationTimeoutId = null;
 
 // Gemeinsamer Wiedergabe-Kern: beide Aufrufer bauen nur notenFolge und
 // gainFolgen, gespielt wird hier auf denselben drei Layern.
@@ -371,11 +382,6 @@ function elementFortschritte(daten, eintraege) {
   }
   return werte;
 }
-
-// Ein Eintrag je Element, in Erzählreihenfolge, mit dem Kreisstand, den es
-// gerade erzeugt. Keine neue Datei nötig: alles steht in den
-// kapitelXX-stationen.json, die auch das Bild liest.
-let elementCache = {};
 
 function elementeFuerKapitel(kapitelNr) {
   let ortsvergleich = laeuftOrtsvergleich(); // uebersichtsrouten.js
@@ -733,6 +739,14 @@ async function spieleKapitelSonifikationAudio(nr) {
   spieleSchichten(notenFolge, gainFolgenProKategorie, slowFaktor, gesamtdauerSek);
 }
 
+// --- Legendenklang: Masse -------------------------------------------------
+
+const KATEGORIE_KLANG_SEK = 2;
+// Der Takt wird viermal so lang gedehnt wie die Spieldauer. Strudel wiederholt
+// ein Muster endlos; so kommt der zweite Anschlag erst nach 8 s, also lange
+// nachdem bei 2 s abgeschaltet wird. Gehört wird dadurch genau ein Ton.
+const KATEGORIE_KLANG_TAKT = 4;
+
 // Nur der Audio-Teil. Play-Zustand und Button gehören der Graph-Ansicht
 // (toggleGrafikPlay, spine-horizontal.js) und bleiben unangetastet.
 // Ein einzelner Anschlag zum Anhören, für die anklickbaren Kategorienzeilen
@@ -741,12 +755,6 @@ async function spieleKapitelSonifikationAudio(nr) {
 // ACHTUNG er beendet, was gerade läuft: ein Strudel-Muster lässt sich nur über
 // hush() anhalten, und das trifft alle Stimmen. Läuft die Sonifikation, bricht
 // ein Klick auf eine Kategorie sie also ab.
-const KATEGORIE_KLANG_SEK = 2;
-// Der Takt wird viermal so lang gedehnt wie die Spieldauer. Strudel wiederholt
-// ein Muster endlos; so kommt der zweite Anschlag erst nach 8 s, also lange
-// nachdem bei 2 s abgeschaltet wird. Gehört wird dadurch genau ein Ton.
-const KATEGORIE_KLANG_TAKT = 4;
-
 async function spieleLegendenKlang(name) {
   // Zwei Sorten Zeile: die drei Gefühlskategorien spielen ihr eigenes
   // Instrument auf der untersten Stufe, die F-Werte alle das Xylophon — dafür
@@ -824,6 +832,8 @@ function beendeSonifikationAudio() {
 // bleibt die fehlende setcps-Erreichbarkeit (siehe oben) folgenlos. Ein neues
 // Muster übernimmt zur nächsten Zyklusgrenze, der Wechsel klingt also gesetzt
 // und nicht wie ein Schnitt.
+
+// --- Intro: Besetzung und Harmonie ----------------------------------------
 
 // Ein Zyklus dauert bei cps=0.5 zwei Sekunden; gedehnt sind es acht. So lang
 // steht ein Akkord, wenn jemand mitten im Schritt liegen bleibt.
@@ -905,6 +915,13 @@ const INTRO_HARMONIE = [
   [0, 2, 4],    // 12  «Was folgt, ist die Route»   i
 ];
 
+// --- Intro: Laufzeitzustand -----------------------------------------------
+
+let introGrenzenCache = null;
+let introTonErlaubt = false;   // hat jemand den Ton eingeschaltet?
+let introLaeuft = false;
+let introSchritt = null;
+
 // Zwei Anschläge je Zyklus, Grundton und Quinte des Akkords.
 //
 // ACHTUNG das Pedal darf NICHT einen einzigen langen Ton halten. Die Aufnahme
@@ -962,8 +979,6 @@ function baueIntroMuster(schritt) {
 // sind auf sechs Stellen gerundet; gegen eine gerechnete Teilung von
 // kartenwechselStart durch dreizehn driften sie mal knapp darüber, mal knapp
 // darunter. Gemessen lägen nur fünf von zwölf Wechseln auf ihrem Text.
-let introGrenzenCache = null;
-
 function introGrenzen() {
   if (introGrenzenCache) return introGrenzenCache;
   // .begleittext-dunkel schliesst die Legenden- und Kapiteltexte aus, die
@@ -984,10 +999,6 @@ function introSchrittFuer(progress) {
   // Akkord — lieber eine zu lange Schlusswendung als ein Absturz.
   return Math.min(i, INTRO_HARMONIE.length - 1);
 }
-
-let introTonErlaubt = false;   // hat jemand den Ton eingeschaltet?
-let introLaeuft = false;
-let introSchritt = null;
 
 // Aus draw() bei jedem Frame gerufen, tut aber nur an Schrittgrenzen etwas —
 // über die ganzen 1276vh sind das dreizehn Musterwechsel, nicht 60 je Sekunde.
