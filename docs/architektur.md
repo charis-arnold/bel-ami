@@ -6,78 +6,44 @@ verbesserungswürdig ist, steht getrennt davon in
 [best-practices-review.md](best-practices-review.md).
 
 **Randbedingung, aus der sich alles Weitere ergibt:** Das Projekt nutzt **keine
-ES-Module**. Jede Datei ist ein eigenes `<script>`-Tag, alle Funktionen und
-Variablen landen im globalen Scope — **ausser dort, wo eine IIFE sie hält.**
-Neun der zwölf Module sind gekapselt und geben nur die genannten Namen über
-`window.*` heraus:
+ES-Module**. Jede Datei ist ein eigenes `<script>`-Tag, und alle Funktionen,
+Variablen und Konstanten der zwölf Dateien landen im **gemeinsamen globalen
+Scope**. Es gibt keine Kapselung und keinen Exportblock: wer einen Namen auf
+Modulebene deklariert, macht ihn damit für jede später geladene Datei sichtbar.
 
-| Modul | Exporte |
-|---|---|
-| `datenbereinigung.js` | 40 |
-| `sketch.js` | 30 (12 Wert, 13 Lesebindung, **5 p5-Hooks**) |
-| `kreisgrafik.js` | 13 |
-| `spine-horizontal.js` | 11 (3 Lesebindungen) |
-| `uebersichtsrouten.js` | 12 (3 Lesebindungen) |
-| `ortsveraenderung.js` | 3 |
-| `sonifikation.js` | 7 (1 Lesebindung) |
-| `kartendekor.js` | 3 |
-| `annotationsbox.js` | 2 |
+Es gibt kein `import`/`export` — wer worauf zugreift, ist nirgends deklariert,
+sondern ergibt sich aus der Reihenfolge in `index.html` und dem Zeitpunkt des
+Zugriffs.
 
-Die drei übrigen sind bewusst ungekapselt: Bei ihnen wird **jeder**
-Top-Level-Name von aussen gelesen, eine Kapsel müsste also alles exportieren
-und nähme dem globalen Scope nichts ab.
+**Drei Regeln, die daraus folgen:**
 
-| Modul | Top-Level-Namen | davon nur intern | Warum ungekapselt |
-|---|---|---|---|
-| `geo-projektion.js` | 11 | **0** | Unterste Schicht — `lonLatToScreen`, die drei Bboxen plus `UEBERSICHT_SCHNITT_BBOX`, `mapOffsetX/Y` und die vier Crop-/Bbox-Funktionen werden alle von aussen gebraucht |
-| `dom-aufbau.js` | 4 | **0** | Nur die vier `baue*`-Funktionen, alle von `setup()` gerufen |
-| `fotomarker.js` | 13 | **0** | Zusätzlicher Blocker: `sketch.js` **schreibt** in sechs dieser Namen (`fotoMarkerListe` in `preload`/`bereinigeEingangsdaten`, die fünf `fotoPopup*`-Handles in `setup`). Eine Kapsel würde diese sieben Zuweisungen wirkungslos machen — sie liefen ins Leere, ohne Fehlermeldung |
+1. **Jeder Top-Level-Name muss projektweit eindeutig sein.** Deklarieren zwei
+   Dateien denselben Namen mit `let` oder `const`, gibt es einen
+   `SyntaxError` — und die zweite Datei lädt dann gar nicht. Bei `function`
+   gäbe es keinen Fehler, sondern stilles Überschreiben. Stand heute: 481
+   Top-Level-Namen, keine einzige Kollision.
+2. **Namen dürfen p5 und Strudel nicht verdecken.** Beide legen ihre API
+   ebenfalls global ab. Ein `let width` oder `const key` auf Modulebene
+   überdeckte p5s eigenen Wert für den ganzen Rest des Projekts. Die einzige
+   beabsichtigte Überschneidung sind die fünf p5-Hooks.
+3. **Die fünf p5-Hooks** (`preload`, `setup`, `draw`, `mousePressed`,
+   `windowResized`) MÜSSEN am `window` liegen — p5 sucht sie dort. Als
+   Top-Level-`function`-Deklarationen in `sketch.js` landen sie automatisch
+   dort. Fehlte einer, bliebe das Bild schwarz, ohne Fehlermeldung.
 
-Für `fotomarker.js` wäre eine Kapselung also nicht nur nutzlos, sondern
-schädlich, solange die Initialisierung in `sketch.js` liegt. Das ist der Rest
-der Fremdschreibzugriffe aus Punkt 8 (21 → 7).
-
-**Form der Kapsel** — gilt für alle neun, steht deshalb nur hier und nicht in
-jeder Datei:
-
-- **Rumpf nicht eingerückt.** Eine Einrückung um zwei Zeichen würde bei
-  Dateien dieser Grösse jede Zeile als geändert markieren: Diff unlesbar,
-  `git blame` wertlos. So bleibt der Kapsel-Diff eine reine Einfügung von
-  Wrapper und Exportblock.
-- **Kein `'use strict'`.** Wäre eine Verhaltensänderung über die Kapselung
-  hinaus (undeklarierte Zuweisungen, `this`, doppelte Parameternamen) und
-  gehört, wenn überhaupt, in einen eigenen Schritt.
-- **Exportblock am Dateiende**, `window.X = X` je Zeile, kein
-  Namespace-Objekt — so bleiben die Aufrufstellen in den lesenden Modulen
-  unverändert.
-
-**Zwei Regeln, die dabei gelten:**
-
-1. Ist ein exportierter Name **veränderlich** und wird im Modul umgeschaltet,
-   steht statt einer Wertzuweisung eine **Lesebindung**
-   (`Object.defineProperty` mit `get`). Eine Kopie würde den Startwert
-   einfrieren. Bei `sketch.js` betrifft das 17 von 35 Exporten — dort wird
-   fast jeder `let` erst in `preload`/`setup`/`draw` gesetzt, also nach dem
-   Lauf der IIFE.
-2. Die **fünf p5-Hooks** (`preload`, `setup`, `draw`, `mousePressed`,
-   `windowResized`) MÜSSEN am `window` liegen — p5 sucht sie dort. Sie stehen
-   in der Kapsel und werden wie jeder andere Name exportiert. Fehlte einer,
-   bliebe das Bild schwarz, ohne Fehlermeldung.
+**ACHTUNG `let` und `const` liegen NICHT am `window`.** Sie stehen im globalen
+lexikalischen Scope. Ein unqualifizierter Zugriff aus einer anderen Datei
+funktioniert (`SCROLL_MEILENSTEINE`), ein Zugriff über das Objekt nicht
+(`window.SCROLL_MEILENSTEINE` ist `undefined`). Dasselbe gilt für `typeof`:
+Vor der Auswertung eines `const` wirft `typeof X` einen `ReferenceError`,
+statt `'undefined'` zu liefern — ein `typeof`-Wächter schützt hier also nicht
+gegen die Ladereihenfolge, sondern ist selbst die Fehlerquelle.
 
 Bei `datenbereinigung.js` hängt die Ladereihenfolge daran: Es ist Skript 1,
 und `kreisgrafik.js` (Skript 3) greift beim Laden auf sechs seiner Namen zu —
 `hexZuRgb`, `ROUTE_COLOR`, `KREIS_KATEGORIEN`, `FWERT_PUNKTGROESSE`,
-`FWERT_LABELS` und `FWERT_PUNKT_DURCHMESSER`. Die IIFE läuft sofort und
-exportiert am Dateiende — alle sechs liegen also auf `window`, bevor Skript 2
-beginnt.
-
-Wo ein exportierter Name **veränderlich** ist und im Modul umgeschaltet wird,
-steht statt einer Wertzuweisung eine **Lesebindung** (`Object.defineProperty`
-mit `get`) — eine Kopie würde den Startwert einfrieren. Das betrifft
-`sonifikationSpieltGerade` sowie `zoomedKapitel`, `kapitelZoomAmount` und
-`kapitelHover`. Siehe die Kommentare in den jeweiligen Exportblöcken. Es gibt kein `import`/`export` — wer worauf
-zugreift, ist nirgends deklariert, sondern ergibt sich aus der Reihenfolge in
-`index.html` und dem Zeitpunkt des Zugriffs.
+`FWERT_LABELS` und `FWERT_PUNKT_DURCHMESSER`. Diese Datei nach hinten zu
+schieben bricht `kreisgrafik.js`.
 
 ---
 
@@ -238,18 +204,18 @@ eigenen Header-Abschnitt aus.
 
 | # | Modul | Zeilen | Hauptfunktionen | Wichtigste eigene Variablen |
 |---|---|---|---|---|
-| 1 | `datenbereinigung.js` | 472 | `bereinigeStationenDaten`, `baueSpineDaten`, `sammleAnnotationenNachOrtBasis`, `zaehleBandCounts`, `zaehleAnnotationenLiveNachOrtBasis`, `ortRunsFuerSpine`, `ortRunSichtbar`, `kreisRadius`, `groessterKreisRadius`, `hexZuRgb` | `KREIS_KATEGORIEN`, `SCROLL_MEILENSTEINE`, `ROUTE_COLOR_RGB`, `FWERT_COLOR`/`FWERT_COLOR_RGB`, `FWERT_PUNKTGROESSE`, `FWERT_PUNKT_DURCHMESSER`, beide `FOTO_MARKER_*_RGB`, `KAPITEL_MIT_SPINE_PANEL`, `WOHNUNG_SAMMELPUNKT_ANKER`, `SCHRIFT_SANS`/`SCHRIFT_SERIF`, `hexZuRgb`/`rgbZuHex`, die Legendenbegriffe aus dem PDF (`WAHRNEHMUNG_LABELS`, `LEGENDE_BLOCK_TITEL`, `LEGENDE_KREISGROESSE`, `LEGENDE_VALENZ`, `LEGENDE_ORTSBESCHRIFTUNG`, `LEGENDE_TITEL`/`LEGENDE_UNTERTITEL`) — **gekapselt**, 39 Exporte. Intern: alle drei `GEDANKEN_*`, die übrigen drei `WOHNUNG_*`, die beiden Fotomarker-Hexwerte und `valenzBucket` |
-| 2 | `geo-projektion.js` | 96 | `lonLatToScreen`, `coverCrop`, `cropToBbox`, `bboxToImgCrop`, `passeBboxInRahmen` | `startBbox`, `uebersichtBbox`, `ch1ImgBbox`, `UEBERSICHT_SCHNITT_BBOX`, `mapOffsetX`, `mapOffsetY` |
-| 3 | `kreisgrafik.js` | 1164 | `zeichneKreiseOrtRuns`, `zeichneKreiseFuerRun`, `zeichneFwertPunkte`, `zeichneKreisLabels`, `zeichneDemoKreisgrafik`, `zeichneSchleier`, `kategorieZeileGetroffen`, `zeichneRegisterleiste`, `zeichneInfoLeiste`, `reiterGetroffen`, `legendenLeisteHoehe`, `registerHoehe`, `leereBandCounts` | **gekapselt**, 13 Exporte; die übrigen Namen (u. a. `HATCH_SPACING`, `schraffiere`, alle `DEMO_*`, `LEGENDE_*` und `LEISTE_*`) sind modulintern. Beherbergt seit dem Onboarding-Umbau auch den neunstufigen Legendenaufbau (`demoLegende` und seine Zeichenroutinen) und beide Register am unteren Rand |
-| 4 | `kartendekor.js` | 231 | `zeichneRoute`, `zeichneMassstabsleiste`, `zeichneScrollFortschritt` | — **gekapselt**, 3 Exporte; intern `haversineMeter`, `MASSSTAB_SCHRITTE`, der Routenpuffer und seine Helfer (`routenPufferBereit`, `routenStufenZuege`, `routenStufenAlpha`, alle `ROUTE_*`). `zeichneScrollFortschritt` liegt hier und nicht im DOM, weil die Reiter der Register an derselben Stelle sitzen und davor liegen müssen |
-| 5 | `ortsveraenderung.js` | 489 | `zeichneOrtsveraenderung` | **Zwei Exporte**: die Zeichenfunktion und `OV_KAPITEL_ZAHL`, aus der `spine-horizontal.js` die Abspieldauer rechnet. Die Ansicht bringt Reihenfolge, Linienlayout und gemeinsame Kreis-Skala (`ovBerechneLayout`) selbst mit, `draw()` übergibt nur `grafikFortschritt`. Alles Übrige ist modulintern |
-| 6 | `spine-horizontal.js` | 363 | `zeichneSpineHorizontal`, `toggleGrafikPlay`, `setzeKapitelAnsichtModus`, `setzeGrafikZurueck`, `stelleSpineDatenBereit`, `spineEintraegeFuer`, `aktuelleGrafikAnimationDauer`, `aktualisiereGrafikFortschritt` | `grafikSpielt`, `grafikFortschritt`, `grafikPlayAusblendStart` (Lesebindungen) — **gekapselt**, intern: beide Spine-Caches, alle `SPINE_*`, `spineLayout` |
-| 7 | `fotomarker.js` | 116 | `zeichneFotoMarker`, `merkeKartenlage`, `oeffneFotoPopup`, `schliesseFotoPopup` | `fotoMarkerListe`, `letzteActiveBbox`, `letzterFotoOffsetX/Y`, `FOTO_MARKER_TREFFER_RADIUS`. Zeichnet einen Punkt mit hellem Kern; Grösse abgeleitet aus `FWERT_PUNKT_DURCHMESSER`, Beschriftung über `zeichneKreisLabels` |
-| 8 | `annotationsbox.js` | 106 | `annotationBoxPosition` | `ANNOTATION_BOX_POSITIONEN` — **gekapselt**, intern u. a. `annotationBoxPositionCache` |
-| 9 | `dom-aufbau.js` | 107 | `baueKapitelRegister`, `baueKartenMarkierungen`, `baueStationsMarker`, `baueZwischenMarker` | — (baut nur DOM, hält keinen Zustand) |
-| 10 | `uebersichtsrouten.js` | 411 | `zeichneUebersichtsrouten`, `kapitelScheiben`, `aktualisiereKapitelZoom`, `springeZuKapitelZoom`, `scrolleZuKapitel1`, `waehleAnsichtsModus` | `zoomedKapitel`, `kapitelZoomAmount`, `kapitelHover` (alle drei als Lesebindung) — **gekapselt**, intern u. a. `kapitelHitze`, `oeffneKapitelZoom`, `scheibenCache` |
-| 11 | `sketch.js` | 892 | `preload`, `setup`, `draw`, `mousePressed`, `windowResized`, `datenFuerKapitel`, `kapitelHatEigeneAnsicht`, `setzeAnsichtsModus`, `starteKapitelEinstieg` | `stationenData`, `uebersichtsRouten`, `kapitelAnsichtsModus`, `kapitel1Geklemmt`/`kapitel1ZoomAmount`, 9 DOM-Handles (als Lesebindung) — **gekapselt**, intern u. a. `kapitelKarten`, `bgImage`/`bgImage2`/`ch1Image`, der Zustand beider Register (`legendenLeisteOffen`, `legendeAus`, `infoAus`) |
-| 12 | `sonifikation.js` | 737 | `spieleSonifikationFuer`, `beendeSonifikationAudio` | `SONIFIKATION_GESAMTDAUER_SEK`, `sonifikationSpieltGerade` (als Lesebindung) — **gekapselt**, die übrigen 17 Namen (u. a. `baueSpielplan`, `baueGainFolge`, `sonifikationDaten`) sind modulintern |
+| 1 | `datenbereinigung.js` | 459 | `bereinigeStationenDaten`, `baueSpineDaten`, `sammleAnnotationenNachOrtBasis`, `zaehleBandCounts`, `zaehleAnnotationenLiveNachOrtBasis`, `ortRunsFuerSpine`, `ortRunSichtbar`, `kreisRadius`, `groessterKreisRadius`, `hexZuRgb` | `KREIS_KATEGORIEN`, `SCROLL_MEILENSTEINE`, `ROUTE_COLOR_RGB`, `FWERT_COLOR`/`FWERT_COLOR_RGB`, `FWERT_PUNKTGROESSE`, `FWERT_PUNKT_DURCHMESSER`, beide `FOTO_MARKER_*_RGB`, `KAPITEL_MIT_SPINE_PANEL`, `WOHNUNG_SAMMELPUNKT_ANKER`, `SCHRIFT_SANS`/`SCHRIFT_SERIF`, `hexZuRgb`/`rgbZuHex`, die Legendenbegriffe aus dem PDF (`WAHRNEHMUNG_LABELS`, `LEGENDE_BLOCK_TITEL`, `LEGENDE_KREISGROESSE`, `LEGENDE_VALENZ`, `LEGENDE_ORTSBESCHRIFTUNG`, `LEGENDE_TITEL`/`LEGENDE_UNTERTITEL`) — die grösste Schnittstelle im Projekt, 39 Namen werden von aussen gelesen. Nur intern: alle drei `GEDANKEN_*`, die übrigen drei `WOHNUNG_*` und `valenzBucket` |
+| 2 | `geo-projektion.js` | 176 | `lonLatToScreen`, `coverCrop`, `cropToBbox`, `bboxToImgCrop`, `passeBboxInRahmen` | `startBbox`, `uebersichtBbox`, `ch1ImgBbox`, `UEBERSICHT_SCHNITT_BBOX`, `mapOffsetX`, `mapOffsetY` |
+| 3 | `kreisgrafik.js` | 1498 | `zeichneKreiseOrtRuns`, `zeichneKreiseFuerRun`, `zeichneFwertPunkte`, `zeichneKreisLabels`, `zeichneDemoKreisgrafik`, `zeichneSchleier`, `kategorieZeileGetroffen`, `zeichneRegisterleiste`, `zeichneInfoLeiste`, `reiterGetroffen`, `legendenLeisteHoehe`, `registerHoehe`, `leereBandCounts` | 13 Namen werden von aussen gelesen; die übrigen (u. a. `HATCH_SPACING`, `schraffiere`, alle `DEMO_*`, `LEGENDE_*` und `LEISTE_*`) sind modulintern. Beherbergt seit dem Onboarding-Umbau auch den neunstufigen Legendenaufbau (`demoLegende` und seine Zeichenroutinen) und beide Register am unteren Rand |
+| 4 | `kartendekor.js` | 237 | `zeichneRoute`, `zeichneMassstabsleiste`, `zeichneScrollFortschritt` | — von aussen gebraucht werden nur die drei Zeichenfunktionen; intern `haversineMeter`, `MASSSTAB_SCHRITTE`, der Routenpuffer und seine Helfer (`routenPufferBereit`, `routenStufenZuege`, `routenStufenAlpha`, alle `ROUTE_*`). `zeichneScrollFortschritt` liegt hier und nicht im DOM, weil die Reiter der Register an derselben Stelle sitzen und davor liegen müssen |
+| 5 | `ortsveraenderung.js` | 479 | `zeichneOrtsveraenderung` | **Drei Namen gehen nach aussen**: die Zeichenfunktion, `ortsvergleichAnnotationen` für `sonifikation.js` und `OV_KAPITEL_ZAHL`, aus der `spine-horizontal.js` die Abspieldauer rechnet. Die Ansicht bringt Reihenfolge, Linienlayout und gemeinsame Kreis-Skala (`ovBerechneLayout`) selbst mit, `draw()` übergibt nur `grafikFortschritt`. Alles Übrige ist modulintern |
+| 6 | `spine-horizontal.js` | 343 | `zeichneSpineHorizontal`, `toggleGrafikPlay`, `setzeKapitelAnsichtModus`, `setzeGrafikZurueck`, `stelleSpineDatenBereit`, `spineEintraegeFuer`, `aktuelleGrafikAnimationDauer`, `aktualisiereGrafikFortschritt` | `grafikSpielt`, `grafikFortschritt`, `grafikPlayAusblendStart` — intern: beide Spine-Caches, alle `SPINE_*`, `spineLayout` |
+| 7 | `fotomarker.js` | 185 | `zeichneFotoMarker`, `merkeKartenlage`, `oeffneFotoPopup`, `schliesseFotoPopup` | `fotoMarkerListe`, `letzteActiveBbox`, `letzterFotoOffsetX/Y`, `FOTO_MARKER_TREFFER_RADIUS`. Zeichnet einen Punkt mit hellem Kern; Grösse abgeleitet aus `FWERT_PUNKT_DURCHMESSER`, Beschriftung über `zeichneKreisLabels` |
+| 8 | `annotationsbox.js` | 98 | `annotationBoxPosition` | `ANNOTATION_BOX_POSITIONEN` — intern u. a. `annotationBoxPositionCache` |
+| 9 | `dom-aufbau.js` | 109 | `baueKapitelRegister`, `baueKartenMarkierungen`, `baueStationsMarker`, `baueZwischenMarker` | — (baut nur DOM, hält keinen Zustand) |
+| 10 | `uebersichtsrouten.js` | 383 | `zeichneUebersichtsrouten`, `kapitelScheiben`, `aktualisiereKapitelZoom`, `springeZuKapitelZoom`, `scrolleZuKapitel1`, `waehleAnsichtsModus` | `zoomedKapitel`, `kapitelZoomAmount`, `kapitelHover` — alle drei nur hier geschrieben, von aussen nur gelesen; intern u. a. `kapitelHitze`, `oeffneKapitelZoom`, `scheibenCache` |
+| 11 | `sketch.js` | 1045 | `preload`, `setup`, `draw`, `mousePressed`, `windowResized`, `datenFuerKapitel`, `kapitelHatEigeneAnsicht`, `setzeAnsichtsModus`, `starteKapitelEinstieg` | `stationenData`, `uebersichtsRouten`, `kapitelAnsichtsModus`, `kapitel1Geklemmt`/`kapitel1ZoomAmount`, 9 DOM-Handles; intern u. a. `kapitelKarten`, `bgImage`/`bgImage2`/`ch1Image`, der Zustand beider Register (`legendenLeisteOffen`, `legendeAus`, `infoAus`) |
+| 12 | `sonifikation.js` | 1044 | `spieleSonifikationFuer`, `beendeSonifikationAudio` | `SONIFIKATION_GESAMTDAUER_SEK`, `sonifikationSpieltGerade` — die übrigen 17 Namen (u. a. `baueSpielplan`, `baueGainFolge`, `sonifikationDaten`) sind modulintern |
 
 `dom-aufbau.js` ist das einzige Modul ohne eigene Top-Level-Variablen: es baut
 DOM-Knoten und schreibt sie in Handles, die `sketch.js` hält.
@@ -630,5 +596,9 @@ Die Angaben sind aus dem Code erhoben, nicht aus den Kommentaren übernommen:
 - **Ladezeit-Abhängigkeiten:** jedes Modul einzeln in JavaScriptCore geladen —
   wer dabei einen `ReferenceError` wirft, braucht ein früher geladenes Modul.
   Genau zwei tun das.
+- **Namenskollisionen:** alle zwölf Dateien in Ladereihenfolge aneinandergehängt
+  und geparst — eine doppelte `let`/`const`-Deklaration bricht dabei mit
+  `SyntaxError` ab. Zusätzlich alle Top-Level-Namen gegen die globalen Namen
+  von p5 und Strudel abgeglichen.
 - **Laufzeit-Abhängigkeiten:** für jedes Modul geprüft, welche Namen es
   verwendet, die ein anderes Modul deklariert.
