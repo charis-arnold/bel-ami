@@ -23,10 +23,9 @@ const SONIFIKATION_SAMPLE_BAENKE = [
   ['https://strudel.b-cdn.net/vcsl.json', 'https://strudel.b-cdn.net/VCSL/'],
 ];
 
-// VCSL hat keine Streicher und keine Klarinetten — die ursprünglich gedachte
-// Saint-Saëns-Besetzung war so nicht zu haben. Was die Bank hat und das
-// Elementmodell weiter unten benutzt: Harfe, Vibraphon, Klavier, Xylophon und
-// das Orgelpedal.
+// VCSL hat keine Streicher und keine Klarinetten. Was die Bank hat und das
+// Elementmodell weiter unten benutzt: Harfe, Vibraphon, Klavier, Xylophon
+// und das Orgelpedal.
 const SONIFIKATION_INSTRUMENTE = {
   ort_loest_emotion_aus: { sound: 'piano', attack: 0.02, release: 0.6, octave: 3 },
   emotion_faerbt_raum: { sound: 'pipeorgan_quiet', attack: 0.25, release: 1.2, octave: 4 },
@@ -299,8 +298,8 @@ async function stelleSonifikationBereit() {
   sonifikationBereit = true;
 }
 
-// Gemeinsamer Wiedergabe-Kern: beide Aufrufer bauen nur notenFolge und
-// gainFolgen, gespielt wird hier auf denselben drei Layern.
+// Gemeinsamer Wiedergabe-Kern: beide Aufrufer bauen nur die Noten- und
+// Gain-Folgen, gespielt wird hier auf denselben drei Ebenen.
 function spieleSchichten(notenFolge, gainFolgenProKategorie, slowFaktor, gesamtdauerSek) {
   let layers = Object.entries(SONIFIKATION_INSTRUMENTE).map(([kategorie, instr]) =>
     n(notenFolge)

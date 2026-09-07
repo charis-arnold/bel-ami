@@ -23,7 +23,7 @@ let grafikPlayAusblendStart = null;
 // --- Spine-Daten: Caches --------------------------------------------------
 
 // Einmal berechnen und halten.
-let spineEintraegep5 = [];  // { typ, text, rv, stationIdx, kreisId }
+let spineEintraegep5 = [];  // { typ, text, rv } plus ortBasis oder zielIndex
 let spineEintraegeKapitel = {}; // Cache je Kapitelnummer (02–18), lazy befüllt beim ersten Zoom
 
 // --- Spine-Layout: Masse --------------------------------------------------

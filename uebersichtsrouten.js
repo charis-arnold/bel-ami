@@ -11,9 +11,8 @@ let zoomedKapitel = null;      // z.B. '03', oder null (Übersicht)
 let kapitelZoomAmount = 0;     // 0 = Übersicht, 1 = voll in Kapitelausschnitt gezoomt
 let kapitelHover = null;       // Kapitelnummer unter der Maus (fürs Cursor/Highlight)
 
-// Deckkraft der Übersichtsrouten und ihrer Badges. Fest, seit es keinen
-// Schlussakt mehr gibt, der sie ausgeblendet hätte; ein gezoomtes Kapitel
-// rechnet unten weiter mit kapitelZoomAmount dagegen.
+// Deckkraft der Übersichtsrouten und ihrer Badges. Fester Wert; ein
+// gezoomtes Kapitel rechnet unten mit kapitelZoomAmount dagegen.
 const ROUTEN_ALPHA = 180;
 
 // Teilt den Übersichtsakt in eine Scheibe je Kapitel, nach Routenlänge
@@ -315,7 +314,7 @@ function aktualisiereKapitelZoom() {
   kapitelZoomAmount = lerp(kapitelZoomAmount, zoomedKapitel ? 1 : 0, 0.08);
 }
 
-// ACHTUNG setzt voraus, dass die Scrollposition schon im uebersichtRouten-Akt liegt — 
+// ACHTUNG setzt voraus, dass die Scrollposition schon im Übersichtsakt liegt —
 // sonst schliesst der <=0-Check in draw() den Zoom im nächsten Frame
 // wieder. Von aussen immer über springeZuKapitelZoom().
 function oeffneKapitelZoom(nr) {

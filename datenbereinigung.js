@@ -35,9 +35,7 @@ const ROUTE_COLOR_RGB = hexZuRgb(ROUTE_COLOR);
 
 // Ein einziges Orange für alles, was F-Wert heisst: die Punkte an den Kreisen,
 // ihre Beschriftungen in der Legende, die Kapitelpunkte und die Routen-Hitze im
-// Übersichtsakt, der Balken der Annotationsbox. Früher standen hier drei
-// Abstufungen je F-Wert-Typ und ein eigener, dunklerer Ton für die Punkte —
-// dadurch zeigte die Legende eine andere Farbe als die Karte daneben.
+// Übersichtsakt, der Balken der Annotationsbox.
 const FWERT_COLOR = '#C2511C';
 const FWERT_COLOR_RGB = hexZuRgb(FWERT_COLOR);
 
@@ -52,10 +50,10 @@ const FOTO_MARKER_KERN_FARBE_RGB = hexZuRgb('#E2E6E1');
 // Die drei Gefühlskategorien, in Zeichenreihenfolge von innen nach aussen.
 //
 // Keine Farbreihe: die drei Töne trennen sich in Hue UND Helligkeit — Gold
-// (HSL 46° 64% 47%), Altrosa (7° 25% 65%), Nachtblau (222° 28% 28%). Früher
-// standen hier drei Goldtöne, die nur 5° Hue und 4 Punkte Helligkeit
-// auseinanderlagen. docs/Legende.pdf zeigt noch diese alte Reihe
-// (#BA9E00 / #C49600 / #CCAA00) und ist entsprechend nachzuziehen.
+// (HSL 46° 64% 47%), Altrosa (7° 25% 65%), Nachtblau (222° 28% 28%).
+//
+// OFFEN docs/Legende.pdf zeigt noch die alte Goldreihe
+// (#BA9E00 / #C49600 / #CCAA00) und ist nachzuziehen.
 //
 // ACHTUNG die Schlüssel stehen wörtlich in den Daten — als
 // annotation.category und als Schlüssel in ortRuns[].bandCounts in allen
@@ -108,13 +106,11 @@ const CATEGORY_LABELS = {
   gesellschaft_soziales: 'Gesellschaft und Soziales',
 };
 
-// Ausformulierte Namen der drei F-Wert-Typen, Gegenstück zu CATEGORY_LABELS.
-// Wortlaut wie im PDF, ohne das frühere Präfix «Wechselwirkung:».
-// ACHTUNG das \n ist ein gesetzter Umbruch, keine Wortlautänderung: die Zeile
-// ist mit Abstand die längste der drei und zog den ganzen Block in die Breite.
-// Automatisch umbrechen liesse sich das nicht sinnvoll — die Stelle ist
-// gewählt, nicht gerechnet. zeichneLegendenBlock (kreisgrafik.js) trennt
-// daran; Labels ohne \n bleiben einzeilig.
+// Ausformulierte Namen der drei F-Wert-Typen, Wortlaut wie im PDF.
+//
+// ACHTUNG das \n ist ein von Hand gesetzter Zeilenumbruch, kein Textfehler.
+// zeichneLegendenBlock (kreisgrafik.js) bricht daran um; ohne \n bleibt das
+// Label einzeilig.
 const FWERT_LABELS = {
   ort_loest_emotion_aus: 'Der Raum löst die Emotion aus',
   emotion_faerbt_raum: 'Die Emotion beeinflusst\ndie Raumwahrnehmung',
@@ -222,12 +218,10 @@ const SCROLL_TRACK_VH = 49425;
 // ACHTUNG bei geänderter Streckenlänge alle Werte umrechnen, sonst
 // verschieben sich die Akte gegeneinander.
 const SCROLL_MEILENSTEINE = {
-  // Titel und Intro-Crawl teilen sich einen Takt: dreizehn gleiche Schritte à
-  // 98vh, der Titel als erster, danach die zwölf .begleittext-Texte aus
-  // index.html. Er hält bis zum ersten Text und überblendet dann über dieselbe
-  // Strecke wie jeder Textwechsel — 0.35 des Textfensters, siehe
-  // fadeDauerFuer() in sketch.js. Der letzte Text setzt damit genau auf
-  // kartenwechselStart zum Ausblenden an.
+  // Titel und Intro-Crawl teilen sich einen Takt: dreizehn Schritte à 98vh —
+  // der Titel, dann die zwölf .begleittext-Texte aus index.html. Überblendet
+  // wird über 0.35 des Textfensters (fadeDauerFuer() in sketch.js); der letzte
+  // Text blendet genau auf kartenwechselStart aus.
   heroFadeStart: 0.001986, heroFadeEnd: 0.003056,
   // 1276vh für Titel und Crawl zusammen, danach 874vh Legendenaufbau.
   // Zoomdauer unverändert 440vh.
@@ -248,18 +242,13 @@ const SCROLL_MEILENSTEINE = {
   // 200vh Lesezeit davor für den Kapitel-Einstiegstext. Die Route selbst misst
   // 148 Annotationen × Takt = 14534vh.
   routeStart: 0.058068, routeEnd: 0.352121,
-  // Kapitel-1-Ende: ab routeEnd stehen Kartenansicht, Hinweis und die beiden
-  // Buttons, 240vh bis zur Klemme. Die ersten 140vh davon gehörten dem
-  // Projekttext-Einblender; er ist heraus, der Weg bleibt als Auslauf.
-  // Die Marke kapitelEndeStart, die ihn begrenzte, wird nicht mehr gelesen.
-  // Übersichtsakt 02–18 (alle Routen nacheinander), 14850vh breit — rund 873vh
-  // je Kapitelroute. Nach oben ist Luft bis 31581vh: so lang ist das längste
-  // Kapitel, und weiter reicht die Strecke nicht. Ein
-  // GEÖFFNETES Kapitel hält sich nicht daran: sein Akt beginnt zwar ebenfalls
-  // auf uebersichtRoutenStart, endet aber dort, wo ihm der Takt seine
-  // Annotationen zumisst (kapitelAktEnde in sketch.js) — Kapitel 05 nach
-  // 31581vh, Kapitel 14 nach 6638vh. Die Strecke ist so lang, dass das längste
-  // Kapitel hineinpasst.
+  // Kapitel-1-Ende: ab routeEnd stehen Karte, Hinweis und die beiden Buttons,
+  // 240vh bis zur Klemme. Danach der Übersichtsakt 02–18, 14850vh breit —
+  // rund 873vh je Kapitelroute.
+  //
+  // Ein GEÖFFNETES Kapitel endet nicht dort, sondern wo sein Takt es hinstellt
+  // (kapitelAktEnde in sketch.js): Kapitel 05 nach 31581vh, Kapitel 14 nach
+  // 6638vh. Die Strecke reicht bis 31581vh, das längste Kapitel passt hinein.
 
   // ACHTUNG uebersichtRoutenStart ist zugleich die Klemme am Ende von
   // Kapitel 1: weiter scrollt draw() nicht. Einen Rauszoom-Akt gibt es nicht

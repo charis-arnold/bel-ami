@@ -102,15 +102,12 @@ function zeichneBlende(x, y, r, ringRgb, kernRgb) {
 }
 
 function zeichneFotoMarker(activeBbox, offsetX = mapOffsetX, offsetY = mapOffsetY, hinweis = null) {
-  // Das Blendensymbol braucht mehr Durchmesser als der frühere Punkt: sechs
-  // Segmente und ein Sechseck in 10 px sind Matsch. 16 px ist die Grenze, ab
-  // der die Spalten noch als Spalten lesen.
+  // Das Blendensymbol braucht Durchmesser: sechs Segmente und ein Sechseck in
+  // 10 px sind Matsch. Ab 16 px lesen die Spalten noch als Spalten.
   //
-  // ACHTUNG damit hält sich der Marker NICHT mehr an die Reihe der
-  // F-Wert-Punkte (grösster 10 px), an die er vorher gebunden war. Das war
-  // vertretbar, solange beide Punkte waren und sich nur in der Farbe
-  // unterschieden — jetzt trägt die FORM den Unterschied, und die braucht
-  // ihren Platz. Wie zuvor skaliert er nicht mit dem Zoom.
+  // ACHTUNG der Marker hält sich bewusst NICHT an die Reihe der F-Wert-Punkte
+  // (grösster 10 px): dort trägt die Farbe den Unterschied, hier die Form, und
+  // die braucht mehr Platz. Er skaliert auch nicht mit dem Zoom.
   let aussenRadius = 8;
   // Tooltip und Hinweis erst nach der Schleife, sonst überzeichnet sie ein
   // später gezeichneter Marker.

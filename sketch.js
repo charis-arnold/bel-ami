@@ -109,10 +109,7 @@ let legendeAus = 0;
 let infoAus = 0;
 const REGISTER_TEMPO = 0.18;   // Anteil des Rests je Frame, wie kapitelZoomAmount
 
-// Der Projekttext hat genau einen Weg hinein: das Register «Info». Früher ging
-// er am Routenende zusätzlich von selbst auf; dafür brauchte es einen zweiten
-// Merker, der den automatischen für den laufenden Durchgang abhakte. Mit dem
-// Einblender ist auch der Merker weg.
+// Der Projekttext hat genau einen Weg hinein: das Register «Info».
 let projekttextPerRegister = false; // über den Reiter geholt, bleibt bis zum nächsten Klick
 let projekttextOffen = false;       // je Frame daraus abgeleitet
 let projekttextEl;                  // #projekttext, die Textfläche des Registers «Info»
@@ -294,9 +291,6 @@ function setup() {
   // auf Modulebene deklariert. Ein `const { … } =` legte funktionslokale
   // Konstanten an, die Modulvariablen blieben undefined — der Menübalken
   // fiele still aus.
-  //
-  // Vorher schrieb dom-aufbau.js diese fünf direkt von aussen; jetzt baut es
-  // und gibt zurück (siehe docs/best-practices-review.md, "Gruppe B").
   ({ modusZeile, planEintrag, graphEintrag, leerzeile, alleEintrag } = baueKapitelRegister());
   baueStationsMarker();
   baueZwischenMarker();
@@ -329,8 +323,7 @@ function draw() {
     if (progress > marke) progress = klemmeScroll(marke);
   }
   // Nach oben endet jeder Akt an seinem Anfang: aus einem Kapitel oder der
-  // Übersicht führt kein Scroll mehr zurück, nur das Kapitelmenü. Vorher fiel
-  // man beim Hochscrollen unversehens in Kapitel 1.
+  // Übersicht führt kein Scroll zurück, nur das Kapitelmenü.
   if ((zoomedKapitel || !kapitel1Geklemmt)
     && progress < SCROLL_MEILENSTEINE.uebersichtRoutenStart) {
     progress = klemmeScroll(SCROLL_MEILENSTEINE.uebersichtRoutenStart);
