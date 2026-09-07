@@ -1,0 +1,962 @@
+[
+  {
+    "name": "Rue Constantinople",
+    "kapitel": [
+      {
+        "nr": "05",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 2
+          },
+          "stimmung_emotion": {
+            "neg": 1,
+            "pos": 2,
+            "neutral": 0,
+            "unrated": 2
+          },
+          "gesellschaft_soziales": {
+            "neg": 3,
+            "pos": 0,
+            "neutral": 1,
+            "unrated": 4
+          }
+        }
+      },
+      {
+        "nr": "07",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 3
+          },
+          "stimmung_emotion": {
+            "neg": 1,
+            "pos": 2,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 1,
+            "neutral": 0,
+            "unrated": 3
+          }
+        }
+      },
+      {
+        "nr": "08",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 3
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 2,
+            "neutral": 0,
+            "unrated": 5
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 3
+          }
+        }
+      },
+      {
+        "nr": "09",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 6
+          },
+          "stimmung_emotion": {
+            "neg": 15,
+            "pos": 3,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "gesellschaft_soziales": {
+            "neg": 2,
+            "pos": 2,
+            "neutral": 0,
+            "unrated": 7
+          }
+        }
+      },
+      {
+        "nr": "12",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 4
+          },
+          "stimmung_emotion": {
+            "neg": 2,
+            "pos": 0,
+            "neutral": 1,
+            "unrated": 0
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 3
+          }
+        }
+      },
+      {
+        "nr": "13",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 14
+          },
+          "stimmung_emotion": {
+            "neg": 13,
+            "pos": 3,
+            "neutral": 1,
+            "unrated": 6
+          },
+          "gesellschaft_soziales": {
+            "neg": 1,
+            "pos": 2,
+            "neutral": 0,
+            "unrated": 15
+          }
+        }
+      },
+      {
+        "nr": "17",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 3
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 2
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          }
+        }
+      },
+      {
+        "nr": "18",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 7
+          },
+          "stimmung_emotion": {
+            "neg": 5,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 6
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Rue Notre-Dame de Lorette",
+    "kapitel": [
+      {
+        "nr": "01",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 2,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 5
+          },
+          "stimmung_emotion": {
+            "neg": 2,
+            "pos": 1,
+            "neutral": 0,
+            "unrated": 5
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 0
+          }
+        }
+      },
+      {
+        "nr": "10",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 3
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Boulevard des Italiens/Capucines",
+    "kapitel": [
+      {
+        "nr": "01",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 1,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 8
+          },
+          "stimmung_emotion": {
+            "neg": 5,
+            "pos": 1,
+            "neutral": 0,
+            "unrated": 5
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 2
+          }
+        }
+      },
+      {
+        "nr": "04",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 0
+          }
+        }
+      },
+      {
+        "nr": "05",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 10
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 2,
+            "neutral": 1,
+            "unrated": 5
+          },
+          "gesellschaft_soziales": {
+            "neg": 1,
+            "pos": 1,
+            "neutral": 2,
+            "unrated": 18
+          }
+        }
+      },
+      {
+        "nr": "10",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 4
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 1,
+            "neutral": 0,
+            "unrated": 0
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          }
+        }
+      },
+      {
+        "nr": "13",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 2,
+            "neutral": 0,
+            "unrated": 1
+          }
+        }
+      },
+      {
+        "nr": "14",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 3
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 1,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 7
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Parc Monceau",
+    "kapitel": [
+      {
+        "nr": "03",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 1,
+            "neutral": 0,
+            "unrated": 2
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 1,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 0
+          }
+        }
+      },
+      {
+        "nr": "12",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 5
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Boulevard Malesherbes",
+    "kapitel": [
+      {
+        "nr": "06",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 15
+          },
+          "stimmung_emotion": {
+            "neg": 11,
+            "pos": 7,
+            "neutral": 3,
+            "unrated": 8
+          },
+          "gesellschaft_soziales": {
+            "neg": 5,
+            "pos": 2,
+            "neutral": 1,
+            "unrated": 35
+          }
+        }
+      },
+      {
+        "nr": "07",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 2
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 0
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 0
+          }
+        }
+      },
+      {
+        "nr": "11",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 7
+          },
+          "stimmung_emotion": {
+            "neg": 3,
+            "pos": 6,
+            "neutral": 0,
+            "unrated": 0
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 4
+          }
+        }
+      },
+      {
+        "nr": "13",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 3
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Folies Bergère",
+    "kapitel": [
+      {
+        "nr": "01",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 4,
+            "pos": 2,
+            "neutral": 2,
+            "unrated": 24
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 4,
+            "neutral": 1,
+            "unrated": 8
+          },
+          "gesellschaft_soziales": {
+            "neg": 1,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 4
+          }
+        }
+      },
+      {
+        "nr": "04",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 3
+          },
+          "stimmung_emotion": {
+            "neg": 3,
+            "pos": 2,
+            "neutral": 1,
+            "unrated": 1
+          },
+          "gesellschaft_soziales": {
+            "neg": 2,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 2
+          }
+        }
+      },
+      {
+        "nr": "05",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 11
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "gesellschaft_soziales": {
+            "neg": 1,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 7
+          }
+        }
+      },
+      {
+        "nr": "06",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 3
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Place de la Madeleine",
+    "kapitel": [
+      {
+        "nr": "01",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 3,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 5
+          },
+          "stimmung_emotion": {
+            "neg": 7,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "gesellschaft_soziales": {
+            "neg": 1,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 0
+          }
+        }
+      },
+      {
+        "nr": "18",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 24
+          },
+          "stimmung_emotion": {
+            "neg": 3,
+            "pos": 15,
+            "neutral": 1,
+            "unrated": 2
+          },
+          "gesellschaft_soziales": {
+            "neg": 1,
+            "pos": 9,
+            "neutral": 0,
+            "unrated": 34
+          }
+        }
+      }
+    ]
+  },
+  {
+    "name": "Redaktion",
+    "kapitel": [
+      {
+        "nr": "01",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 2,
+            "pos": 1,
+            "neutral": 1,
+            "unrated": 8
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 0
+          }
+        }
+      },
+      {
+        "nr": "03",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 1,
+            "pos": 1,
+            "neutral": 1,
+            "unrated": 25
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 1,
+            "neutral": 0,
+            "unrated": 7
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 1,
+            "neutral": 0,
+            "unrated": 9
+          }
+        }
+      },
+      {
+        "nr": "04",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 12
+          },
+          "stimmung_emotion": {
+            "neg": 2,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 5
+          },
+          "gesellschaft_soziales": {
+            "neg": 3,
+            "pos": 3,
+            "neutral": 0,
+            "unrated": 14
+          }
+        }
+      },
+      {
+        "nr": "05",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 3
+          },
+          "stimmung_emotion": {
+            "neg": 1,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 4
+          },
+          "gesellschaft_soziales": {
+            "neg": 1,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 5
+          }
+        }
+      },
+      {
+        "nr": "06",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 5
+          },
+          "stimmung_emotion": {
+            "neg": 1,
+            "pos": 4,
+            "neutral": 0,
+            "unrated": 0
+          },
+          "gesellschaft_soziales": {
+            "neg": 1,
+            "pos": 1,
+            "neutral": 0,
+            "unrated": 28
+          }
+        }
+      },
+      {
+        "nr": "07",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 7
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 1,
+            "neutral": 0,
+            "unrated": 5
+          },
+          "gesellschaft_soziales": {
+            "neg": 1,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 10
+          }
+        }
+      },
+      {
+        "nr": "09",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 0
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 0
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 2
+          }
+        }
+      },
+      {
+        "nr": "10",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 5
+          },
+          "stimmung_emotion": {
+            "neg": 2,
+            "pos": 1,
+            "neutral": 0,
+            "unrated": 0
+          },
+          "gesellschaft_soziales": {
+            "neg": 2,
+            "pos": 1,
+            "neutral": 0,
+            "unrated": 11
+          }
+        }
+      },
+      {
+        "nr": "11",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 3
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 0
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 1,
+            "neutral": 0,
+            "unrated": 0
+          }
+        }
+      },
+      {
+        "nr": "12",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 7
+          },
+          "stimmung_emotion": {
+            "neg": 1,
+            "pos": 3,
+            "neutral": 0,
+            "unrated": 0
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          }
+        }
+      },
+      {
+        "nr": "13",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 3
+          },
+          "stimmung_emotion": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 3
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 0
+          }
+        }
+      },
+      {
+        "nr": "16",
+        "bandCounts": {
+          "raum_umwelt": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 1
+          },
+          "stimmung_emotion": {
+            "neg": 1,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 6
+          },
+          "gesellschaft_soziales": {
+            "neg": 0,
+            "pos": 0,
+            "neutral": 0,
+            "unrated": 11
+          }
+        }
+      }
+    ]
+  }
+]

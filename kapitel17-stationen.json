@@ -1,0 +1,3942 @@
+{
+  "kapitel": 17,
+  "route": [
+    {
+      "ort": "Palais Walter, Faubourg Saint-Honoré",
+      "lon": 2.316,
+      "lat": 48.8712,
+      "revealIndex": 0
+    },
+    {
+      "ort": "Fahrt über die Champs-Élysées und durch das Bois",
+      "lon": 2.285,
+      "lat": 48.869,
+      "revealIndex": 5
+    },
+    {
+      "ort": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "lon": 2.26,
+      "lat": 48.872,
+      "revealIndex": 8
+    },
+    {
+      "ort": "Palais Walter, Faubourg Saint-Honoré",
+      "lon": 2.316,
+      "lat": 48.8712,
+      "revealIndex": 38
+    },
+    {
+      "ort": "Wohnung Du Roy (Rue Constantinople 127)",
+      "lon": 2.31921,
+      "lat": 48.88037,
+      "revealIndex": 40
+    },
+    {
+      "ort": "Place de la Concorde (Droschke vor dem Marineministerium)",
+      "lon": 2.3212,
+      "lat": 48.8656,
+      "revealIndex": 46
+    },
+    {
+      "ort": "Fahrt aus Paris Richtung Sèvres",
+      "lon": 2.295,
+      "lat": 48.861,
+      "revealIndex": 55
+    },
+    {
+      "ort": "La Roche-Guyon an der Seine",
+      "lon": 2.28,
+      "lat": 48.8535,
+      "revealIndex": 66,
+      "routeEndsHere": true
+    }
+  ],
+  "gedanken": [],
+  "markierungen": [],
+  "routenPunkte": [
+    [
+      2.316,
+      48.8712
+    ],
+    [
+      2.316,
+      48.8712
+    ],
+    [
+      2.316,
+      48.8712
+    ],
+    [
+      2.316,
+      48.8712
+    ],
+    [
+      2.316,
+      48.8712
+    ],
+    [
+      2.285,
+      48.869
+    ],
+    [
+      2.285,
+      48.869
+    ],
+    [
+      2.285,
+      48.869
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.316,
+      48.8712
+    ],
+    [
+      2.316,
+      48.8712
+    ],
+    [
+      2.31921,
+      48.88037
+    ],
+    [
+      2.31921,
+      48.88037
+    ],
+    [
+      2.31921,
+      48.88037
+    ],
+    [
+      2.31921,
+      48.88037
+    ],
+    [
+      2.31921,
+      48.88037
+    ],
+    [
+      2.31921,
+      48.88037
+    ],
+    [
+      2.3212,
+      48.8656
+    ],
+    [
+      2.3212,
+      48.8656
+    ],
+    [
+      2.3212,
+      48.8656
+    ],
+    [
+      2.3212,
+      48.8656
+    ],
+    [
+      2.3212,
+      48.8656
+    ],
+    [
+      2.3212,
+      48.8656
+    ],
+    [
+      2.3212,
+      48.8656
+    ],
+    [
+      2.3212,
+      48.8656
+    ],
+    [
+      2.3212,
+      48.8656
+    ],
+    [
+      2.295,
+      48.861
+    ],
+    [
+      2.295,
+      48.861
+    ],
+    [
+      2.295,
+      48.861
+    ],
+    [
+      2.295,
+      48.861
+    ],
+    [
+      2.295,
+      48.861
+    ],
+    [
+      2.295,
+      48.861
+    ],
+    [
+      2.295,
+      48.861
+    ],
+    [
+      2.295,
+      48.861
+    ],
+    [
+      2.295,
+      48.861
+    ],
+    [
+      2.295,
+      48.861
+    ],
+    [
+      2.295,
+      48.861
+    ],
+    [
+      2.28,
+      48.8535
+    ],
+    [
+      2.28,
+      48.8535
+    ],
+    [
+      2.28,
+      48.8535
+    ],
+    [
+      2.28,
+      48.8535
+    ],
+    [
+      2.28,
+      48.8535
+    ],
+    [
+      2.28,
+      48.8535
+    ],
+    [
+      2.28,
+      48.8535
+    ],
+    [
+      2.28,
+      48.8535
+    ],
+    [
+      2.28,
+      48.8535
+    ],
+    [
+      2.28,
+      48.8535
+    ],
+    [
+      2.28,
+      48.8535
+    ],
+    [
+      2.28,
+      48.8535
+    ],
+    [
+      2.28,
+      48.8535
+    ]
+  ],
+  "routenPfadDetail": [
+    [
+      2.316,
+      48.8712
+    ],
+    [
+      2.3157262,
+      48.8712696
+    ],
+    [
+      2.3155589,
+      48.8713182
+    ],
+    [
+      2.3142636,
+      48.8716733
+    ],
+    [
+      2.3142287,
+      48.871661
+    ],
+    [
+      2.3140342,
+      48.8717245
+    ],
+    [
+      2.3140202,
+      48.8717443
+    ],
+    [
+      2.3130177,
+      48.8720098
+    ],
+    [
+      2.31256,
+      48.8721286
+    ],
+    [
+      2.3124383,
+      48.8721573
+    ],
+    [
+      2.3123692,
+      48.8721721
+    ],
+    [
+      2.3101954,
+      48.8713853
+    ],
+    [
+      2.3101789,
+      48.8713434
+    ],
+    [
+      2.31001,
+      48.8712857
+    ],
+    [
+      2.3099231,
+      48.8712534
+    ],
+    [
+      2.3098993,
+      48.8712692
+    ],
+    [
+      2.3090058,
+      48.8709495
+    ],
+    [
+      2.3088609,
+      48.8709844
+    ],
+    [
+      2.3087805,
+      48.8709817
+    ],
+    [
+      2.3087188,
+      48.8709363
+    ],
+    [
+      2.3087094,
+      48.8709213
+    ],
+    [
+      2.3069653,
+      48.8703013
+    ],
+    [
+      2.3066122,
+      48.8704138
+    ],
+    [
+      2.3064465,
+      48.8704666
+    ],
+    [
+      2.3057939,
+      48.8706737
+    ],
+    [
+      2.3056024,
+      48.8707337
+    ],
+    [
+      2.3055065,
+      48.8706934
+    ],
+    [
+      2.3053894,
+      48.8707311
+    ],
+    [
+      2.3051481,
+      48.8708081
+    ],
+    [
+      2.3046141,
+      48.8709779
+    ],
+    [
+      2.3045878,
+      48.8709863
+    ],
+    [
+      2.3038244,
+      48.871229
+    ],
+    [
+      2.3034132,
+      48.8713609
+    ],
+    [
+      2.3031875,
+      48.8714324
+    ],
+    [
+      2.302867,
+      48.8714969
+    ],
+    [
+      2.3027176,
+      48.8715439
+    ],
+    [
+      2.3025172,
+      48.8716069
+    ],
+    [
+      2.3022489,
+      48.8716913
+    ],
+    [
+      2.3020279,
+      48.8713888
+    ],
+    [
+      2.3020082,
+      48.8713619
+    ],
+    [
+      2.301182,
+      48.8716241
+    ],
+    [
+      2.3009774,
+      48.871689
+    ],
+    [
+      2.3006901,
+      48.8717802
+    ],
+    [
+      2.3003856,
+      48.8718403
+    ],
+    [
+      2.3003465,
+      48.8717866
+    ],
+    [
+      2.3002171,
+      48.8718277
+    ],
+    [
+      2.3001489,
+      48.8718496
+    ],
+    [
+      2.299285,
+      48.8721233
+    ],
+    [
+      2.2991535,
+      48.8721651
+    ],
+    [
+      2.2990646,
+      48.8721933
+    ],
+    [
+      2.2985282,
+      48.8723634
+    ],
+    [
+      2.2972575,
+      48.8727796
+    ],
+    [
+      2.2969292,
+      48.8728706
+    ],
+    [
+      2.2968104,
+      48.8729083
+    ],
+    [
+      2.2966938,
+      48.8729453
+    ],
+    [
+      2.2962669,
+      48.8730806
+    ],
+    [
+      2.2960928,
+      48.8729676
+    ],
+    [
+      2.296037,
+      48.8729317
+    ],
+    [
+      2.2957848,
+      48.8728282
+    ],
+    [
+      2.2957604,
+      48.8728223
+    ],
+    [
+      2.295674,
+      48.8728003
+    ],
+    [
+      2.295431,
+      48.8727484
+    ],
+    [
+      2.2953576,
+      48.8727389
+    ],
+    [
+      2.295335,
+      48.872736
+    ],
+    [
+      2.2950882,
+      48.8727162
+    ],
+    [
+      2.295076,
+      48.872716
+    ],
+    [
+      2.2949962,
+      48.8727162
+    ],
+    [
+      2.2945448,
+      48.8727644
+    ],
+    [
+      2.2944612,
+      48.8727806
+    ],
+    [
+      2.2942293,
+      48.8728483
+    ],
+    [
+      2.2942068,
+      48.8728558
+    ],
+    [
+      2.2941474,
+      48.8728755
+    ],
+    [
+      2.2938123,
+      48.8730974
+    ],
+    [
+      2.2937635,
+      48.8731379
+    ],
+    [
+      2.2932976,
+      48.87293
+    ],
+    [
+      2.2931571,
+      48.8728673
+    ],
+    [
+      2.2931192,
+      48.8728571
+    ],
+    [
+      2.292128,
+      48.8724356
+    ],
+    [
+      2.2909203,
+      48.8719275
+    ],
+    [
+      2.2908453,
+      48.8718955
+    ],
+    [
+      2.2890501,
+      48.8711541
+    ],
+    [
+      2.289013,
+      48.8711169
+    ],
+    [
+      2.2889107,
+      48.8710554
+    ],
+    [
+      2.2888537,
+      48.8710604
+    ],
+    [
+      2.28818,
+      48.8707601
+    ],
+    [
+      2.2880631,
+      48.8707024
+    ],
+    [
+      2.287833,
+      48.8706174
+    ],
+    [
+      2.2859702,
+      48.8698377
+    ],
+    [
+      2.2859817,
+      48.8696323
+    ],
+    [
+      2.285957,
+      48.8695479
+    ],
+    [
+      2.2858468,
+      48.8694048
+    ],
+    [
+      2.2857535,
+      48.8693402
+    ],
+    [
+      2.2855702,
+      48.8692435
+    ],
+    [
+      2.2853269,
+      48.8692154
+    ],
+    [
+      2.285,
+      48.869
+    ],
+    [
+      2.2850272,
+      48.8692922
+    ],
+    [
+      2.2848659,
+      48.8693705
+    ],
+    [
+      2.2847329,
+      48.8694976
+    ],
+    [
+      2.2846997,
+      48.8697509
+    ],
+    [
+      2.282855,
+      48.8701571
+    ],
+    [
+      2.2828216,
+      48.8701455
+    ],
+    [
+      2.2826914,
+      48.8701787
+    ],
+    [
+      2.2826624,
+      48.8702041
+    ],
+    [
+      2.2818768,
+      48.8703724
+    ],
+    [
+      2.28107,
+      48.8705566
+    ],
+    [
+      2.2792505,
+      48.8709549
+    ],
+    [
+      2.2792334,
+      48.870949
+    ],
+    [
+      2.2788898,
+      48.8710277
+    ],
+    [
+      2.278867,
+      48.8710419
+    ],
+    [
+      2.2777377,
+      48.8712886
+    ],
+    [
+      2.2777004,
+      48.8712833
+    ],
+    [
+      2.2775768,
+      48.8713128
+    ],
+    [
+      2.2773565,
+      48.8713511
+    ],
+    [
+      2.2771683,
+      48.8714009
+    ],
+    [
+      2.2767703,
+      48.8714889
+    ],
+    [
+      2.2764861,
+      48.8715517
+    ],
+    [
+      2.2764777,
+      48.8715415
+    ],
+    [
+      2.2763221,
+      48.8715689
+    ],
+    [
+      2.2762832,
+      48.8716462
+    ],
+    [
+      2.2762254,
+      48.8718783
+    ],
+    [
+      2.2755811,
+      48.8720982
+    ],
+    [
+      2.2753821,
+      48.8722013
+    ],
+    [
+      2.2745031,
+      48.8722593
+    ],
+    [
+      2.2744392,
+      48.8722399
+    ],
+    [
+      2.2737927,
+      48.8726059
+    ],
+    [
+      2.2737321,
+      48.8726391
+    ],
+    [
+      2.2736715,
+      48.8726723
+    ],
+    [
+      2.2735074,
+      48.872731
+    ],
+    [
+      2.2734451,
+      48.8727665
+    ],
+    [
+      2.2732853,
+      48.8726464
+    ],
+    [
+      2.2727618,
+      48.8729262
+    ],
+    [
+      2.272595,
+      48.8729055
+    ],
+    [
+      2.2710466,
+      48.8729033
+    ],
+    [
+      2.2709331,
+      48.8729006
+    ],
+    [
+      2.2697608,
+      48.8728724
+    ],
+    [
+      2.2682025,
+      48.8730196
+    ],
+    [
+      2.2681241,
+      48.8730319
+    ],
+    [
+      2.266886,
+      48.8732287
+    ],
+    [
+      2.2664346,
+      48.8733521
+    ],
+    [
+      2.2645351,
+      48.8726663
+    ],
+    [
+      2.2642792,
+      48.8725753
+    ],
+    [
+      2.2631297,
+      48.8721636
+    ],
+    [
+      2.2630393,
+      48.8721256
+    ],
+    [
+      2.2630354,
+      48.872126
+    ],
+    [
+      2.2607324,
+      48.8712954
+    ],
+    [
+      2.26,
+      48.872
+    ],
+    [
+      2.2607324,
+      48.8712954
+    ],
+    [
+      2.2630354,
+      48.872126
+    ],
+    [
+      2.2630393,
+      48.8721256
+    ],
+    [
+      2.2631297,
+      48.8721636
+    ],
+    [
+      2.2642792,
+      48.8725753
+    ],
+    [
+      2.2645351,
+      48.8726663
+    ],
+    [
+      2.2664346,
+      48.8733521
+    ],
+    [
+      2.266886,
+      48.8732287
+    ],
+    [
+      2.2681241,
+      48.8730319
+    ],
+    [
+      2.2682025,
+      48.8730196
+    ],
+    [
+      2.2697608,
+      48.8728724
+    ],
+    [
+      2.2709331,
+      48.8729006
+    ],
+    [
+      2.2710466,
+      48.8729033
+    ],
+    [
+      2.272595,
+      48.8729055
+    ],
+    [
+      2.2727618,
+      48.8729262
+    ],
+    [
+      2.2732853,
+      48.8726464
+    ],
+    [
+      2.2734451,
+      48.8727665
+    ],
+    [
+      2.2735074,
+      48.872731
+    ],
+    [
+      2.2736715,
+      48.8726723
+    ],
+    [
+      2.2737321,
+      48.8726391
+    ],
+    [
+      2.2737927,
+      48.8726059
+    ],
+    [
+      2.2744392,
+      48.8722399
+    ],
+    [
+      2.2745031,
+      48.8722593
+    ],
+    [
+      2.2753821,
+      48.8722013
+    ],
+    [
+      2.2755811,
+      48.8720982
+    ],
+    [
+      2.2762254,
+      48.8718783
+    ],
+    [
+      2.2763635,
+      48.8718942
+    ],
+    [
+      2.2766955,
+      48.8719452
+    ],
+    [
+      2.2782686,
+      48.8721166
+    ],
+    [
+      2.2796454,
+      48.8722652
+    ],
+    [
+      2.2798314,
+      48.8722854
+    ],
+    [
+      2.2831752,
+      48.8726606
+    ],
+    [
+      2.2838805,
+      48.8727394
+    ],
+    [
+      2.2842964,
+      48.8727929
+    ],
+    [
+      2.2846953,
+      48.8728512
+    ],
+    [
+      2.2847451,
+      48.8728285
+    ],
+    [
+      2.2858389,
+      48.8729489
+    ],
+    [
+      2.2865295,
+      48.8730268
+    ],
+    [
+      2.2869799,
+      48.8730782
+    ],
+    [
+      2.2875774,
+      48.8731465
+    ],
+    [
+      2.2879977,
+      48.8731945
+    ],
+    [
+      2.2891312,
+      48.8733126
+    ],
+    [
+      2.2906277,
+      48.8734846
+    ],
+    [
+      2.2909138,
+      48.8735119
+    ],
+    [
+      2.2923761,
+      48.873646
+    ],
+    [
+      2.2925582,
+      48.8736574
+    ],
+    [
+      2.2925536,
+      48.8736775
+    ],
+    [
+      2.2925446,
+      48.8737177
+    ],
+    [
+      2.2926531,
+      48.8737288
+    ],
+    [
+      2.2926997,
+      48.8737337
+    ],
+    [
+      2.2928395,
+      48.8737311
+    ],
+    [
+      2.2934296,
+      48.8738206
+    ],
+    [
+      2.2934417,
+      48.8739709
+    ],
+    [
+      2.2934957,
+      48.8740938
+    ],
+    [
+      2.2935079,
+      48.8741081
+    ],
+    [
+      2.2937113,
+      48.8743786
+    ],
+    [
+      2.293935,
+      48.8743032
+    ],
+    [
+      2.294038,
+      48.8742685
+    ],
+    [
+      2.295061,
+      48.8740848
+    ],
+    [
+      2.2954013,
+      48.8739857
+    ],
+    [
+      2.2965018,
+      48.8735175
+    ],
+    [
+      2.2966261,
+      48.8734783
+    ],
+    [
+      2.2970053,
+      48.8733588
+    ],
+    [
+      2.2971182,
+      48.8733231
+    ],
+    [
+      2.2972471,
+      48.8732824
+    ],
+    [
+      2.2973667,
+      48.8732447
+    ],
+    [
+      2.2974779,
+      48.8733158
+    ],
+    [
+      2.2976099,
+      48.8732738
+    ],
+    [
+      2.29889,
+      48.8728538
+    ],
+    [
+      2.2994296,
+      48.8726863
+    ],
+    [
+      2.2996598,
+      48.8726147
+    ],
+    [
+      2.2997766,
+      48.8725784
+    ],
+    [
+      2.3005748,
+      48.8723298
+    ],
+    [
+      2.3013251,
+      48.8720914
+    ],
+    [
+      2.3014529,
+      48.8720511
+    ],
+    [
+      2.3023124,
+      48.8717783
+    ],
+    [
+      2.3026448,
+      48.8716728
+    ],
+    [
+      2.3028256,
+      48.8716154
+    ],
+    [
+      2.3029296,
+      48.8715824
+    ],
+    [
+      2.3032298,
+      48.8714871
+    ],
+    [
+      2.3034551,
+      48.8714156
+    ],
+    [
+      2.3038635,
+      48.871286
+    ],
+    [
+      2.3046285,
+      48.8710432
+    ],
+    [
+      2.3051908,
+      48.8708647
+    ],
+    [
+      2.3054329,
+      48.8707879
+    ],
+    [
+      2.3056024,
+      48.8707337
+    ],
+    [
+      2.3057939,
+      48.8706737
+    ],
+    [
+      2.3064465,
+      48.8704666
+    ],
+    [
+      2.3066122,
+      48.8704138
+    ],
+    [
+      2.3069653,
+      48.8703013
+    ],
+    [
+      2.3087094,
+      48.8709213
+    ],
+    [
+      2.3087188,
+      48.8709363
+    ],
+    [
+      2.3087805,
+      48.8709817
+    ],
+    [
+      2.3088609,
+      48.8709844
+    ],
+    [
+      2.3090058,
+      48.8709495
+    ],
+    [
+      2.3098993,
+      48.8712692
+    ],
+    [
+      2.3099231,
+      48.8712534
+    ],
+    [
+      2.31001,
+      48.8712857
+    ],
+    [
+      2.3101789,
+      48.8713434
+    ],
+    [
+      2.3101954,
+      48.8713853
+    ],
+    [
+      2.3123692,
+      48.8721721
+    ],
+    [
+      2.3124383,
+      48.8721573
+    ],
+    [
+      2.31256,
+      48.8721286
+    ],
+    [
+      2.3130177,
+      48.8720098
+    ],
+    [
+      2.3140202,
+      48.8717443
+    ],
+    [
+      2.3140342,
+      48.8717245
+    ],
+    [
+      2.3142287,
+      48.871661
+    ],
+    [
+      2.3142636,
+      48.8716733
+    ],
+    [
+      2.3155589,
+      48.8713182
+    ],
+    [
+      2.3157262,
+      48.8712696
+    ],
+    [
+      2.316,
+      48.8712
+    ],
+    [
+      2.3160167,
+      48.8713122
+    ],
+    [
+      2.3160449,
+      48.8713398
+    ],
+    [
+      2.3159294,
+      48.8728237
+    ],
+    [
+      2.3159072,
+      48.872835
+    ],
+    [
+      2.3159032,
+      48.8729071
+    ],
+    [
+      2.315918,
+      48.8729253
+    ],
+    [
+      2.3158467,
+      48.8738174
+    ],
+    [
+      2.3159567,
+      48.873838
+    ],
+    [
+      2.3160083,
+      48.8738666
+    ],
+    [
+      2.3159965,
+      48.8740093
+    ],
+    [
+      2.3159632,
+      48.8740133
+    ],
+    [
+      2.3158609,
+      48.8751536
+    ],
+    [
+      2.315911,
+      48.8751568
+    ],
+    [
+      2.3158923,
+      48.8754104
+    ],
+    [
+      2.3158559,
+      48.8754303
+    ],
+    [
+      2.3157863,
+      48.8764955
+    ],
+    [
+      2.3158238,
+      48.8765187
+    ],
+    [
+      2.3158087,
+      48.8766073
+    ],
+    [
+      2.3157551,
+      48.8766709
+    ],
+    [
+      2.3156746,
+      48.8776933
+    ],
+    [
+      2.3156881,
+      48.8777016
+    ],
+    [
+      2.3156778,
+      48.8778076
+    ],
+    [
+      2.3156627,
+      48.8778191
+    ],
+    [
+      2.3156475,
+      48.8780257
+    ],
+    [
+      2.3156518,
+      48.8781061
+    ],
+    [
+      2.3156725,
+      48.8781075
+    ],
+    [
+      2.3158761,
+      48.8783456
+    ],
+    [
+      2.3156039,
+      48.8785674
+    ],
+    [
+      2.3155658,
+      48.879067
+    ],
+    [
+      2.3155791,
+      48.8790831
+    ],
+    [
+      2.3155737,
+      48.879171
+    ],
+    [
+      2.3155602,
+      48.8791817
+    ],
+    [
+      2.3154997,
+      48.8799414
+    ],
+    [
+      2.3155113,
+      48.879964
+    ],
+    [
+      2.3164494,
+      48.8803937
+    ],
+    [
+      2.3166175,
+      48.8804536
+    ],
+    [
+      2.3166651,
+      48.8804914
+    ],
+    [
+      2.3170413,
+      48.8806444
+    ],
+    [
+      2.3170656,
+      48.8806441
+    ],
+    [
+      2.3171779,
+      48.8806935
+    ],
+    [
+      2.3174249,
+      48.8804657
+    ],
+    [
+      2.3181345,
+      48.8806486
+    ],
+    [
+      2.3182805,
+      48.8805879
+    ],
+    [
+      2.3183186,
+      48.880592
+    ],
+    [
+      2.3183906,
+      48.8806978
+    ],
+    [
+      2.3190944,
+      48.8804732
+    ],
+    [
+      2.3191279,
+      48.8804767
+    ],
+    [
+      2.31921,
+      48.88037
+    ],
+    [
+      2.3193915,
+      48.8803723
+    ],
+    [
+      2.3193265,
+      48.8802708
+    ],
+    [
+      2.3198743,
+      48.8800921
+    ],
+    [
+      2.3203988,
+      48.8799209
+    ],
+    [
+      2.3204039,
+      48.8799093
+    ],
+    [
+      2.3206605,
+      48.8798292
+    ],
+    [
+      2.3209218,
+      48.8797456
+    ],
+    [
+      2.3215471,
+      48.8795457
+    ],
+    [
+      2.3215589,
+      48.8795236
+    ],
+    [
+      2.3216905,
+      48.8794257
+    ],
+    [
+      2.3218189,
+      48.8793471
+    ],
+    [
+      2.3221078,
+      48.8788068
+    ],
+    [
+      2.3220855,
+      48.8787858
+    ],
+    [
+      2.3221407,
+      48.8786825
+    ],
+    [
+      2.3221698,
+      48.878674
+    ],
+    [
+      2.3224696,
+      48.8781196
+    ],
+    [
+      2.3224914,
+      48.8780202
+    ],
+    [
+      2.3225891,
+      48.8778689
+    ],
+    [
+      2.3226066,
+      48.87786
+    ],
+    [
+      2.3229356,
+      48.8772467
+    ],
+    [
+      2.3229423,
+      48.8772324
+    ],
+    [
+      2.3229786,
+      48.8771482
+    ],
+    [
+      2.3229965,
+      48.8771312
+    ],
+    [
+      2.3235857,
+      48.8760322
+    ],
+    [
+      2.3237465,
+      48.8757194
+    ],
+    [
+      2.3237774,
+      48.8755585
+    ],
+    [
+      2.3237432,
+      48.8755465
+    ],
+    [
+      2.323731,
+      48.8754473
+    ],
+    [
+      2.3237519,
+      48.8752687
+    ],
+    [
+      2.3237027,
+      48.8752455
+    ],
+    [
+      2.3237254,
+      48.8751076
+    ],
+    [
+      2.3237553,
+      48.8750953
+    ],
+    [
+      2.3238297,
+      48.874324
+    ],
+    [
+      2.3237854,
+      48.874309
+    ],
+    [
+      2.3237579,
+      48.8741198
+    ],
+    [
+      2.3238341,
+      48.8740902
+    ],
+    [
+      2.3237312,
+      48.8737542
+    ],
+    [
+      2.3236272,
+      48.8734278
+    ],
+    [
+      2.3235944,
+      48.8734069
+    ],
+    [
+      2.3235527,
+      48.8733189
+    ],
+    [
+      2.3235836,
+      48.873303
+    ],
+    [
+      2.3235011,
+      48.8730961
+    ],
+    [
+      2.3234957,
+      48.8730088
+    ],
+    [
+      2.3235018,
+      48.8729973
+    ],
+    [
+      2.3230673,
+      48.8715891
+    ],
+    [
+      2.3230334,
+      48.8715825
+    ],
+    [
+      2.3230238,
+      48.8714947
+    ],
+    [
+      2.3230327,
+      48.8714656
+    ],
+    [
+      2.3229204,
+      48.8710989
+    ],
+    [
+      2.3228,
+      48.8710409
+    ],
+    [
+      2.3228304,
+      48.8709784
+    ],
+    [
+      2.3229514,
+      48.8708148
+    ],
+    [
+      2.3230836,
+      48.8706216
+    ],
+    [
+      2.323204,
+      48.870449
+    ],
+    [
+      2.3228381,
+      48.8703544
+    ],
+    [
+      2.3228104,
+      48.8703913
+    ],
+    [
+      2.3227281,
+      48.8703639
+    ],
+    [
+      2.3224461,
+      48.8697969
+    ],
+    [
+      2.3222219,
+      48.8693854
+    ],
+    [
+      2.3219278,
+      48.8688465
+    ],
+    [
+      2.321951,
+      48.86884
+    ],
+    [
+      2.3218739,
+      48.8687233
+    ],
+    [
+      2.3218312,
+      48.8687107
+    ],
+    [
+      2.3208673,
+      48.8672835
+    ],
+    [
+      2.3209169,
+      48.867272
+    ],
+    [
+      2.3208112,
+      48.8670463
+    ],
+    [
+      2.3203948,
+      48.8660144
+    ],
+    [
+      2.3205416,
+      48.8659847
+    ],
+    [
+      2.3201689,
+      48.8654691
+    ],
+    [
+      2.3206209,
+      48.8653297
+    ],
+    [
+      2.3212,
+      48.8656
+    ],
+    [
+      2.3206209,
+      48.8653297
+    ],
+    [
+      2.3204798,
+      48.8646721
+    ],
+    [
+      2.320409,
+      48.8642542
+    ],
+    [
+      2.3199241,
+      48.8642761
+    ],
+    [
+      2.3198302,
+      48.8641596
+    ],
+    [
+      2.3199007,
+      48.8640662
+    ],
+    [
+      2.3189693,
+      48.8627896
+    ],
+    [
+      2.3188926,
+      48.8628104
+    ],
+    [
+      2.3178455,
+      48.8630599
+    ],
+    [
+      2.3160144,
+      48.8631823
+    ],
+    [
+      2.3158006,
+      48.8631783
+    ],
+    [
+      2.3152154,
+      48.8631673
+    ],
+    [
+      2.3141053,
+      48.8631332
+    ],
+    [
+      2.3139417,
+      48.8631313
+    ],
+    [
+      2.3128399,
+      48.8631044
+    ],
+    [
+      2.3120151,
+      48.8630753
+    ],
+    [
+      2.3075744,
+      48.8629184
+    ],
+    [
+      2.306237,
+      48.8628747
+    ],
+    [
+      2.3058935,
+      48.8628698
+    ],
+    [
+      2.3056138,
+      48.8628729
+    ],
+    [
+      2.3038203,
+      48.8629063
+    ],
+    [
+      2.3032129,
+      48.8628965
+    ],
+    [
+      2.2994643,
+      48.8624726
+    ],
+    [
+      2.2985894,
+      48.8622859
+    ],
+    [
+      2.2980038,
+      48.8621393
+    ],
+    [
+      2.2976067,
+      48.8620301
+    ],
+    [
+      2.2974098,
+      48.8619586
+    ],
+    [
+      2.2971831,
+      48.8618674
+    ],
+    [
+      2.2951951,
+      48.8608169
+    ],
+    [
+      2.295,
+      48.861
+    ],
+    [
+      2.2951951,
+      48.8608169
+    ],
+    [
+      2.2953585,
+      48.8607087
+    ],
+    [
+      2.2953036,
+      48.8606734
+    ],
+    [
+      2.2951153,
+      48.8607783
+    ],
+    [
+      2.2931834,
+      48.8594004
+    ],
+    [
+      2.2914247,
+      48.8604093
+    ],
+    [
+      2.2912957,
+      48.8603225
+    ],
+    [
+      2.2911658,
+      48.8602274
+    ],
+    [
+      2.2908347,
+      48.8599707
+    ],
+    [
+      2.2906557,
+      48.8598986
+    ],
+    [
+      2.2882895,
+      48.8580452
+    ],
+    [
+      2.2878751,
+      48.8578093
+    ],
+    [
+      2.2864414,
+      48.856739
+    ],
+    [
+      2.2854412,
+      48.8559284
+    ],
+    [
+      2.285306,
+      48.8558189
+    ],
+    [
+      2.2837521,
+      48.8545875
+    ],
+    [
+      2.2835856,
+      48.8544598
+    ],
+    [
+      2.2835108,
+      48.8544756
+    ],
+    [
+      2.2834271,
+      48.8544099
+    ],
+    [
+      2.2825114,
+      48.8537522
+    ],
+    [
+      2.2824011,
+      48.8537801
+    ],
+    [
+      2.2817618,
+      48.8534015
+    ],
+    [
+      2.281468,
+      48.8532206
+    ],
+    [
+      2.2811809,
+      48.8530422
+    ],
+    [
+      2.2811117,
+      48.8530043
+    ],
+    [
+      2.2810165,
+      48.8529629
+    ],
+    [
+      2.2809173,
+      48.8529074
+    ],
+    [
+      2.2805445,
+      48.8531026
+    ],
+    [
+      2.2804948,
+      48.8530644
+    ],
+    [
+      2.2804352,
+      48.8530983
+    ],
+    [
+      2.2803953,
+      48.8531697
+    ],
+    [
+      2.2803501,
+      48.85324
+    ],
+    [
+      2.28,
+      48.8535
+    ]
+  ],
+  "annotationen": [
+    {
+      "id": 1,
+      "text": "Drei Monate waren seitdem vergangen. Die Scheidung Du Roys war ausgesprochen. Seine Frau hatte den Namen Forestier wieder angenommen.",
+      "tags": [
+        "time",
+        "social"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Palais Walter, Faubourg Saint-Honoré",
+      "ort": "unbekannt",
+      "revealIndex": 0,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 2,
+      "text": "Da die Walters am 15. Juli nach Trouville fahren wollten, so hatte man verabredet, noch vor der Trennung einen Tag auf dem Lande zu verbringen.",
+      "tags": [
+        "time",
+        "location"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Palais Walter, Faubourg Saint-Honoré",
+      "ort": "Trouville",
+      "revealIndex": 1,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 3,
+      "text": "Man wählte einen Donnerstag und brach schon um neun Uhr morgens in einem großen sechssitzigen Reiselandauer, der mit vier Pferden bespannt war, auf.",
+      "tags": [
+        "time",
+        "social",
+        "material"
+      ],
+      "valenz": null,
+      "intensitaet": 2,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Palais Walter, Faubourg Saint-Honoré",
+      "ort": "Paris (Ausgangspunkt der Fahrt)",
+      "revealIndex": 2,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 4,
+      "text": "Es sollte in Saint-Germain im Pavillon Henry IV. gefrühstückt werden.",
+      "tags": [
+        "location"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Palais Walter, Faubourg Saint-Honoré",
+      "ort": "Pavillon Henri IV, Saint-Germain-en-Laye",
+      "revealIndex": 3,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 5,
+      "text": "Bel-Ami hatte sich ausgemacht, der einzige Mann in der Gesellschaft zu sein, denn er konnte weder die Anwesenheit noch das Gesicht des Marquis de Cazolles ertragen.",
+      "tags": [
+        "george_duroy",
+        "mood",
+        "social"
+      ],
+      "valenz": -1,
+      "intensitaet": 2,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Palais Walter, Faubourg Saint-Honoré",
+      "ort": "unbekannt",
+      "revealIndex": 4,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 6,
+      "text": "Der Wagen fuhr in raschem Trabe die Avenue des Champs-Elysees hinab und dann durch das Bois de Boulogne.",
+      "tags": [
+        "location",
+        "move"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Champs-Élysées und durch das Bois",
+      "ort": "Avenue des Champs-Élysées / Bois de Boulogne",
+      "revealIndex": 5,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 7,
+      "text": "Es war ein herrliches, nicht zu heißes Sommerwetter. Die Schwalben zogen durch den blauen Himmel in wundervollen Kurven, sie flogen so schnell, daß man sie immer noch zu sehen glaubte, als sie schon vorüber waren,",
+      "tags": [
+        "weather",
+        "atmosphere",
+        "sound"
+      ],
+      "valenz": 1,
+      "intensitaet": 2,
+      "category": "stimmung_emotion",
+      "ortBasis": "Fahrt über die Champs-Élysées und durch das Bois",
+      "ort": "unterwegs Richtung Saint-Germain",
+      "revealIndex": 6,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 8,
+      "text": "Die drei Damen saßen tief im Vordersitz des Landauers, die Mutter zwischen den beiden Töchtern und im Rücksitz die drei Männer, Walter in der Mitte, rechts und links die beiden Gäste.",
+      "tags": [
+        "social",
+        "space"
+      ],
+      "valenz": null,
+      "intensitaet": 2,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Fahrt über die Champs-Élysées und durch das Bois",
+      "ort": "im Landauer, unterwegs Richtung Saint-Germain",
+      "revealIndex": 7,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 9,
+      "text": "Man fuhr über die Seine am Mont-Valérien vorbei und gelangte nach Bougival. Dann ging es am Fluß entlang bis nach Pecq.",
+      "tags": [
+        "location",
+        "move"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Mont-Valérien / Bougival / Pecq, Seine-Ufer",
+      "revealIndex": 8,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 10,
+      "text": "Graf de Latour-Yvelin war schon ein reifer Mann mit einem langen, dünnen Doppelbart, dessen Spitzen sich beim leisesten Windhauch bewegten und",
+      "tags": [
+        "social",
+        "material"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "im Landauer, unterwegs Richtung Saint-Germain",
+      "revealIndex": 9,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 11,
+      "text": "wie Du Roy oft behauptete, »der Wind schaffe die schönsten Effekte in seinem Bart«",
+      "tags": [
+        "george_duroy",
+        "mood",
+        "social"
+      ],
+      "valenz": -1,
+      "intensitaet": 1,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "im Landauer, unterwegs Richtung Saint-Germain",
+      "revealIndex": 10,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 12,
+      "text": "Georges war sehr bleich und blickte oft zu Suzanne hinüber, die auch sehr bleich war.",
+      "tags": [
+        "george_duroy",
+        "mood",
+        "atmosphere"
+      ],
+      "valenz": null,
+      "intensitaet": 2,
+      "category": "stimmung_emotion",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "im Landauer, unterwegs Richtung Saint-Germain",
+      "revealIndex": 11,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": true,
+      "fWertType": "ort_loest_emotion_aus",
+      "f_wert": "ort_loest_emotion_aus"
+    },
+    {
+      "id": 13,
+      "text": "Ihre Augen trafen sich, sie schienen übereinzustimmen, sich gegenseitig zu verstehen und geheime Gedanken auszutauschen, um sich dann gleich wieder zu fliehen.",
+      "tags": [
+        "atmosphere",
+        "social"
+      ],
+      "valenz": null,
+      "intensitaet": 2,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Terrasse/Landsitz bei Paris (außerhalb)",
+      "revealIndex": 12,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 14,
+      "text": "Das Frühstück dauerte lange. Vor der Rückfahrt nach Paris schlug Georges vor, einen Spaziergang auf der Terrasse zu machen.",
+      "tags": [
+        "time",
+        "move",
+        "location"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Terrasse eines Landsitzes bei Paris",
+      "revealIndex": 13,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 15,
+      "text": "Man blieb zunächst eine Weile stehen, um die Aussicht zu bewundern. Alle stellten sich in einer Reihe längs der Brüstung, und man war über den weiten ungeheuren Horizont begeistert.",
+      "tags": [
+        "space",
+        "atmosphere"
+      ],
+      "valenz": null,
+      "intensitaet": 2,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Terrasse mit Panoramablick bei Paris",
+      "revealIndex": 14,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": true,
+      "fWertType": "ort_loest_emotion_aus",
+      "f_wert": "ort_loest_emotion_aus"
+    },
+    {
+      "id": 16,
+      "text": "Am Fuße eines langen Hügelrückens floß die Seine nach Maison-Lafitte zu, wie eine Riesenschlange, die auf einer großen Wiese lag.",
+      "tags": [
+        "location",
+        "space",
+        "atmosphere"
+      ],
+      "valenz": null,
+      "intensitaet": 2,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Maison-Laffitte, Seine",
+      "revealIndex": 15,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 17,
+      "text": "Rechts auf dem Kamm der Hügelkette hob sich die Wasserleitung von Marly vom Himmel ab; sie sah wie eine riesige Raupe mit breiten Pfoten aus, und Marly selbst verschwand in dem dichten grünen Laub der Bäume.",
+      "tags": [
+        "location",
+        "space",
+        "material"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Marly-le-Roi, Wasserleitung von Marly",
+      "revealIndex": 16,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 18,
+      "text": "Auf der weiten Ebene, die sich vor ihnen ausbreitete, sah man hin und wieder kleinere Dörfer. Die Seen von Vesinet bildeten schöne weiße Flecke in dem spärlichen Grün der kleinen Haine.",
+      "tags": [
+        "location",
+        "space",
+        "atmosphere"
+      ],
+      "valenz": null,
+      "intensitaet": 2,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Le Vésinet, Seen",
+      "revealIndex": 17,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 19,
+      "text": "Links, ganz in der Ferne, ragte über dem Horizont der spitze Turm von Sartrouville.",
+      "tags": [
+        "location",
+        "space"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Sartrouville, Kirchturm",
+      "revealIndex": 18,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 20,
+      "text": "Dann begann man langsam auf und ab zu gehen, um den Blick auf die weite Landschaft zu genießen.",
+      "tags": [
+        "move",
+        "space",
+        "atmosphere"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Terrasse des Landsitzes",
+      "revealIndex": 19,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 21,
+      "text": "Georges und Suzanne blieben etwas zurück.",
+      "tags": [
+        "george_duroy",
+        "move"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Terrasse des Landsitzes",
+      "revealIndex": 20,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 22,
+      "text": "Er machte eine kurze, ungeduldige Bewegung.",
+      "tags": [
+        "george_duroy",
+        "mood",
+        "koerper_als_akteur"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "stimmung_emotion",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Terrasse des Landsitzes",
+      "revealIndex": 21,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 23,
+      "text": "Nein, ich sage es Ihnen zum zehntenmal, es ist zwecklos. Er würde mir nur sein Haus verbieten; er jagt mich aus der Zeitung fort, und wir werden uns nicht einmal sehen können.",
+      "tags": [
+        "george_duroy",
+        "mood",
+        "social"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Terrasse des Landsitzes",
+      "revealIndex": 22,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 24,
+      "text": "Wenn Sie nicht meine Frau werden, verlasse ich für immer Paris und dieses Land.",
+      "tags": [
+        "george_duroy",
+        "mood",
+        "location_erinnerung"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "stimmung_emotion",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Paris (allgemein)",
+      "revealIndex": 23,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": true,
+      "fWertType": "emotion_faerbt_raum",
+      "f_wert": "emotion_faerbt_raum"
+    },
+    {
+      "id": 25,
+      "text": "Er sah sie von der Seite an und fragte zögernd:",
+      "tags": [
+        "george_duroy",
+        "koerper_als_akteur"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "unbekannt",
+      "revealIndex": 24,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 26,
+      "text": "»Nein,« sagte er lebhaft, »Sie kennen sie nicht, sie wird noch zorniger und aufgeregter sein als Ihr Vater.",
+      "tags": [
+        "george_duroy",
+        "mood"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "stimmung_emotion",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "unbekannt",
+      "revealIndex": 25,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 27,
+      "text": "Wenn Sie entschlossen, richtig entschlossen sind, meine Frau zu werden, meine liebe, liebe, kleine Suzanne ...",
+      "tags": [
+        "george_duroy",
+        "mood",
+        "social"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "unbekannt",
+      "revealIndex": 26,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": true,
+      "fWertType": "ort_loest_emotion_aus",
+      "f_wert": "ort_loest_emotion_aus"
+    },
+    {
+      "id": 28,
+      "text": "Sie fuhr vor Freude auf und begann in die Hände zu klatschen.",
+      "tags": [
+        "atmosphere"
+      ],
+      "valenz": null,
+      "intensitaet": 2,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "unbekannt",
+      "revealIndex": 27,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 29,
+      "text": "Sie finden mich in einer Droschke, gegenüber dem Marineministerium.",
+      "tags": [
+        "location"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Place de la Concorde, gegenüber dem Marineministerium (Ministère de la Marine)",
+      "revealIndex": 28,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 30,
+      "text": "Wenn der Portier sich schlafen gelegt hat, erwarte ich Sie auf dem Place de la Concorde.",
+      "tags": [
+        "location"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Place de la Concorde",
+      "revealIndex": 29,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 31,
+      "text": "Man sprach über Seebäder, wo man bald sein würde.",
+      "tags": [
+        "location"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Seebäder (unspezifisch)",
+      "revealIndex": 30,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 32,
+      "text": "Dann fuhren sie über Chatou zurück, um nicht denselben Weg noch einmal machen zu müssen.",
+      "tags": [
+        "move",
+        "location"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Chatou",
+      "revealIndex": 31,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 33,
+      "text": "Georges sagte nichts. Er dachte: »Also, wenn diese Kleine etwas Mut hat, dann würde die Sache endlich klappen.«",
+      "tags": [
+        "george_duroy",
+        "mood"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "stimmung_emotion",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Rückfahrt von Chatou",
+      "revealIndex": 32,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 34,
+      "text": "Seit drei Monaten spann er um sie das unwiderstehliche Netz der schmeichelnden Zärtlichkeit. Er bezauberte, er verführte und eroberte sie.",
+      "tags": [
+        "george_duroy",
+        "mood",
+        "social"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "unspezifisch / innere Reflexion",
+      "revealIndex": 33,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 35,
+      "text": "Er hatte zunächst erreicht, daß sie dem Marquis de Cazolles absagte.",
+      "tags": [
+        "george_duroy",
+        "social",
+        "mood"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "unspezifisch / innere Reflexion",
+      "revealIndex": 34,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 36,
+      "text": "Daß Frau Walter niemals zustimmen würde, ihm ihre Tochter zu geben, das begriff er sehr wohl. Sie liebte ihn noch, sie würde ihn immer lieben, und zwar mit einer leidenschaftlichen Wucht.",
+      "tags": [
+        "george_duroy",
+        "mood",
+        "social"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "unspezifisch / innere Reflexion",
+      "revealIndex": 35,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 37,
+      "text": "Aber sobald er die Kleine in der Ferne versteckt hielt, dann konnte er mit dem Vater unterhandeln, wie eine Macht mit der anderen.",
+      "tags": [
+        "george_duroy",
+        "social",
+        "mood"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "unspezifisch / innere Reflexion",
+      "revealIndex": 36,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 38,
+      "text": "Er dachte über dieses alles nach. Er antwortete mit abgehackten Sätzen auf die Fragen, die man an ihn richtete und auf die er kaum hörte.",
+      "tags": [
+        "george_duroy",
+        "mood"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "stimmung_emotion",
+      "ortBasis": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "ort": "Rückfahrt nach Paris",
+      "revealIndex": 37,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 39,
+      "text": "Als man nach Paris zurückkam, wachte er wieder auf.",
+      "tags": [
+        "george_duroy",
+        "move",
+        "mood"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "stimmung_emotion",
+      "ortBasis": "Palais Walter, Faubourg Saint-Honoré",
+      "ort": "Paris (Stadtgrenze / Einfahrt)",
+      "revealIndex": 38,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": true,
+      "fWertType": "ort_loest_emotion_aus",
+      "f_wert": "ort_loest_emotion_aus"
+    },
+    {
+      "id": 40,
+      "text": "Als der Landauer in den Hof des Palais einfuhr, wollte man Georges zum Diner dabehalten.",
+      "tags": [
+        "location",
+        "move"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Palais Walter, Faubourg Saint-Honoré",
+      "ort": "Palais Walter, Paris",
+      "revealIndex": 39,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 41,
+      "text": "Er lehnte jedoch dankend ab und ging nach Hause.",
+      "tags": [
+        "george_duroy",
+        "move"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "raum_umwelt",
+      "ortBasis": "Wohnung Du Roy (Rue Constantinople 127)",
+      "ort": "Duroys Wohnung, Paris",
+      "revealIndex": 40,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 42,
+      "text": "Nachdem er etwas gegessen hatte, ordnete er seine Papiere, als wenn ihm eine lange Reise bevorstand.",
+      "tags": [
+        "george_duroy",
+        "mood"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "stimmung_emotion",
+      "ortBasis": "Wohnung Du Roy (Rue Constantinople 127)",
+      "ort": "Duroys Wohnung, Paris",
+      "revealIndex": 41,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 43,
+      "text": "Er verbrannte die Briefe, die ihn kompromittieren konnten, die anderen versteckte er und schrieb an einige Freunde.",
+      "tags": [
+        "george_duroy"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "raum_umwelt",
+      "ortBasis": "Wohnung Du Roy (Rue Constantinople 127)",
+      "ort": "Duroys Wohnung (nicht spezifiziert)",
+      "revealIndex": 42,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 44,
+      "text": "Von Zeit zu Zeit sah er auf die Standuhr und dachte: »Jetzt muß es drüben sehr heiß hergehen.«",
+      "tags": [
+        "george_duroy",
+        "time",
+        "mood"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "stimmung_emotion",
+      "ortBasis": "Wohnung Du Roy (Rue Constantinople 127)",
+      "ort": "Duroys Wohnung (nicht spezifiziert)",
+      "revealIndex": 43,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": true,
+      "fWertType": "ort_loest_emotion_aus",
+      "f_wert": "ort_loest_emotion_aus"
+    },
+    {
+      "id": 45,
+      "text": "Eine Unruhe und Unsicherheit nagte ihm am Herzen. Wie, wenn ihm die Sache mißlingen würde? ... Was hatte er ja eigentlich zu fürchten?",
+      "tags": [
+        "george_duroy",
+        "mood",
+        "social"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Wohnung Du Roy (Rue Constantinople 127)",
+      "ort": "Duroys Wohnung (nicht spezifiziert)",
+      "revealIndex": 44,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 46,
+      "text": "Gegen elf Uhr verließ er sein Haus.",
+      "tags": [
+        "time"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Wohnung Du Roy (Rue Constantinople 127)",
+      "ort": "Duroys Wohnung (nicht spezifiziert)",
+      "revealIndex": 45,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 47,
+      "text": "Er wanderte eine Weile auf und ab.",
+      "tags": [
+        "move",
+        "george_duroy"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "raum_umwelt",
+      "ortBasis": "Place de la Concorde (Droschke vor dem Marineministerium)",
+      "ort": "Straße in der Nähe von Duroys Wohnung (nicht spezifiziert)",
+      "revealIndex": 46,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": true,
+      "fWertType": "emotion_faerbt_raum",
+      "f_wert": "emotion_faerbt_raum"
+    },
+    {
+      "id": 48,
+      "text": "Dann nahm er eine Droschke und ließ den Kutscher an der Place de la Concorde vor den Arkaden des Marineministeriums halten.",
+      "tags": [
+        "move",
+        "george_duroy",
+        "location"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "raum_umwelt",
+      "ortBasis": "Place de la Concorde (Droschke vor dem Marineministerium)",
+      "ort": "Place de la Concorde, Marineministerium (Arkaden)",
+      "revealIndex": 47,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 49,
+      "text": "Hin und wieder zündete er ein Streichholz an, um nach der Uhr zu sehen. Je mehr die Mitternachtsstunde heranrückte, um so fieberhafter und unruhiger wurde seine Ungeduld.",
+      "tags": [
+        "george_duroy",
+        "time",
+        "mood"
+      ],
+      "valenz": -1,
+      "intensitaet": 3,
+      "category": "stimmung_emotion",
+      "ortBasis": "Place de la Concorde (Droschke vor dem Marineministerium)",
+      "ort": "Place de la Concorde, Droschke vor dem Marineministerium",
+      "revealIndex": 48,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": true,
+      "fWertType": "ort_loest_emotion_aus",
+      "f_wert": "ort_loest_emotion_aus"
+    },
+    {
+      "id": 50,
+      "text": "Alle Augenblicke steckte er seinen Kopf aus dem Wagenfenster und spähte hinaus.",
+      "tags": [
+        "george_duroy",
+        "koerper_als_akteur"
+      ],
+      "valenz": -1,
+      "intensitaet": 2,
+      "category": "stimmung_emotion",
+      "ortBasis": "Place de la Concorde (Droschke vor dem Marineministerium)",
+      "ort": "Place de la Concorde, Droschke vor dem Marineministerium",
+      "revealIndex": 49,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": true,
+      "fWertType": "koerper_als_sensor",
+      "f_wert": "koerper_als_sensor"
+    },
+    {
+      "id": 51,
+      "text": "Eine ferne Turmuhr schlug zwölf, gleich darauf schlug eine andere in der Nähe und dann gleich zwei auf einmal.",
+      "tags": [
+        "george_duroy",
+        "sound",
+        "time",
+        "mood"
+      ],
+      "valenz": -1,
+      "intensitaet": 2,
+      "category": "stimmung_emotion",
+      "ortBasis": "Place de la Concorde (Droschke vor dem Marineministerium)",
+      "ort": "Place de la Concorde, Droschke vor dem Marineministerium",
+      "revealIndex": 50,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": true,
+      "fWertType": "ort_loest_emotion_aus",
+      "f_wert": "ort_loest_emotion_aus"
+    },
+    {
+      "id": 52,
+      "text": "Trotzdem war er entschlossen zu bleiben, bis es Tag wurde. In solchen Fällen muß man Geduld haben.",
+      "tags": [
+        "george_duroy",
+        "mood",
+        "time"
+      ],
+      "valenz": -1,
+      "intensitaet": 2,
+      "category": "stimmung_emotion",
+      "ortBasis": "Place de la Concorde (Droschke vor dem Marineministerium)",
+      "ort": "Place de la Concorde, Droschke vor dem Marineministerium",
+      "revealIndex": 51,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 53,
+      "text": "Er hörte, wie es ein viertel, dann ein halb, dann dreiviertel schlug, und schließlich wiederholten sämtlich Uhren, eine nach der anderen, eins, wie sie zwölf Uhr geschlagen hatten.",
+      "tags": [
+        "george_duroy",
+        "sound",
+        "time",
+        "mood"
+      ],
+      "valenz": -1,
+      "intensitaet": 2,
+      "category": "stimmung_emotion",
+      "ortBasis": "Place de la Concorde (Droschke vor dem Marineministerium)",
+      "ort": "Place de la Concorde, Droschke vor dem Marineministerium",
+      "revealIndex": 52,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": true,
+      "fWertType": "koerper_als_sensor",
+      "f_wert": "koerper_als_sensor"
+    },
+    {
+      "id": 54,
+      "text": "Er hatte die Hoffnung schon verloren und zerbrach sich den Kopf darüber, was wohl geschehen sein könnte.",
+      "tags": [
+        "george_duroy",
+        "mood"
+      ],
+      "valenz": -1,
+      "intensitaet": 2,
+      "category": "stimmung_emotion",
+      "ortBasis": "Place de la Concorde (Droschke vor dem Marineministerium)",
+      "ort": "Place de la Concorde, Droschke vor dem Marineministerium",
+      "revealIndex": 53,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 55,
+      "text": "Er fuhr atemlos empor: »Sind Sie das, Suzanne?«",
+      "tags": [
+        "george_duroy",
+        "mood",
+        "koerper_als_akteur"
+      ],
+      "valenz": 1,
+      "intensitaet": 2,
+      "category": "stimmung_emotion",
+      "ortBasis": "Place de la Concorde (Droschke vor dem Marineministerium)",
+      "ort": "Place de la Concorde, Droschke vor dem Marineministerium",
+      "revealIndex": 54,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": true,
+      "fWertType": "ort_loest_emotion_aus",
+      "f_wert": "ort_loest_emotion_aus"
+    },
+    {
+      "id": 56,
+      "text": "Sie stieg ein und sank in seine Arme. Er rief dem Kutscher zu: »Vorwärts!« Und die Droschke setzte sich in Bewegung.",
+      "tags": [
+        "move",
+        "location"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt aus Paris Richtung Sèvres",
+      "ort": "Place de la Concorde, Abfahrt der Droschke",
+      "revealIndex": 55,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 57,
+      "text": "Er war unruhig und zitterte",
+      "tags": [
+        "george_duroy",
+        "mood"
+      ],
+      "valenz": -1,
+      "intensitaet": 2,
+      "category": "stimmung_emotion",
+      "ortBasis": "Fahrt aus Paris Richtung Sèvres",
+      "ort": "unbestimmt, Paris",
+      "revealIndex": 56,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 58,
+      "text": "er hielt mit gespannter Aufmerksamkeit zu, sein Herz klopfte, ein zorniger, neidischer Haß stieg in ihm gegen diese Leute auf.",
+      "tags": [
+        "george_duroy",
+        "mood"
+      ],
+      "valenz": -1,
+      "intensitaet": 3,
+      "category": "stimmung_emotion",
+      "ortBasis": "Fahrt aus Paris Richtung Sèvres",
+      "ort": "unbestimmt, Paris",
+      "revealIndex": 57,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 59,
+      "text": "Doch er hielt die Tochter.",
+      "tags": [
+        "george_duroy",
+        "social"
+      ],
+      "valenz": 1,
+      "intensitaet": 1,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "Fahrt aus Paris Richtung Sèvres",
+      "ort": "unbestimmt, Paris",
+      "revealIndex": 58,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 60,
+      "text": "Es ist zu spät, wir können keinen Zug mehr erreichen.",
+      "tags": [
+        "george_duroy",
+        "time"
+      ],
+      "valenz": -1,
+      "intensitaet": 1,
+      "category": "stimmung_emotion",
+      "ortBasis": "Fahrt aus Paris Richtung Sèvres",
+      "ort": "unbestimmt, Paris",
+      "revealIndex": 59,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": true,
+      "fWertType": "ort_loest_emotion_aus",
+      "f_wert": "ort_loest_emotion_aus"
+    },
+    {
+      "id": 61,
+      "text": "Wir fahren mit diesem Wagen nach Sevres und dort übernachten wir, und morgen früh reisen wir nach La Roche Guyon weiter.",
+      "tags": [
+        "george_duroy",
+        "move",
+        "location"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt aus Paris Richtung Sèvres",
+      "ort": "Sèvres",
+      "revealIndex": 60,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 62,
+      "text": "Es ist ein hübsches Dorf an der Seine, zwischen Montes und Bonnieres.",
+      "tags": [
+        "location",
+        "space"
+      ],
+      "valenz": null,
+      "intensitaet": 2,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt aus Paris Richtung Sèvres",
+      "ort": "La Roche-Guyon, Seine",
+      "revealIndex": 61,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 63,
+      "text": "Der Wagen rollte durch die Straßen.",
+      "tags": [
+        "move",
+        "location"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt aus Paris Richtung Sèvres",
+      "ort": "Unbestimmt (Kapitel 17)",
+      "revealIndex": 62,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 64,
+      "text": "Georges nahm die Hand des jungen Mädchens und begann sie langsam und rücksichtsvoll zu küssen.",
+      "tags": [
+        "george_duroy",
+        "koerper_als_akteur"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "raum_umwelt",
+      "ortBasis": "Fahrt aus Paris Richtung Sèvres",
+      "ort": "Unbestimmt (Kapitel 17)",
+      "revealIndex": 63,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 65,
+      "text": "Er wußte nicht, was er ihr sagen sollte, denn er war an platonische Zärtlichkeiten nicht gewöhnt.",
+      "tags": [
+        "george_duroy",
+        "mood"
+      ],
+      "valenz": -1,
+      "intensitaet": 2,
+      "category": "stimmung_emotion",
+      "ortBasis": "Fahrt aus Paris Richtung Sèvres",
+      "ort": "unbekannt",
+      "revealIndex": 64,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 66,
+      "text": "Plötzlich schien es ihm, als wenn sie weinte. Erschrocken fragte er: »Was haben Sie, meine liebe Kleine?«",
+      "tags": [
+        "george_duroy",
+        "mood"
+      ],
+      "valenz": -1,
+      "intensitaet": 2,
+      "category": "stimmung_emotion",
+      "ortBasis": "Fahrt aus Paris Richtung Sèvres",
+      "ort": "unbekannt",
+      "revealIndex": 65,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": true,
+      "fWertType": "ort_loest_emotion_aus",
+      "f_wert": "ort_loest_emotion_aus"
+    },
+    {
+      "id": 106,
+      "text": "Herr Walter antwortete Du Roy auf seinen langen Brief und sagte ihm die Hand seiner Tochter zu.",
+      "tags": [
+        "social"
+      ],
+      "valenz": null,
+      "intensitaet": 2,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "La Roche-Guyon an der Seine",
+      "ort": "unbestimmt",
+      "revealIndex": 105,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 107,
+      "text": "Bel-Ami hatte seinen Brief in den Postkasten geworfen, in dem Augenblick, wo er Paris verließ, denn er hatte ihn schon am Abend vor der Entführung geschrieben.",
+      "tags": [
+        "move",
+        "location"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "La Roche-Guyon an der Seine",
+      "ort": "Unbestimmt (Kapitel 17)",
+      "revealIndex": 106,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 108,
+      "text": "In respektvollen Ausdrücken teilte er darin mit, daß er seit langem schon das junge Mädchen liebe, daß jedoch nie eine Verabredung zwischen ihnen beiden bestanden hatte, daß er aber, als sie in voller Freiheit zu ihm gekommen war, um ihm zu sagen: »Ich will Ihre Frau sein«, sich für berechtigt hielt, sie zu behalten und sogar zu verbergen, bis er von den Eltern eine Antwort erhalten würde, deren rechtmäßigen Willen er respektiere, aber für weniger maßgebend halte, als den Willen seiner Verlobten selbst.",
+      "tags": [
+        "social"
+      ],
+      "valenz": null,
+      "intensitaet": 2,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "La Roche-Guyon an der Seine",
+      "ort": "Unbestimmt (Kapitel 17)",
+      "revealIndex": 107,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 109,
+      "text": "Als er seinen Zweck erreicht hatte, brachte er Suzanne nach Paris und schickte sie zu ihren Eltern zurück; er selbst hielt sich eine Weile von ihnen fern.",
+      "tags": [
+        "move",
+        "location"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "La Roche-Guyon an der Seine",
+      "ort": "Unbestimmt (Kapitel 17)",
+      "revealIndex": 108,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 110,
+      "text": "Sie hatten sechs Tage an der Seine in La Roche-Guyon verbracht.",
+      "tags": [
+        "location",
+        "time"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "raum_umwelt",
+      "ortBasis": "La Roche-Guyon an der Seine",
+      "ort": "La Roche-Guyon",
+      "revealIndex": 109,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 111,
+      "text": "Noch nie hatte sich das junge Mädchen so amüsiert. Sie spielte die Bäuerin.",
+      "tags": [
+        "atmosphere",
+        "social"
+      ],
+      "valenz": null,
+      "intensitaet": 2,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "La Roche-Guyon an der Seine",
+      "ort": "La Roche-Guyon",
+      "revealIndex": 110,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": true,
+      "fWertType": "ort_loest_emotion_aus",
+      "f_wert": "ort_loest_emotion_aus"
+    },
+    {
+      "id": 112,
+      "text": "Und da er sie als seine Schwester ausgab, so lebten sie ungeniert und keusch nebeneinander, in einer Art verliebter Kameradschaft.",
+      "tags": [
+        "social",
+        "atmosphere"
+      ],
+      "valenz": null,
+      "intensitaet": 2,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "La Roche-Guyon an der Seine",
+      "ort": "La Roche-Guyon",
+      "revealIndex": 111,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 113,
+      "text": "Er hielt es für gescheiter, sie nicht anzurühren.",
+      "tags": [
+        "george_duroy",
+        "mood"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "stimmung_emotion",
+      "ortBasis": "La Roche-Guyon an der Seine",
+      "ort": "La Roche-Guyon",
+      "revealIndex": 112,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 114,
+      "text": "Sie angelte und trug dabei auf dem Kopf einen riesigen Strohhut mit Feldblumen. Sie fand die Gegend bezaubernd.",
+      "tags": [
+        "space",
+        "atmosphere",
+        "social"
+      ],
+      "valenz": null,
+      "intensitaet": 2,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "La Roche-Guyon an der Seine",
+      "ort": "Unbestimmt (Kapitel 17)",
+      "revealIndex": 113,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": true,
+      "fWertType": "ort_loest_emotion_aus",
+      "f_wert": "ort_loest_emotion_aus"
+    },
+    {
+      "id": 115,
+      "text": "Georges trug eine Bauernbluse, die er sich im Dorfe beim Kaufmann erstanden hatte.",
+      "tags": [
+        "george_duroy",
+        "social",
+        "material"
+      ],
+      "valenz": null,
+      "intensitaet": 1,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "La Roche-Guyon an der Seine",
+      "ort": "Dorf (ländliche Umgebung, Flucht mit Suzanne)",
+      "revealIndex": 114,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 116,
+      "text": "Er machte mit Suzanne Ausflüge entweder zu Fuß am Fluß entlang, oder im Boot.",
+      "tags": [
+        "george_duroy",
+        "move",
+        "location"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "raum_umwelt",
+      "ortBasis": "La Roche-Guyon an der Seine",
+      "ort": "Fluss in ländlicher Umgebung (Flucht mit Suzanne)",
+      "revealIndex": 115,
+      "station": null,
+      "perspektive": "erzaehler",
+      "hasFwert": false,
+      "fWertType": null,
+      "f_wert": null
+    },
+    {
+      "id": 117,
+      "text": "Sie küßten sich jeden Augenblick. Suzanne in voller Unschuld, er bereit, seiner Begierde zu unterliegen.",
+      "tags": [
+        "george_duroy",
+        "mood",
+        "koerper_als_akteur"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "stimmung_emotion",
+      "ortBasis": "La Roche-Guyon an der Seine",
+      "ort": "Ländliche Umgebung (Flucht mit Suzanne)",
+      "revealIndex": 116,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": true,
+      "fWertType": "ort_loest_emotion_aus",
+      "f_wert": "ort_loest_emotion_aus"
+    },
+    {
+      "id": 118,
+      "text": "als er ihr sagte: »Morgen kehren wir nach Paris zurück, Ihr Vater versichert mir Ihre Hand«",
+      "tags": [
+        "george_duroy",
+        "location",
+        "move",
+        "social"
+      ],
+      "valenz": null,
+      "intensitaet": null,
+      "category": "gesellschaft_soziales",
+      "ortBasis": "La Roche-Guyon an der Seine",
+      "ort": "Unbestimmt (Kapitel 17)",
+      "revealIndex": 117,
+      "station": null,
+      "perspektive": "figur",
+      "hasFwert": true,
+      "fWertType": "emotion_faerbt_raum",
+      "f_wert": "emotion_faerbt_raum"
+    }
+  ],
+  "halteorte": [],
+  "zwischenPunkte": [],
+  "ortRuns": [
+    {
+      "ort": "Palais Walter, Faubourg Saint-Honoré",
+      "revealIndex": 0,
+      "lon": 2.316,
+      "lat": 48.8712,
+      "nodeType": "location",
+      "bandCounts": {
+        "raum_umwelt": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 3
+        },
+        "stimmung_emotion": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 1
+        },
+        "gesellschaft_soziales": {
+          "neg": 1,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 2
+        }
+      }
+    },
+    {
+      "ort": "Fahrt über die Champs-Élysées und durch das Bois",
+      "revealIndex": 5,
+      "lon": 2.285,
+      "lat": 48.869,
+      "nodeType": "location",
+      "bandCounts": {
+        "raum_umwelt": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 1
+        },
+        "stimmung_emotion": {
+          "neg": 0,
+          "pos": 1,
+          "neutral": 0,
+          "unrated": 0
+        },
+        "gesellschaft_soziales": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 1
+        }
+      }
+    },
+    {
+      "ort": "Fahrt über die Seine nach Saint-Germain und zurück",
+      "revealIndex": 8,
+      "lon": 2.26,
+      "lat": 48.872,
+      "nodeType": "location",
+      "bandCounts": {
+        "raum_umwelt": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 15
+        },
+        "stimmung_emotion": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 6
+        },
+        "gesellschaft_soziales": {
+          "neg": 1,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 8
+        }
+      }
+    },
+    {
+      "ort": "Wohnung Du Roy (Rue Constantinople 127)",
+      "revealIndex": 40,
+      "lon": 2.31921,
+      "lat": 48.88037,
+      "nodeType": "location",
+      "bandCounts": {
+        "raum_umwelt": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 3
+        },
+        "stimmung_emotion": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 2
+        },
+        "gesellschaft_soziales": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 1
+        }
+      }
+    },
+    {
+      "ort": "Place de la Concorde (Droschke vor dem Marineministerium)",
+      "revealIndex": 46,
+      "lon": 2.3212,
+      "lat": 48.8656,
+      "nodeType": "location",
+      "bandCounts": {
+        "raum_umwelt": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 2
+        },
+        "stimmung_emotion": {
+          "neg": 6,
+          "pos": 1,
+          "neutral": 0,
+          "unrated": 0
+        },
+        "gesellschaft_soziales": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 0
+        }
+      }
+    },
+    {
+      "ort": "Fahrt aus Paris Richtung Sèvres",
+      "revealIndex": 55,
+      "lon": 2.295,
+      "lat": 48.861,
+      "nodeType": "location",
+      "bandCounts": {
+        "raum_umwelt": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 5
+        },
+        "stimmung_emotion": {
+          "neg": 5,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 0
+        },
+        "gesellschaft_soziales": {
+          "neg": 0,
+          "pos": 1,
+          "neutral": 0,
+          "unrated": 0
+        }
+      }
+    },
+    {
+      "ort": "La Roche-Guyon an der Seine",
+      "revealIndex": 66,
+      "lon": 2.28,
+      "lat": 48.8535,
+      "nodeType": "location",
+      "bandCounts": {
+        "raum_umwelt": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 4
+        },
+        "stimmung_emotion": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 2
+        },
+        "gesellschaft_soziales": {
+          "neg": 0,
+          "pos": 0,
+          "neutral": 0,
+          "unrated": 7
+        }
+      }
+    }
+  ],
+  "routenPfadKumulativ": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    94,
+    94,
+    94,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    145,
+    256,
+    256,
+    304,
+    304,
+    304,
+    304,
+    304,
+    304,
+    375,
+    375,
+    375,
+    375,
+    375,
+    375,
+    375,
+    375,
+    375,
+    405,
+    405,
+    405,
+    405,
+    405,
+    405,
+    405,
+    405,
+    405,
+    405,
+    405,
+    438,
+    438,
+    438,
+    438,
+    438,
+    438,
+    438,
+    438,
+    438,
+    438,
+    438,
+    438,
+    438
+  ],
+  "ausgeschlosseneAnnotationen": [
+    [
+      66,
+      105
+    ]
+  ]
+}

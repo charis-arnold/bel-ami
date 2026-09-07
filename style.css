@@ -1,0 +1,953 @@
+/* =============================================================================
+   style.css — visuelle Struktur für Bel-Ami v2
+   Nur die Stile, die für die eigentliche Darstellung gebraucht werden.
+============================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700;800&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+:root {
+  --bg: #ECECEC;
+  --ink: #1A1A1A;
+  /* Tinte des Kapitelmenüs: Schrift, Haarlinien und die aktive Fläche */
+  --menue: #3A5058;
+  --gold: #63561F;
+  --grey: #8F8F8F;
+  --sans: 'Source Sans 3', -apple-system, sans-serif;
+  --serif: 'Source Serif 4', serif;
+  --serif-text: 'Source Serif 4', serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  background: var(--bg);
+  font-family: var(--sans);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+
+/* =========================
+   1) Bühne und Scroll
+   ========================= */
+
+.scrolly-stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Grafische Ansicht (siehe kapitelAnsichtsModus in sketch.js): Karte/Route
+   werden im Canvas selbst durch die zentrierte, horizontale Spine
+   überdeckt (zeichneSpineHorizontal) — diese kartenbezogenen DOM-Overlays
+   passen thematisch nicht mehr dazu und würden ohne Bezugspunkt frei über
+   der Grafik schweben, daher hier ausgeblendet. */
+.scrolly-stage.grafik-ansicht #kapitelEnde,
+.scrolly-stage.grafik-ansicht #kapitelEndeText,
+.scrolly-stage.grafik-ansicht #kartenMarkierungen,
+.scrolly-stage.grafik-ansicht #annotationBox {
+  display: none;
+}
+
+.scroll-track {
+  pointer-events: none;
+}
+
+/* Register «Info» ganz ausgefahren (zeichneInfoLeiste in kreisgrafik.js):
+   Die dunkle Fläche liegt im Canvas — alles DOM darüber stünde sonst
+   unverdeckt im Bild. Auf der Bühne trifft es jedes Kind ausser dem
+   Canvas selbst (Begleit- und Einstiegstexte, Annotationsbox, Marker),
+   dazu die fixen Bedienelemente daneben. pointer-events aus, damit jeder
+   Klick bei p5 ankommt und das Register wieder zufährt. Das Kapitelmenü fehlt
+   hier: es verschwindet nicht auf einmal, sondern wandert hinter die
+   aufziehende Fläche (.kapitel-register-rahmen weiter unten).
+
+   ACHTUNG visibility statt opacity: draw() schreibt die Deckkraft der
+   Begleit- und Einstiegstexte jeden Frame als Inline-Stil: eine
+   opacity-Regel im Stylesheet käme dagegen nicht an. */
+body.projekttext-offen #scrollyStage > *:not(canvas),
+body.projekttext-offen #grafikPlayButton {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Register «Legende» ausgefahren (zeichneRegisterleiste): derselbe Grund —
+   der Balken liegt im Canvas und hätte sonst DOM über sich. Zwei bleiben
+   stehen: das Kapitelmenü zum Navigieren, das an der Balkenkante hinter ihm
+   verschwindet (.kapitel-register-rahmen weiter unten), und die
+   Annotationsbox, die weiterlesbar bleiben soll und stattdessen über den
+   Balken rückt (siehe Abschnitt 7). */
+body.legende-offen #scrollyStage > *:not(canvas):not(#annotationBox),
+body.legende-offen #grafikPlayButton {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+h1,
+h2,
+.lead,
+.scroll-hinweis {
+  transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+h1 {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 5;
+  font-family: var(--serif);
+  text-transform: uppercase;
+  font-size: clamp(30px, 5.2vw, 33px);
+  letter-spacing: -0.005em;
+  font-weight: 300;
+  line-height: 1.15;
+  width: max-content;
+  max-width: 44ch;
+  pointer-events: none;
+  color: #ffffff;
+}
+
+h2 {
+  position: absolute;
+  top: 36%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 5;
+  font-family: var(--serif);
+  text-transform: normal;
+  font-size: clamp(30px, 5.2vw, 52px);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  line-height: 1.15;
+  width: max-content;
+  max-width: 44ch;
+  pointer-events: none;
+  color: #ffffff;
+}
+
+.lead {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 5;
+  font-family: var(--serif);
+  font-weight: 300;
+  letter-spacing: -0.005em;
+  line-height: 1.15;
+  width: max-content;
+  pointer-events: none;
+  color: #ffffff;
+}
+
+.lead-1 {
+  top: 45%;
+  font-size: clamp(15px, 5.2vw, 30px);
+}
+
+.lead-2 {
+  top: 79%;
+  font-size: clamp(15px, 5.2vw, 22px);
+}
+
+.scroll-hinweis {
+  position: absolute;
+  top: 88%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  color: var(--gold);
+  pointer-events: none;
+  animation: scroll-hinweis-bounce 1.8s ease-in-out infinite;
+}
+
+.scroll-hinweis-arrow {
+  font-size: 50px;
+  line-height: 1.5;
+  font-weight: 300;
+  color: #ffffff;
+}
+
+/* Auf den hellen Karten trägt der Hinweis die Tinte der übrigen
+   Bedienelemente statt des Weiss der dunklen Startkarte. */
+.scroll-hinweis.auf-hell,
+.scroll-hinweis.auf-hell .scroll-hinweis-text,
+.scroll-hinweis.auf-hell .scroll-hinweis-arrow {
+  color: var(--menue);
+}
+
+/* Bedienschrift: der Scrollen-Hinweis, der Tonschalter, die Kapitelende-Knöpfe
+   und die Beschriftung über dem Play-Knopf tragen dieselbe Schrift. Die Farbe
+   steht bei jedem einzeln — sie hängt am Untergrund, siehe .kapitel-ende-knopf.
+
+   ACHTUNG .intro-ton steht weiter unten und darf die vier Angaben hier NICHT
+   noch einmal setzen: gleiche Spezifität, spätere Regel — sie gewönne und die
+   Schrift liefe wieder auseinander. */
+.scroll-hinweis-text,
+.intro-ton,
+.kapitel-ende-knopf,
+.grafik-play-button::before {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.scroll-hinweis-text {
+  color: #ffffff;
+}
+
+/* Tonschalter des Introstücks. Steht mittig zwischen den beiden Leadzeilen —
+   gehört zum Titelbild und verschwindet mit ihm. Trägt die Bedienschrift von
+   oben.
+
+   ACHTUNG 58.5% ist die Mitte zwischen .lead-1 (45%) und .begleittext (72%),
+   und top misst bei allen dreien die MITTE, nicht die Oberkante: sie teilen
+   sich dasselbe translate(-50%, -50%). Wird eine der beiden Bezugszeilen
+   verschoben, muss dieser Wert mit.
+
+   ACHTUNG der Bezug unten ist .begleittext, NICHT .lead-2 (79%) — der
+   Crawl-Text setzt genau dort ein, wo der Titel ausblendet, und er ist der
+   Nachbar, gegen den der Knopf steht. */
+.intro-ton {
+  position: absolute;
+  top: 58.5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 18px 9px 15px;
+  background: var(--gold);
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  transition: opacity 0.4s ease, background-color 0.3s ease;
+}
+
+/* Aufgehellte Fläche statt Rahmenwechsel — der Knopf hat keinen Rahmen mehr.
+   Schrift und Ring bleiben weiss und tragen den Kontrast (7,2:1 auf dem
+   Gold, siehe unten). */
+.intro-ton:hover {
+  background: #7A6B27;
+}
+
+.intro-ton:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* Ring, der sich beim Einschalten füllt — kein Lautsprechersymbol, damit der
+   Knopf dieselbe Zeichensprache trägt wie die Kreise der Karte. */
+.intro-ton-zeichen {
+  width: 11px;
+  height: 11px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.intro-ton[aria-pressed="true"] .intro-ton-zeichen {
+  background: currentColor;
+}
+
+/* Blendet mit der dunklen Karte weg; gesetzt aus draw(). pointer-events aus,
+   damit der unsichtbare Knopf keine Klicks mehr fängt. */
+.intro-ton.verborgen {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Kapitelende: zwei Klickziele am Ende jedes Kapitels — weiter ins nächste
+   oder zurück in die Übersicht. Position und Typografie wie zuvor der einzelne
+   Hinweis, also wie .scroll-hinweis auf der Startseite. Der Bounce entfällt:
+   er gehörte zur Scroll-Geste eines einzelnen Hinweises, ein wippendes
+   Buttonpaar läse sich als Zappeln. */
+.kapitel-ende {
+  position: absolute;
+  top: 88%;
+  left: 50%;
+  display: flex;
+  gap: 10px;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.6s;
+}
+
+.kapitel-ende.sichtbar {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Farbe wie die Kapitelnummern und die Kreis-Labels (#212B2E) — anders als
+   der weisse "Scrollen"-Hinweis der Startseite, der auf dem dunklen
+   Startbild steht. Das Kapitelende liegt über der hellen Kapitelkarte. */
+/* Optik wie die Einträge des Kapitelregisters, aber umgekehrt: die Knöpfe
+   stehen von Anfang an in der aktiven Fassung — dunkle Fläche, helle Schrift,
+   dieselben Werte wie .kapitel-register-item.aktiv. Der Zeiger nimmt sie
+   zurück auf den hellen Ruhezustand des Registers.
+   Die Haarlinie steht in beiden Zuständen, auf der dunklen Fläche unsichtbar:
+   sonst wechselte die Höhe des Knopfs beim Überfahren um 1 px.
+   Die Grösse bleibt, wie sie war — Polster 10/20 und die 14px der
+   Bedienschrift oben, damit die Knöpfe nicht auf Registermass schrumpfen. */
+.kapitel-ende-knopf {
+  border: none;
+  border-bottom: 1px solid rgba(58, 80, 88, 0.15);
+  background: var(--menue);
+  padding: 10px 20px;
+  color: #C6D2D7;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.kapitel-ende-knopf:hover {
+  background: rgba(58, 80, 88, 0.08);
+  color: var(--menue);
+}
+
+/* Kapitel 18 hat kein nächstes Kapitel — dort bleibt nur "Übersicht". */
+.kapitel-ende-knopf.versteckt {
+  display: none;
+}
+
+@keyframes scroll-hinweis-bounce {
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%);
+  }
+
+  50% {
+    transform: translate(-50%, -35%);
+  }
+}
+
+
+/* =========================
+   Begleittexte (beliebig viele, je mit eigenem
+   Scroll-Fenster über data-von / data-bis)
+   ========================= */
+
+/* ACHTUNG top wird in kreisgrafik.js gespiegelt (BEGLEITTEXT_MITTE): der
+   Legendenaufbau setzt seine Blöcke über die Oberkante dieses Texts, ohne sie
+   messen zu können. Wird der Wert hier geändert, muss er dort mit. */
+
+.begleittext,
+.kapitel-einstiegstext,
+.kapitel-ende-text {
+  position: absolute;
+  top: 72%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 5;
+  font-family: var(--serif-text);
+  font-size: clamp(16px, 3vw, 30px);
+  font-weight: 400;
+  line-height: 1.5;
+  max-width: 42ch;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  color: #ffffff;
+}
+
+/* Dunkle statt weisse Schrift — bei .begleittext-dunkel (Kapitel 1s
+   Einstiegstext, scroll-gebunden) und .kapitel-einstiegstext (Kapitel
+   02–18, zeitbasiert, siehe draw() in sketch.js). */
+.begleittext.begleittext-dunkel,
+.kapitel-einstiegstext,
+.kapitel-ende-text {
+  color: #212B2E;
+}
+
+/* Der Text am Kapitelende steht höher als die übrigen: auf denselben 42 %
+   wie der hochgesetzte Begleittext (.begleittext-hoch), nicht auf 72 %.
+   Versalien wie bei den übrigen Bedienelementen; im HTML steht der Text
+   deshalb in normaler Schreibweise. */
+.kapitel-ende-text {
+  top: 42%;
+  text-transform: uppercase;
+}
+
+/* Feste Bezugshöhe statt Eigenhöhe, Teil 1: die Begleittexte.
+
+   Sie lösen einander überblendend ab, und weil jeder um seine eigene Mitte
+   zentriert ist (translateY(-50 %)), sitzen die Zeilen zweier Texte, die sich
+   gerade kreuzen, um eine halbe Zeile versetzt übereinander — beim Scrollen
+   sieht man den Versatz als Doppelbild. Der Kasten hier ist immer vier Zeilen
+   hoch (4 × line-height 1.5 = 6em), der Text sitzt an seiner Oberkante: alle
+   Begleittexte beginnen damit auf derselben Höhe und blenden sauber
+   ineinander. Vier Zeilen, weil das im Browser gemessen der längste ist.
+
+   min-height statt height: unterhalb von rund 1300 px Fensterbreite wird die
+   Textspalte schmaler (left: 50 % deckelt sie auf die halbe Bühnenbreite,
+   noch vor max-width), die Texte laufen dort auf fünf Zeilen. Sie weichen
+   dann wie bisher nach oben aus, statt unten aus dem Kasten zu ragen. */
+.begleittext {
+  min-height: 6em;
+}
+
+/* Feste Bezugshöhe statt Eigenhöhe, Teil 2: die Kapitel-Einstiegstexte sind
+   zwischen fünf und acht Zeilen lang. Zentriert sich jeder um seine eigene
+   Mitte (translateY(-50 %)), sitzt die erste Zeile bei jedem Kapitel woanders
+   und der Text springt beim Wechsel um bis zu zwei Zeilen. Der Kasten hier
+   ist immer acht Zeilen hoch (8 × line-height 1.5 = 12em), der Text sitzt an
+   seiner Oberkante: alle Kapitel blenden ihre Zeilen an denselben Stellen ein.
+   Acht Zeilen, weil das im Browser gemessen die längsten sind (Kapitel 01 und
+   16) — die Unterkante des Kastens liegt damit genau dort, wo diese beiden
+   auch bisher endeten, kein Kapitel rutscht tiefer ins Bild als zuvor.
+
+   min-height statt height, aus demselben Grund wie oben: auf schmaleren
+   Fenstern laufen die Texte länger und weichen dann mittig aus, statt unten
+   aus dem Bild zu fallen. Wird ein Text länger als acht Zeilen, den Wert
+   hier mit anheben.
+
+   Kapitel 1 hat keinen eigenen .kapitel-einstiegstext — dort steht der
+   Begleittext mit data-kapitel="01" an derselben Stelle und bekommt deshalb
+   denselben Kasten. */
+.kapitel-einstiegstext,
+.begleittext[data-kapitel="01"] {
+  min-height: 12em;
+}
+
+/* Der Kapitelende-Hinweis blendet über diese Klasse ein, nicht über ein
+   Scroll-Fenster: hinter der Klemme am Kapitelende gibt es keine Strecke
+   mehr, über die er ausblenden könnte (siehe draw()). */
+.kapitel-ende-text.sichtbar {
+  opacity: 1;
+}
+
+/* Tiefer als die übrigen Begleittexte: der Legendenaufbau steht als Ganzes
+   über seinem Text, und alles darüber leitet sich von dessen Oberkante ab
+   (siehe begleittextOben in kreisgrafik.js). Auf 72 % blieb unten ein
+   Streifen leer. Die Kapiteltexte bleiben bei 72 % — mehrere von ihnen sind
+   deutlich länger und fielen sonst unten heraus.
+
+   ACHTUNG die Grafik darf der Kasten nicht berühren, und das tut er auch
+   nicht: seine vier Zeilen (min-height: 6em oben) sind genau die vier, mit
+   denen der Legendenaufbau ohnehin rechnet (BEGLEITTEXT_ZEILEN_MAX = 4 in
+   kreisgrafik.js). Um 78 % zentriert liegt seine Oberkante damit exakt auf
+   begleittextOben() — der Linie, die die Legende schon heute für den Text
+   frei hält, und die der längste dieser Texte auch bisher erreicht. Kein
+   Erklärungstext rückt der Kreisgrafik also näher als zuvor.
+
+   Wer die 6em oben ändert, ändert diese Linie mit: BEGLEITTEXT_ZEILEN_MAX in
+   kreisgrafik.js muss dann auf dieselbe Zeilenzahl nachgezogen werden, sonst
+   schiebt sich der Text in die Grafik. */
+.begleittext[data-demo-gruppe] {
+  top: 78%;
+}
+
+/* Höher als die übrigen Begleittexte: auf 64 % läge der Text genau dort, wo
+   während der Route der Bedienhinweis am Fotomarker steht (siehe
+   data-foto-hinweis in index.html und zeichneFotoMarker).
+
+   Ohne festen Kasten: dieser Text steht allein in seinem Scroll-Fenster,
+   überblendet also mit keinem zweiten und hat vom gemeinsamen Zeilenraster
+   nichts. Seine Höhe ist gegen den Bedienhinweis eingemessen — ein Kasten
+   würde ihn ohne Gegenwert um eine halbe Zeile anheben. */
+.begleittext.begleittext-hoch {
+  top: 42%;
+  min-height: 0;
+}
+
+
+/* =========================
+   2) Ort-Marker (Wohnung Duroy)
+   ========================= */
+
+
+/* =========================
+   3) Einheitlicher Ortspunkt (schwarz, alle Spalten)
+   ========================= */
+
+.ortspunkt {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #000;
+  flex-shrink: 0;
+}
+
+
+/* =========================
+   4) Karten-Markierungen (Halteorte + Zwischen-Punkte + Markierungen)
+   ========================= */
+
+.karten-markierung {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.karten-markierung.sichtbar {
+  opacity: 1;
+}
+
+.karten-markierung .ortspunkt {
+  width: 9px;
+  height: 9px;
+  transform: translate(-50%, -50%);
+}
+
+.karten-markierung .label {
+  display: none;
+}
+
+
+/* =========================
+   7) Annotations-Textbox
+   ========================= */
+
+.annotation-box {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  max-width: 75ch;
+  display: flex;
+  justify-content: center;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Zwei mögliche Positionen der Annotationsbox, beide links. Welche je Kapitel
+   gilt, entscheidet annotationBoxPosition() in annotationsbox.js anhand der
+   tatsächlichen Lage von Route und Kreisen — einmal je Kapitel UND
+   Fenstergrösse, nicht fest verdrahtet: der Kartenausschnitt wird je nach
+   Fensterformat unterschiedlich weit seitlich beschnitten, die Kreise liegen
+   also nicht auf jedem Bildschirm gleich.
+   Unten mit 12 % Abstand statt 10 %, damit die Box den Scroll-Fortschrittsbalken
+   (bottom 16px) frei lässt. */
+.annotation-box.pos-unten-links {
+  top: auto;
+  bottom: 12%;
+  transition: bottom 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Der ausgefahrene Legendenbalken (158 px) läge sonst unter der Box — DOM
+   steht über dem Canvas, sie stünde also darauf. Statt sie auszublenden rückt
+   sie über den Balken und bleibt lesbar. Die obere Variante (top: 10 %) reicht
+   nie so weit herunter und bleibt, wo sie ist. */
+body.legende-offen .annotation-box.pos-unten-links {
+  bottom: calc(12% + 158px);
+}
+
+/* Übergang wie beim Buttonpaar am Kapitelende (.kapitel-ende), damit die Box
+   dort im selben Takt geht, wie Hinweis und Buttons kommen. Ohne ihn fiele
+   die Fläche schlagartig weg, während der Text darin noch ausblendet. */
+.annotation-inner {
+  border-radius: 0;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.annotation-bar {
+  height: 6px;
+  width: 100%;
+}
+
+/* ACHTUNG font-size führt LABEL_GROESSE in kreisgrafik.js als denselben Wert:
+   die Ortsnamen auf der Karte und die Legende zeichnen mit ihm im Canvas,
+   diese Zeile hier ist DOM. Wird der eine geändert, muss der andere mit. */
+.annotation-tag {
+  display: block;
+  padding: 14px 26px 0 26px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  color: #212B2E;
+}
+
+.annotation-tag:empty {
+  display: none;
+}
+
+.annotation-text {
+  font-family: var(--serif-text);
+  font-size: 22px;
+  line-height: 1.35;
+  color: #212B2E;
+  text-align: center;
+  max-width: 520px;
+  padding: 6px 26px 18px 26px;
+  background: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* =========================
+   9) Kapitelregister (rechter Rand, inkl. Plan/Graph + Alle oben drin)
+   ========================= */
+
+/* Der Legendenbalken liegt im Canvas, das Menü als DOM darüber — es stünde
+   sonst auf ihm statt dahinter. Der Rahmen schneidet es an der Balkenkante ab;
+   sichtbar ist das dasselbe, weil der Balken deckt. draw() setzt seine
+   Unterkante jeden Frame auf die Balkenhöhe.
+
+   ACHTUNG die Lage des Menüs hängt am Viewport (46vh), nicht am Rahmen: mit
+   top in Prozent rutschte es mit dem schrumpfenden Rahmen nach oben. */
+.kapitel-register-rahmen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* Breite = Raum zwischen rechtem Rand und der Annotationsbox (.annotation-box
+   endet bei right:5%, siehe oben). Rechtsbündige Beschriftung, damit die
+   Einträge an der Bildschirmkante abschliessen.
+
+   Sitzt etwas über der Mitte: unten rechts stehen die beiden Registerreiter
+   (zeichneReiter in kreisgrafik.js), das Menü rückt ihnen aus dem Weg. */
+.kapitel-register {
+  position: absolute;
+  right: 0;
+  top: 46vh;
+  transform: translateY(-50%);
+  width: 7vw;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.kapitel-register.sichtbar {
+  opacity: 1;
+  visibility: visible;
+}
+
+.kapitel-register-item {
+  width: 100%;
+  padding: 8px 6px;
+  border: none;
+  border-bottom: 1px solid rgba(58, 80, 88, 0.15);
+  background: none;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--menue);
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.kapitel-register-item:hover {
+  background: rgba(58, 80, 88, 0.08);
+}
+
+.kapitel-register-item.aktiv {
+  background: var(--menue);
+  color: #C6D2D7;
+}
+
+/* "Plan"/"Graph"-Zeile: ersetzt den ehemaligen ansicht-wechseln-btn
+   (oben rechts, togglete Text zwischen "Strahl"/"Karte") — hier stattdessen
+   zwei fest benannte, unabhängig anklickbare Hälften nebeneinander in einer
+   Registerzeile, die direkt (nicht togglend) auf Karten- bzw. Grafik-Ansicht
+   springen. Aktive Hälfte bekommt dieselbe .aktiv-Optik wie das aktive
+   Kapitel darunter. */
+.kapitel-register-modus-zeile {
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid rgba(58, 80, 88, 0.15);
+}
+
+.kapitel-register-modus-item {
+  flex: 1 1 50%;
+  padding: 8px 6px;
+  border: none;
+  background: none;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--menue);
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.kapitel-register-modus-item:first-child {
+  border-right: 1px solid rgba(58, 80, 88, 0.15);
+}
+
+.kapitel-register-modus-item:hover {
+  background: rgba(58, 80, 88, 0.08);
+}
+
+.kapitel-register-modus-item.aktiv {
+  background: var(--menue);
+  color: #C6D2D7;
+}
+
+/* Leerzeile zwischen Plan/Graph+Alle (oben) und der Kapitelliste
+   (darunter) — reiner Abstandshalter, keine eigene Interaktion. Höhe
+   entspricht in etwa einer regulären Registerzeile. */
+.kapitel-register-leerzeile {
+  width: 100%;
+  height: 24px;
+}
+
+/* In der Übersicht (alle Kapitelrouten, kein Kapitel gezoomt) braucht es
+   Plan/Graph nicht — dort gibt es keine Kapitel-Ansicht, die sie umschalten
+   könnten (siehe draw() in sketch.js). */
+.kapitel-register-modus-zeile.versteckt,
+.kapitel-register-leerzeile.versteckt {
+  display: none;
+}
+
+
+/* =========================
+   9c) Projekttext auf der Fläche des Registers «Info»
+
+   Die dunkle Fläche selbst liegt im Canvas (zeichneInfoLeiste in
+   kreisgrafik.js) — hier steht nur der Text darauf. Der Container fängt
+   bewusst KEINE Klicks (pointer-events: none), damit ein Klick neben den
+   Text bei p5 ankommt und den Einblender schliesst; nur die Textspalte
+   selbst nimmt Klicks an, damit man darin scrollen und markieren kann.
+   ========================= */
+.projekttext {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 22;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10vh 8vw;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.35s ease, visibility 0.35s;
+}
+
+.projekttext.offen {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Spalte genau so breit wie .begleittext / .kapitel-einstiegstext.
+
+   ACHTUNG die font-size hier ist KEINE Textgrösse — dieser Knoten zeigt selbst
+   keinen Text, die Absätze darunter setzen ihre eigene. Sie steht nur da,
+   damit ch dieselbe Bezugsgrösse bekommt wie dort: ch misst in Zeichen der
+   Schriftgrösse des Elements, an dem max-width hängt. Ohne diese Zeile
+   rechnete 42ch gegen die kleinere Absatzschrift und die Spalte fiele
+   schmaler aus als die Einstiegstexte.
+   Beide Werte gehören zusammen und müssen mit .begleittext mitwandern. */
+.projekttext-inner {
+  font-size: clamp(16px, 3vw, 30px);
+  max-width: 42ch;
+  max-height: 80vh;
+  overflow-y: auto;
+  pointer-events: auto;
+}
+
+/* Helle Serifenschrift auf dunklem Grund — derselbe Ton wie der Intro-Crawl
+   am Anfang, auf den der Projekttext bewusst zurückverweist. */
+/* Eigene, kleinere Schrift als die Einstiegstexte: die stehen als einzelner
+   Satz über der Karte, hier laufen drei Absätze am Stück — dafür kleinerer
+   Grad und lockerer Zeilenabstand. Nur die Spaltenbreite ist gemeinsam,
+   siehe .projekttext-inner oben. */
+.projekttext-inner p {
+  font-family: var(--serif-text);
+  font-size: clamp(16px, 1.5vw, 22px);
+  line-height: 1.65;
+  text-align: left;
+  color: #E2E6E1;
+}
+
+.projekttext-inner p + p {
+  margin-top: 1.1em;
+}
+
+
+.grafik-play-button {
+  position: fixed;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  z-index: 20;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: var(--ink);
+  color: #fff;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease, background 0.2s ease;
+}
+
+/* Beschriftung über dem Knopf. Als Pseudo-Element statt eigenem Knoten: so
+   kommt und geht sie mit dem Knopf, ohne zweiten Zustand in draw(). Dunkel
+   wie die Kapitelende-Knöpfe — sie steht auf der hellen Graph-Ansicht, nicht
+   auf dem dunklen Startbild wie der Scrollen-Hinweis.
+
+   ACHTUNG absolut positioniert, sonst würde sie als Flex-Element das Play-
+   Zeichen aus der Mitte des Knopfes schieben. */
+.grafik-play-button::before {
+  content: 'Sound on';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 10px;
+  white-space: nowrap;
+  color: #212B2E;
+  pointer-events: none;
+}
+
+.grafik-play-button.sichtbar {
+  opacity: 1;
+  visibility: visible;
+}
+
+.grafik-play-button:hover {
+  background: #333;
+}
+
+
+/* =========================
+   11) Foto-Popup (Fotobank Huma-Num/FNP)
+   ========================= */
+
+.foto-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease;
+}
+
+.foto-popup.offen {
+  opacity: 1;
+  visibility: visible;
+}
+
+.foto-popup-inner {
+  position: relative;
+  background: #fff;
+  border-radius: 10px;
+  max-width: min(560px, 90vw);
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.foto-popup-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.06);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.foto-popup-close:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.foto-popup-lieu {
+  padding-right: 30px;
+  margin-bottom: 14px;
+}
+
+.foto-popup-titel {
+  display: block;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 17px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.foto-popup-plz {
+  display: block;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--grey);
+  margin-top: 2px;
+}
+
+.foto-popup-bild {
+  display: block;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.foto-popup-beschreibung {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.75);
+  margin-top: 14px;
+}

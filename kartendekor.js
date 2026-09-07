@@ -1,0 +1,249 @@
+/* =============================================================================
+   kartendekor.js — Route, Massstabsleiste und Fortschrittsleiste
+
+   Reine Zeichenroutinen ohne Zugriff auf den Erzählzustand: sie bekommen
+   sichtbare Bbox, Kartenoffset, Alpha und beim Routenzug den Endindex als
+   Parameter. haversineMeter wohnt hier mit, weil zeichneMassstabsleiste sein
+   einziger Aufrufer ist.
+============================================================================= */
+
+// --- Modulkapselung ---------------------------------------------------
+// 14 von 17 Namen intern, 3 exportiert. Konvention: docs/architektur.md.
+(function () {
+
+// ---------------------------------------------------------------------------
+// Massstabsleiste unten rechts, skaliert live mit der sichtbaren Bbox.
+// Haversine bei mittlerer Breite reicht als Näherung für einen Ausschnitt.
+// ---------------------------------------------------------------------------
+
+function haversineMeter(lon1, lat1, lon2, lat2) {
+  const R = 6371000;
+  const toRad = d => d * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
+
+// Rundwerte für die Balkenlänge in Metern, Übersicht bis Kapitel-Zoom.
+const MASSSTAB_SCHRITTE = [10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000, 2500, 5000, 10000, 20000, 25000, 50000, 100000];
+
+// Längste erlaubte Balkenbreite. Klingt nach Kosmetik, entscheidet aber, WELCHE
+// Stufe erscheint — und bei 160 fiel sie auf grossen Bildschirmen nach unten
+// durch: 200 m hätten dort 172 px gebraucht, zwölf zu viel, also blieben 100 m
+// mit 86 px übrig. Der Balken wurde damit kürzer, je grösser das Fenster.
+// Dasselbe im Übersichtsakt, wo 1 km auf 500 m fiel.
+//
+// Ursache ist die Lücke in der Reihe oben: zwischen 100 und 200 liegt ein
+// Faktor 2, zwischen 200 und 250 nur 1.25. Reisst die Kappung, geht es
+// gleich eine ganze Verdopplung hinunter.
+//
+// 240 px fängt diese Fälle und hält zugleich Kapitel 1 und 2 auf derselben
+// Stufe. Über 993 durchgerechnete Fensterformate stimmen damit 93,8 % überein
+// (bei 160 px waren es 70,9 %), und im üblichen Bereich um 1800x1300 alle.
+// Der Wert hängt an breite_m 6350 für Kapitel 2, siehe FEINJUSTIERUNG in
+// data-prep/05 bereinigen/schneide-kapitelkarten.py — wer eines ändert, muss
+// das andere nachrechnen.
+const MASSSTAB_MAX_PX = 240;
+
+function zeichneMassstabsleiste(bbox, offsetX, offsetY = 0) {
+  let mapPixelWidth = width - offsetX;
+  if (mapPixelWidth <= 0) return;
+  let midLat = (bbox.north + bbox.south) / 2;
+  let breiteMeter = haversineMeter(bbox.west, midLat, bbox.east, midLat);
+  let meterProPixel = breiteMeter / mapPixelWidth;
+  if (!isFinite(meterProPixel) || meterProPixel <= 0) return;
+
+  // Grösster "schöner" Wert, dessen Balken noch unter MASSSTAB_MAX_PX bleibt.
+  let ziel = MASSSTAB_SCHRITTE[0];
+  for (let schritt of MASSSTAB_SCHRITTE) {
+    if (schritt / meterProPixel <= MASSSTAB_MAX_PX) ziel = schritt;
+    else break;
+  }
+  let balkenBreite = ziel / meterProPixel;
+  let label = ziel >= 1000 ? `${ziel / 1000} km` : `${ziel} m`;
+
+  // randY hält die Leiste über den beiden Registerreitern am unteren Rand
+  // (LEISTE_REITER_H = 30 in kreisgrafik.js) frei.
+  let randX = 40, randY = 76, tickHoehe = 6;
+  let x1 = width - randX - balkenBreite;
+  let x2 = width - randX;
+  let y = height - randY - offsetY;
+
+  push();
+  stroke(26, 26, 26, 220);
+  strokeWeight(2);
+  line(x1, y, x2, y);
+  line(x1, y - tickHoehe, x1, y);
+  line(x2, y - tickHoehe, x2, y);
+  noStroke();
+  fill(26, 26, 26, 220);
+  textFont(SCHRIFT_SANS);
+  textStyle(NORMAL);
+  textSize(11);
+  textAlign(CENTER, BOTTOM);
+  drawingContext.fillText(label, (x1 + x2) / 2, y - tickHoehe - 4); // fillText: p5s text() bleibt bei Animation manchmal unsichtbar
+  pop();
+}
+
+// ---------------------------------------------------------------------------
+// Fortschrittsleiste am unteren Rand
+// ---------------------------------------------------------------------------
+
+// Wie weit man im laufenden Akt ist, 0..1. Liegt im Canvas und nicht im DOM:
+// die Reiter der beiden Register sitzen an derselben Stelle und müssen davor
+// liegen — als DOM-Element läge die Leiste immer darüber. Wer danach zeichnet,
+// deckt sie zu; genau das tun der Legendenbalken und die Info-Fläche.
+const FORTSCHRITT_RAND = 24;   // Abstand links und rechts
+const FORTSCHRITT_UNTEN = 16;  // Unterkante zum Fensterrand
+const FORTSCHRITT_HOEHE = 4;
+const FORTSCHRITT_GRUND = 'rgba(0, 0, 0, 0.08)';
+
+function zeichneScrollFortschritt(anteil) {
+  let breite = width - 2 * FORTSCHRITT_RAND;
+  if (breite <= 0) return;
+  let y = height - FORTSCHRITT_UNTEN - FORTSCHRITT_HOEHE;
+  push(); // schreibt fillStyle direkt, wie die Massstabsleiste oben
+  noStroke();
+  drawingContext.fillStyle = FORTSCHRITT_GRUND;
+  drawingContext.fillRect(FORTSCHRITT_RAND, y, breite, FORTSCHRITT_HOEHE);
+  drawingContext.fillStyle = ROUTE_COLOR;
+  drawingContext.fillRect(FORTSCHRITT_RAND, y, breite * constrain(anteil, 0, 1), FORTSCHRITT_HOEHE);
+  pop();
+}
+
+// ---------------------------------------------------------------------------
+// Die Route: eine Farbe, nach hinten verblassend. Gezeichnet wird in einen
+// eigenen Puffer, weil nur dort Deckkraft geschrieben statt gemischt wird.
+
+// Jede Stufe wird DECKEND gezogen und überschreibt die vorherige; den Verlauf
+// macht ein Waschgang davor (erase = destination-out).
+
+// ACHTUNG nicht mit halbdurchsichtigen Strichen direkt aufs Canvas: wo zwei
+// einander berühren, addiert Porter-Duff ihre Deckkraft — an Stufengrenzen,
+// an den Kappen und überall, wo die Route sich selbst kreuzt.
+const ROUTE_STUFEN = 20;
+const ROUTE_MIN_ALPHA = 45;
+const ROUTE_MAX_ALPHA = 255;
+
+// Schweiflänge in Bildschirmpixeln, nicht in Wegpunkten: an Indizes gebunden
+// hängt sie an der Abtastung des Pfads und fällt je Kapitel um Faktor 13
+// verschieden aus. 400px lassen auch im kürzesten Kapitel (18, rund 770px
+// Route) noch eine Hälfte auf der Mindestdeckkraft stehen.
+const ROUTE_SCHWEIF_PX = 400;
+
+let routenPuffer = null; // Vollbildpuffer, siehe zeichneRoute
+
+// Zielwert der Stufe k (0 = älteste, ROUTE_STUFEN-1 = Spitze). Linear wie
+// bisher; die Waschstärken unten leiten sich daraus ab.
+function routenStufenAlpha(k) {
+  return ROUTE_MIN_ALPHA + (ROUTE_MAX_ALPHA - ROUTE_MIN_ALPHA) * k / (ROUTE_STUFEN - 1);
+}
+
+function routenPufferBereit() {
+  if (routenPuffer && (routenPuffer.width !== width || routenPuffer.height !== height)) {
+    routenPuffer.remove();
+    routenPuffer = null;
+  }
+  if (!routenPuffer) routenPuffer = createGraphics(width, height);
+  routenPuffer.clear();
+  return routenPuffer;
+}
+
+// Zerlegt den projizierten Pfad von der Spitze rückwärts in ROUTE_STUFEN Züge
+// gleicher Bogenlänge; alles jenseits des Schweifs bildet die älteste Stufe.
+// Grenzen werden ins Segment interpoliert, damit benachbarte Züge exakt
+// aneinander anschliessen.
+function routenStufenZuege(p, letzterPunkt) {
+  let abstand = new Array(letzterPunkt + 1);
+  abstand[letzterPunkt] = 0;
+  for (let i = letzterPunkt - 1; i >= 0; i--) {
+    abstand[i] = abstand[i + 1] + dist(p[i].x, p[i].y, p[i + 1].x, p[i + 1].y);
+  }
+  let stufenLaenge = ROUTE_SCHWEIF_PX / (ROUTE_STUFEN - 1);
+  let zuege = new Array(ROUTE_STUFEN);
+  let stufe = ROUTE_STUFEN - 1;
+  let zug = [p[letzterPunkt]];
+  for (let i = letzterPunkt - 1; i >= 0; i--) {
+    let grenze = (ROUTE_STUFEN - stufe) * stufenLaenge;
+    while (stufe > 0 && abstand[i] >= grenze) {
+      let segLaenge = abstand[i] - abstand[i + 1];
+      let t = segLaenge > 0 ? (grenze - abstand[i + 1]) / segLaenge : 0;
+      let gp = { x: lerp(p[i + 1].x, p[i].x, t), y: lerp(p[i + 1].y, p[i].y, t) };
+      zug.push(gp);
+      zuege[stufe] = zug;
+      stufe--;
+      zug = [gp];
+      grenze = (ROUTE_STUFEN - stufe) * stufenLaenge;
+    }
+    zug.push(p[i]);
+  }
+  zuege[stufe] = zug;
+  return zuege;
+}
+
+function zeichneRoute(punkte, upToIndex, bbox, strichstaerke = 2, offsetX = mapOffsetX, offsetY = mapOffsetY, alphaMultiplier = 1) {
+  if (upToIndex < 1 || alphaMultiplier <= 0) return;
+  let letzterPunkt = Math.min(upToIndex, punkte.length - 1);
+  if (letzterPunkt < 1) return;
+
+  let p = [];
+  let links = Infinity, oben = Infinity, rechts = -Infinity, unten = -Infinity;
+  for (let i = 0; i <= letzterPunkt; i++) {
+    let q = lonLatToScreen(punkte[i][0], punkte[i][1], bbox, offsetX, offsetY);
+    p.push(q);
+    links = Math.min(links, q.x); rechts = Math.max(rechts, q.x);
+    oben = Math.min(oben, q.y); unten = Math.max(unten, q.y);
+  }
+  let rand = strichstaerke + 2;
+  let zuege = routenStufenZuege(p, letzterPunkt);
+
+  let pg = routenPufferBereit();
+  let schonGezeichnet = false;
+  for (let k = 0; k < ROUTE_STUFEN; k++) {
+    if (!zuege[k] || zuege[k].length < 2) continue;
+    // Kurze Routen fangen erst bei einer höheren Stufe an; bis dahin ist der
+    // Puffer leer und es gibt nichts zu waschen.
+    if (schonGezeichnet) {
+      // Nimmt allem bisher Gezeichneten den Anteil, der die vorige Stufe auf
+      // ihren Zielwert bringt. Nur über dem Routenrahmen statt Vollbild.
+
+      // ACHTUNG fill() muss VOR erase() stehen: erase() tauscht nur den
+      // Farbwert, es schaltet die Füllung nicht ein. Sonst malt das Rechteck
+      // nichts und der Verlauf bleibt ganz aus.
+      pg.push();
+      pg.noStroke();
+      pg.fill(255);
+      pg.erase(255 * (1 - routenStufenAlpha(k - 1) / routenStufenAlpha(k)));
+      pg.rect(links - rand, oben - rand, rechts - links + 2 * rand, unten - oben + 2 * rand);
+      pg.noErase();
+      pg.pop();
+    }
+    pg.push();
+    pg.noFill();
+    pg.strokeWeight(strichstaerke);
+    pg.strokeCap(ROUND);
+    pg.strokeJoin(ROUND);
+    pg.stroke(ROUTE_COLOR_RGB.r, ROUTE_COLOR_RGB.g, ROUTE_COLOR_RGB.b, ROUTE_MAX_ALPHA);
+    pg.beginShape();
+    zuege[k].forEach(q => pg.vertex(q.x, q.y));
+    pg.endShape();
+    pg.pop();
+    schonGezeichnet = true;
+  }
+
+  // alphaMultiplier erst beim Auflegen, nicht im Puffer: so übersteht der
+  // Puffer die Einblendung eines Kapitels ohne Neuaufbau.
+  if (alphaMultiplier < 1) tint(255, 255 * alphaMultiplier);
+  image(pg, 0, 0);
+  if (alphaMultiplier < 1) noTint();
+}
+
+
+// --- Export ------------------------------------------------------------
+// Drei Zeichenfunktionen. Leser: docs/architektur.md.
+window.zeichneMassstabsleiste = zeichneMassstabsleiste;
+window.zeichneScrollFortschritt = zeichneScrollFortschritt;
+window.zeichneRoute = zeichneRoute;
+
+})(); // Ende der Modulkapselung, siehe Kommentar oben
