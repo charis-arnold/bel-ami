@@ -5,13 +5,11 @@
    parallel mit derselben Gesamtdauer. Zeitbasiert, nicht scroll-gekoppelt.
 
    Zwei Modelle nebeneinander:
-   - Stationsmodell (Kapitel 02–18, und Kapitel 1 bei MODUS 'stationen'):
-     eine Tonstufe je Station, drei F-Wert-Kategorien als drei Layer in
-     c-moll. Zeitplan aus Gehstrecke und Annotationsdichte je Station
-     (kapitel01-sonifikation.json).
+   - Stationsmodell (02–18, und Kapitel 1 bei MODUS 'stationen'): eine Tonstufe
+     je Station, drei F-Wert-Kategorien als drei Ebenen in c-moll. Zeitplan aus
+     kapitel01-sonifikation.json.
    - Elementmodell (Prototyp, nur Kapitel 1): ein Klang je Element, drei
-     Gefühlskategorien als Instrumente, Tonhöhe aus dem Kreisradius. Siehe
-     den Block "Prototyp" weiter unten.
+     Gefühlskategorien als Instrumente, Tonhöhe aus dem Kreisradius.
 ============================================================================= */
 
 // --- Strudel-Anbindung ----------------------------------------------------
@@ -53,15 +51,13 @@ const SONIFIKATION_GEWICHT_ANNOTATION_SKALA = 0.6; // Gewichtspunkte pro Annotat
 
 // --- Prototyp: ein Klang je Element (nur Kapitel 1) --------------------
 //
-// Dreht die Zuordnung des Stationsmodells um. Dort tragen die drei
-// F-WERT-TYPEN die Instrumente; hier tragen sie die drei GEFÜHLSKATEGORIEN,
-// und die F-Werte bekommen als Instrument 4 eine eigene Stimme. Damit klingt
-// die Tonebene so, wie die Grafik gebaut ist: die Bänder sind die
-// Kategorien, die Punkte am Rand sind die F-Werte.
+// Dreht die Zuordnung des Stationsmodells um: dort tragen die F-WERT-TYPEN die
+// Instrumente, hier die drei GEFÜHLSKATEGORIEN; die F-Werte bekommen als
+// Instrument 4 eine eigene Stimme. Die Tonebene ist damit gebaut wie die
+// Grafik — Bänder sind Kategorien, Punkte am Rand sind F-Werte.
 //
-// Jedes Element klingt einmal. Die Tonhöhe folgt dem Kreisradius, den es
-// gerade erzeugt — und weil der Radius mit der Wurzel wächst, springt ein
-// junger Kreis hörbar, während ein voller nur noch kriecht.
+// Jedes Element klingt einmal. Die Tonhöhe folgt dem Kreisradius; weil der mit
+// der Wurzel wächst, springt ein junger Kreis hörbar, ein voller kriecht.
 
 // Umschalter zum Vergleichen: 'stationen' spielt die bisherige Fassung —
 // Kapitel 1 aus kapitel01-sonifikation.json, 02–18 aus den Spine-Einträgen.
@@ -80,10 +76,9 @@ const SONIFIKATION_MODUS = 'elemente';
 const ELEMENT_DAUER_BEZUG = 150; // Elemente in Kapitel 1
 
 // Woran die Zeitpunkte hängen:
-// 'spine'   — an dem Moment, in dem das Element im Bild erscheint. Ton und
-//             Grafik laufen exakt synchron. Preis: die Spine verteilt ihre
-//             Zeit auf Orte, nicht auf Elemente. Die 50 Elemente der Folies
-//             Bergère fallen deshalb in die letzten 2,6 s.
+// 'spine'   — am Moment, in dem das Element im Bild erscheint; Ton und Grafik
+//             laufen exakt synchron. Preis: die Spine verteilt ihre Zeit auf
+//             Orte, die 50 Elemente der Folies Bergère fallen in 2,6 s.
 // 'element' — alle Elemente gleich weit auseinander (0,3 s).
 // 'puls'    — Abstände auf ein Pulsraster gerundet, also ein echtes Metrum.
 
@@ -96,13 +91,11 @@ const SONIFIKATION_ZEITBASIS = 'spine';
 const SONIFIKATION_PULS_SEK = 0.25;
 
 // Gemeinsamer Versatz aller Klänge gegenüber dem Bild, in Sekunden.
-// Positiv = Ton später, negativ = Ton früher. Der Zeitplan selbst stimmt mit
-// dem Bild überein (siehe spieleElementAudio); was hier ausgeglichen wird, ist
-// die Anlaufzeit der Tonausgabe: Das Bild startet mit dem Klick, der Ton erst,
-// wenn der Strudel-Takt ihn aufnimmt. Wie lange das dauert, hängt am Rechner
-// und am Browser — deshalb eine Stellschraube und kein fester Wert.
-// Einstellen: abspielen, eine auffällige Stelle beobachten und in Schritten
-// von 0.05 nachziehen, bis Ton und Kreiswachstum zusammenfallen.
+// Positiv = Ton später, negativ = Ton früher. Der Zeitplan stimmt mit dem Bild
+// überein (siehe spieleElementAudio); ausgeglichen wird nur die Anlaufzeit der
+// Tonausgabe, die je nach Rechner und Browser verschieden lang ist.
+// Einstellen: abspielen und in Schritten von 0.05 nachziehen, bis Ton und
+// Kreiswachstum zusammenfallen.
 const SONIFIKATION_VERSATZ_SEK = 0;
 
 // Nachklang nach dem letzten Element; die Spine steht dann schon still.
@@ -117,40 +110,32 @@ const SONIFIKATION_NACHKLANG_SEK = 2;
 const ELEMENT_TONART = 'minor';
 
 // Woran sich die Stufenleiter misst:
-// 'kapitel' — am grössten Kreis des ganzen Kapitels. Ein kleiner Ort bleibt
-//             unten, ein grosser steigt hoch; Kreisgrösse ist über das ganze
-//             Stück hinweg hörbar. Preis: die meisten Orte in Kapitel 1
-//             haben zwei bis sieben Elemente je Band und bekommen damit zwei
-//             bis drei Stufen — zu wenig für eine Linie.
-// 'ort'     — an dem, was der Ort selbst erreicht, und die Phrase wird so
-//             lang wie er Elemente hat (höchstens eine Oktave). Jeder Besuch
-//             bekommt eine eigene Linie. Preis: gleiche Tonhöhe sagt nicht
-//             mehr gleiche Kreisgrösse.
+// 'kapitel' — am grössten Kreis des Kapitels. Kreisgrösse ist über das ganze
+//             Stück hörbar. Preis: die meisten Orte in Kapitel 1 haben zwei bis
+//             sieben Elemente je Band, das gibt nur zwei bis drei Stufen.
+// 'ort'     — an dem, was der Ort selbst erreicht; die Phrase wird so lang wie
+//             er Elemente hat (höchstens eine Oktave). Preis: gleiche Tonhöhe
+//             sagt nicht mehr gleiche Kreisgrösse.
 const ELEMENT_STUFENBEZUG = 'ort';
 
 // Instrument 1–3, je eine Gefühlskategorie. Angeschlagene Instrumente statt
-// Wellenformen: sie klingen von selbst ab und lassen Luft zwischen den
-// Tönen — ohne die gibt es keine Melodie, nur Fläche. Die Oktave folgt der
-// Farbreihe, dunkles Band tief, helles Band hoch.
-// name steht hier und nicht in der Legende: Klang und Bezeichnung gehören
-// zusammen, sonst driften sie auseinander. kreisgrafik.js liest ihn.
+// Wellenformen: sie klingen von selbst ab und lassen Luft zwischen den Tönen.
+// Die Oktave folgt der Farbreihe, dunkles Band tief, helles Band hoch.
+// name steht hier und nicht in der Legende; kreisgrafik.js liest ihn.
 const ELEMENT_INSTRUMENTE = {
-// Zwei Stellschrauben je Instrument, beide freiwillig:
-// lautstaerke gleicht aus, was die Aufnahmen an Pegel mitbringen (1 = unverändert).
-// anschlag überschreibt die Anlaufzeit der Rolle — je länger, desto weicher setzt
-// der Ton ein und desto weniger bricht er aus dem Satz heraus.
-// negOktaven überschreibt, wie weit die negative Lage unter der Grundlage liegt.
-// hoehenfilter (Hz) nimmt die Höhen zurück: Je tiefer der Wert, desto weicher
-// und weiter weg klingt das Instrument. Ohne Angabe bleibt der Klang unbearbeitet.
+// Vier freiwillige Stellschrauben je Instrument:
+// lautstaerke  gleicht den Pegel der Aufnahme aus (1 = unverändert).
+// anschlag     Anlaufzeit — je länger, desto weicher setzt der Ton ein.
+// negOktaven   wie weit die negative Lage unter der Grundlage liegt.
+// hoehenfilter (Hz) nimmt die Höhen zurück; ohne Angabe bleibt der Klang roh.
 //
 // ACHTUNG die Aufnahmen der Bank sind sehr verschieden laut ausgesteuert —
 // gemessen am Ton A4 (Effektivwert der ersten drei Sekunden):
 //   Marimba 0.0005 | Harfe 0.0085 | Vibraphon 0.0700 | Steinway 0.0738
-// Zwischen Marimba und Steinway liegen also fast 43 dB. Die Faktoren unten
-// gleichen das auf den Pegel der Harfe aus; sie sind keine Gestaltung, sondern
-// eine Korrektur der Aufnahmen. Wer ein Instrument tauscht, muss neu messen.
-// Das musikalische Gewicht steht getrennt davon in ELEMENT_ROLLEN: lautstaerke
-// gleicht die Aufnahme aus, gain sagt, wie wichtig die Stimme ist.
+// Zwischen Marimba und Steinway liegen fast 43 dB. Die Faktoren unten gleichen
+// das auf den Pegel der Harfe aus — eine Korrektur der Aufnahmen, keine
+// Gestaltung. Wer ein Instrument tauscht, muss neu messen. Das musikalische
+// Gewicht steht getrennt in ELEMENT_ROLLEN.
   raum_umwelt: { sound: 'marimba', oktave: 3, name: 'Marimba', lautstaerke: 10 }, // Raum und Umwelt
   stimmung_emotion: { sound: 'harp', oktave: 4, name: 'Harfe' },              // Stimmung und Emotion
   gesellschaft_soziales: { sound: 'steinway', oktave: 5, name: 'Klavier', lautstaerke: 0.12 }, // Gesellschaft und Soziales
@@ -811,22 +796,16 @@ function beendeSonifikationAudio() {
 // datenbereinigung.js.
 //
 // Besetzung: Orgelpedal als Grund, darüber je Schritt eines der drei
-// Kategorieinstrumente der Kreis-Sonifikation. Kein eigenes Instrumentarium —
-// das Intro führt die Klangfarben des Hauptstücks ein, und zwar in ihrer
-// Bedeutung: Marimba trägt die Texte über die gebaute Stadt, Klavier die über
-// Presse, Geld und Politik, Harfe die beiden über den Einzelnen. Wer den
-// Legendenaufbau erreicht, hat die Zuordnung längst gehört.
-//
-// c-moll ist die Tonart der übrigen Sonifikation und zugleich die von
-// Saint-Saëns' dritter Symphonie (1886, «Orgelsymphonie») — daher das Pedal.
-// Streicher und Klarinetten hat VCSL nicht; die 128 Instrumente der Bank
-// bieten aber sieben Orgelregister.
+// Kategorieinstrumente der Kreis-Sonifikation (welches, sagt
+// INTRO_KATEGORIE_JE_SCHRITT). Das Intro führt damit die Klangfarben des
+// Hauptstücks ein, bevor die Legende sie erklärt. Tonart c-moll wie das übrige
+// Stück — und wie Saint-Saëns' Orgelsymphonie (1886); VCSL hat keine
+// Streicher, dafür sieben Orgelregister, daher das Pedal.
 //
 // ACHTUNG der Scroll steuert NICHT die Abspielposition, sondern nur, welcher
-// Akkord gerade dran ist. Strudel behält seine eigene Uhr bei cps=0.5; damit
-// bleibt die fehlende setcps-Erreichbarkeit (siehe oben) folgenlos. Ein neues
-// Muster übernimmt zur nächsten Zyklusgrenze, der Wechsel klingt also gesetzt
-// und nicht wie ein Schnitt.
+// Akkord dran ist. Strudel behält seine eigene Uhr bei cps=0.5. Ein neues
+// Muster übernimmt zur nächsten Zyklusgrenze, der Wechsel klingt gesetzt und
+// nicht wie ein Schnitt.
 
 // --- Intro: Besetzung und Harmonie ----------------------------------------
 
@@ -836,14 +815,12 @@ const INTRO_ZYKLUS_DEHNUNG = 4;
 
 // Das Intro besetzt AUSSCHLIESSLICH Instrumente der Kreis-Sonifikation: die
 // drei Kategorienstimmen aus ELEMENT_INSTRUMENTE und das Orgelpedal aus
-// ELEMENT_BASS. Nichts Fremdes kommt hinzu — wer das Intro gehört hat, kennt
-// die Klangfarben des Hauptstücks bereits, bevor die Legende sie erklärt.
+// ELEMENT_BASS.
 //
 // ACHTUNG abgeleitet, nicht zweitgeschrieben. Wird ein Instrument im
-// Hauptstück getauscht, folgt das Intro von selbst. Die lautstaerke kommt
-// dabei mit: sie gleicht aus, dass die Bank um bis zu 43 dB verschieden
-// ausgesteuert ist (Messung siehe ELEMENT_INSTRUMENTE) und ist keine
-// Gestaltung. Das musikalische Gewicht steht daneben in gain.
+// Hauptstück getauscht, folgt das Intro von selbst. Die lautstaerke kommt mit:
+// sie gleicht die bis zu 43 dB Pegelunterschied der Bank aus (Messung siehe
+// ELEMENT_INSTRUMENTE). Das musikalische Gewicht steht daneben in gain.
 const INTRO_GRUND = {
   ...ELEMENT_BASS, gain: 0.42, attack: 1.2, release: 3.0, room: 0.55,
 };
@@ -866,12 +843,10 @@ const INTRO_STIMMEN = {
   },
 };
 
-// Welche Kategorie trägt welchen Text? Der Crawl hat einen eigenen Bogen —
-// die gebaute Stadt, dann das System aus Presse, Geld und Politik, zuletzt
-// der Einzelne. Er endet genau dort, wo die Route beginnt: bei Duroy.
-// Damit spielt jeder Text auf dem Instrument seiner Kategorie, und die
-// Zuordnung ist zwanzig Bildschirmhöhen lang zu hören, bevor der
-// Legendenaufbau sie benennt.
+// Welche Kategorie trägt welchen Text? Der Crawl hat einen eigenen Bogen — die
+// gebaute Stadt, dann Presse, Geld und Politik, zuletzt der Einzelne. Er endet
+// dort, wo die Route beginnt: bei Duroy. Jeder Text spielt damit auf dem
+// Instrument seiner Kategorie.
 const INTRO_KATEGORIE_JE_SCHRITT = [
   null,                    //  0  Titel — nur der Grund
   'raum_umwelt',           //  1  «1885 wächst Paris explosionsartig»
@@ -889,11 +864,8 @@ const INTRO_KATEGORIE_JE_SCHRITT = [
 ];
 
 // Ein Akkord je Schritt, als Stufen der c-moll-Leiter (0=c, 2=es, 4=g …).
-// Die Folge liest den Crawl mit: i steht am Anfang, das Eisen des Eiffelturms
-// hellt nach III auf, Haussmanns fertige Stadt liegt auf VI, mit den Pressen
-// und Tunesien kippt es nach iv, der Zusammenbruch der Union Générale steht
-// auf dem verminderten ii°, und über v führt der letzte Text nach i zurück —
-// dorthin, wo die Route beginnt.
+// Die Folge liest den Crawl mit: von i über III und VI nach iv, ii° und v —
+// und mit dem letzten Text zurück nach i, wo die Route beginnt.
 const INTRO_HARMONIE = [
   [0, 2, 4],    //  0  Titel                        i    c-moll
   [0, 2, 4],    //  1  «1885 wächst Paris»          i
@@ -966,14 +938,13 @@ function baueIntroMuster(schritt) {
 }
 
 // Die Schrittgrenzen stehen nicht hier, sondern in denselben data-von-Werten,
-// aus denen draw() die Einblendung der Texte rechnet. Der Akkord wechselt damit
-// genau dann, wenn ein neuer Text erscheint — und bleibt richtig, wenn der
-// Crawl je umgetaktet wird.
+// aus denen draw() die Einblendung der Texte rechnet. Der Akkord wechselt
+// genau dann, wenn ein neuer Text erscheint.
 //
-// ACHTUNG eine Gleichteilung der Strecke leistet das NICHT. Die Werte im HTML
-// sind auf sechs Stellen gerundet; gegen eine gerechnete Teilung von
-// kartenwechselStart durch dreizehn driften sie mal knapp darüber, mal knapp
-// darunter. Gemessen lägen nur fünf von zwölf Wechseln auf ihrem Text.
+// ACHTUNG eine Gleichteilung der Strecke leistet das NICHT: die Werte im HTML
+// sind auf sechs Stellen gerundet und driften gegen eine gerechnete Teilung
+// von kartenwechselStart durch dreizehn. Gemessen lägen nur fünf von zwölf
+// Wechseln auf ihrem Text.
 function introGrenzen() {
   if (introGrenzenCache) return introGrenzenCache;
   // .begleittext-dunkel schliesst die Legenden- und Kapiteltexte aus, die

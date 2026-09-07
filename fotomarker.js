@@ -42,17 +42,15 @@ function merkeKartenlage(bbox, offsetX, offsetY) {
   letzterFotoOffsetY = offsetY;
 }
 
-// hinweis (optional): { titel, text, alpha } — hängt ein beschriftetes Label
-// mit Zuführungslinie an genau den Marker mit diesem Titel. Zeitpunkt und
-// Deckkraft bestimmt der Aufrufer, siehe draw() in sketch.js.
-// Blendensymbol: voller Kreis, darin ein sechseckiges Loch und sechs gerade
-// Spalten. Die Spalten sind die VERLÄNGERTEN Sechseckseiten — genau daraus
-// entsteht der Drall, den eine Objektivblende hat. Radial gezogene Spalten
-// ergäben ein Wagenrad.
+// hinweis (optional): { titel, text, alpha } — hängt ein beschriftetes Label an
+// den Marker mit diesem Titel. Zeitpunkt und Deckkraft bestimmt der Aufrufer,
+// siehe draw() in sketch.js.
+// Blendensymbol: voller Kreis mit sechseckigem Loch und sechs Spalten. Die
+// Spalten sind die VERLÄNGERTEN Sechseckseiten — daher der Drall einer
+// Objektivblende; radial gezogen ergäben sie ein Wagenrad.
 //
-// ACHTUNG ab hier wird auf den Kreis geclippt. Die Spalten laufen über den
-// Rand hinaus (sie müssen ihn sicher erreichen, auch in der flachsten Ecke);
-// ohne Clip zeichneten sie helle Striche auf die Karte.
+// ACHTUNG ab hier wird auf den Kreis geclippt. Die Spalten laufen über den Rand
+// hinaus; ohne Clip zeichneten sie helle Striche auf die Karte.
 function zeichneBlende(x, y, r, ringRgb, kernRgb) {
   const ECKEN = 6;
   // Verhältnisse nach der Vorlage eingestellt: Loch enger, Spalten schlanker

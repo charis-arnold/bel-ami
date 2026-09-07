@@ -217,14 +217,12 @@ function setup() {
   heroText = document.querySelectorAll('h1, h2, .lead');
   scrollHinweisEl = document.querySelector('.scroll-hinweis');
 
-  // Tonschalter des Introstücks. ACHTUNG das Einschalten muss aus diesem
-  // Klick-Handler kommen — Scrollen zählt nicht als Nutzergeste, sonst bleibt
-  // Strudel stumm. haltKlickAuf hält den mousedown fest, damit der Klick nicht
-  // zusätzlich auf der Leinwand landet.
-  // Die Beschriftung sagt, was der Klick TUT, nicht was gerade ist: im
-  // ausgeschalteten Zustand steht «Ton an». Den Zustand trägt der Ring
-  // daneben, der sich beim Einschalten füllt — Text und Ring sagen damit
-  // zweierlei, statt sich zu wiederholen.
+  // Tonschalter des Introstücks. Die Beschriftung sagt, was der Klick TUT: im
+  // ausgeschalteten Zustand steht «Ton an». Den Zustand zeigt der Ring daneben.
+  //
+  // ACHTUNG das Einschalten muss aus diesem Klick-Handler kommen — Scrollen
+  // zählt nicht als Nutzergeste, sonst bleibt Strudel stumm. haltKlickAuf hält
+  // den mousedown fest, damit der Klick nicht zusätzlich auf der Leinwand landet.
   introTonEl = document.getElementById('introTon');
   let introTonTextEl = introTonEl.querySelector('.intro-ton-text');
   let zeigeIntroTonZustand = (an) => {
@@ -397,11 +395,9 @@ function draw() {
   let uebersichtRoutenFortschritt = constrain(map(progress, SCROLL_MEILENSTEINE.uebersichtRoutenStart, aktEnde, 0, 1), 0, 1);
 
   // Übersichtswelt hinter Kapitel 1, in zwei Ansichten: Überblickskarte mit
-  // allen Routen oder Ortsvergleich. Welche läuft, sagt der Menümodus; die
-  // Klemme oben trennt nur ihre Scrollstrecken.
-  // Kein Scrollmass mehr, sondern der Zustand: kein Kapitel offen und Kapitel 1
-  // verlassen. Am Anfang des Akts steht der Fortschritt auf 0, die Übersicht
-  // läuft aber schon — sonst fehlten dort Register und Menü.
+  // allen Routen oder Ortsvergleich. Welche läuft, sagt der Menümodus.
+  // Kein Scrollmass, sondern der Zustand — am Anfang des Akts steht der
+  // Fortschritt auf 0, die Übersicht läuft aber schon.
   let inUebersicht = !zoomedKapitel && !kapitel1Geklemmt;
   let imOrtsvergleich = laeuftOrtsvergleich(); // uebersichtsrouten.js
 
@@ -486,11 +482,9 @@ function draw() {
   let aktuelleAnnotationZoom = null;
 
   // Unbedingt aufrufen, auch ausserhalb des Akts: zeichneUebersichtsrouten()
-  // setzt dann selbst kapitelHover und den Cursor zurück. Ob der Akt läuft,
-  // sagt der dritte Wert — nicht der Fortschritt, der an seinem Anfang auf 0
-  // steht, wo Startpunkte und Nummern schon dastehen sollen. Im Ortsvergleich
-  // deckt die Ansicht die Karte ohnehin ab, und die Startpunkte fallen dort
-  // zugleich als unsichtbare Klickziele weg.
+  // setzt dann selbst kapitelHover und den Cursor zurück. Ob der Akt läuft, sagt
+  // der dritte Wert — nicht der Fortschritt, der an seinem Anfang auf 0 steht,
+  // wo Startpunkte und Nummern schon dastehen sollen.
   let uebersichtRoutenErgebnis = zeichneUebersichtsrouten(activeBbox,
     uebersichtRoutenFortschritt, !imOrtsvergleich && (!!zoomedKapitel || inUebersicht));
   aktuelleAnnotationZoom = uebersichtRoutenErgebnis.aktuelleAnnotationZoom;
@@ -738,18 +732,17 @@ function draw() {
   // mapOffsetX/Y bei gezoomtem Kapitel, sonst kartenOffsetX/Y.
   let fotoOffsetX = (zoomedKapitel && kapitelZoomAmount > 0.001) ? mapOffsetX : kartenOffsetX;
   let fotoOffsetY = (zoomedKapitel && kapitelZoomAmount > 0.001) ? mapOffsetY : kartenOffsetY;
-  // ACHTUNG die Lage nur merken, solange die Marker wirklich im Bild stehen:
-  // hinter "Graph" deckt Spine bzw. Ortsvergleich sie zu, und der Treffertest
-  // in mousePressed() öffnete sonst Fotos an unsichtbaren Stellen.
-  // Nur auf den Kapitelkarten. Auf der Start- und der Überblickskarte liegt
-  // ganz Paris im Bild: die Marker stünden dort dicht beieinander und meinten
-  // Orte, die wenige Pixel gross sind — anklickbar, aber nicht auseinander zu
-  // halten.
+  // Nur auf den Kapitelkarten: auf der Start- und der Überblickskarte liegt ganz
+  // Paris im Bild, die Marker stünden dort wenige Pixel auseinander.
   //
-  // ACHTUNG die Schwelle 0.5 statt "ein Kapitel ist gewählt": zoomedKapitel
-  // steht schon, während der Zoom noch läuft und die Überblickskarte im Bild
-  // ist. Erst ab der Hälfte liegt die Kapitelkarte oben. kapitelCrop prüft
-  // zusätzlich, dass ihr Bild überhaupt geladen ist.
+  // ACHTUNG die Lage nur merken, solange die Marker wirklich im Bild stehen —
+  // hinter "Graph" deckt Spine bzw. Ortsvergleich sie zu, und der Treffertest in
+  // mousePressed() öffnete sonst Fotos an unsichtbaren Stellen.
+  //
+  // ACHTUNG die Schwelle 0.5 statt "ein Kapitel ist gewählt": zoomedKapitel steht
+  // schon, während der Zoom noch läuft und die Überblickskarte im Bild ist. Erst
+  // ab der Hälfte liegt die Kapitelkarte oben. kapitelCrop prüft zusätzlich, dass
+  // ihr Bild geladen ist.
   let aufKapitelkarte = zoomedKapitel
     ? (!!kapitelCrop && kapitelZoomAmount > 0.5)
     : inKapitel1Kartenausschnitt;
@@ -790,25 +783,20 @@ function draw() {
   zeichneDemoKreisgrafik(demoFortschritt, demoAlpha * (1 - demoAusblenden),
     legendeSchritte, legendeSchleier);
 
-  // Zuoberst die beiden Register: erst der Legendenbalken, dann die
-  // Info-Fläche, die beim Ausfahren alles zudeckt, die Reiter eingeschlossen.
-  // Fortschrittsleiste zuerst, die Register darüber: ihre Reiter sitzen an
-  // derselben Stelle am unteren Rand und sollen davor liegen. In der
-  // Graph-Ansicht entfällt sie — dort treibt der Play-Knopf, nicht der Scroll,
-  // und er sitzt an derselben Stelle.
+  // Zuoberst die beiden Register: erst der Legendenbalken, dann die Info-Fläche,
+  // die beim Ausfahren alles zudeckt. Die Fortschrittsleiste kommt davor, weil
+  // die Reiter an derselben Stelle sitzen. In der Graph-Ansicht entfällt sie —
+  // dort treibt der Play-Knopf, und er sitzt ebenfalls dort.
   if (!inKapitelGrafikAnsicht && !imOrtsvergleich) zeichneScrollFortschritt(leisteAnteil);
   zeichneRegisterleiste(legendeAus, imRegisterbereich);
   zeichneInfoLeiste(infoAus, legendeAus);
 
-  // Die DOM-Ebene geht schon beim Anfahren weg: sie liegt über dem Canvas und
-  // stünde sonst hell auf der heraufziehenden Fläche. Der Text kommt umgekehrt
-  // erst, wenn die Fläche ganz oben ist.
   // Das Kapitelmenü liegt als DOM über dem Canvas; der Rahmen schneidet es an
-  // der Oberkante des ausgefahrenen Registers ab, damit es dahinter
-  // verschwindet statt darauf zu stehen — beim flachen Legendenbalken wie bei
-  // der Info-Fläche, die bis nach oben zieht. registerHoehe zählt die Reiter
-  // mit: sie sitzen auf der Balkenkante und dürfen nie verdeckt sein. Nur bei
-  // Änderung schreiben, sonst rechnet der Browser jeden Frame das Layout neu.
+  // der Oberkante des ausgefahrenen Registers ab, damit es dahinter verschwindet
+  // statt darauf zu stehen. registerHoehe zählt die Reiter mit: sie sitzen auf
+  // der Balkenkante und dürfen nie verdeckt sein.
+  // Nur bei Änderung schreiben, sonst rechnet der Browser jeden Frame das Layout
+  // neu.
   let schnitt = Math.round(Math.max(registerHoehe(legendeAus), height * infoAus));
   if (schnitt !== registerSchnitt) {
     registerSchnitt = schnitt;

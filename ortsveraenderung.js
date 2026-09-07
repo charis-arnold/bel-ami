@@ -257,12 +257,10 @@ function ovStand(index, maxNr, anteil) {
 // Element, nicht je Kapitel.
 
 // ACHTUNG die Zeit hängt an den Elementen, nicht an der Kapitelskala. Auf die
-// Kapitel verteilt liegen 44 % der Laufzeit in Lücken, in denen keiner der
-// sieben Orte etwas beiträgt, und kurze Besuche blitzen auf — Madeleines
-// Besuch in Kapitel 1 dauerte so 0.84 s statt 1.66 s. Reihenfolge und
-// Zuordnung bleiben unberührt, nur die Leerläufe schrumpfen. Die Klangfolge
-// zählt über denselben Rang, deshalb bleiben Bild und Ton ohne weiteres Zutun
-// synchron.
+// Kapitel verteilt lägen 44 % der Laufzeit in Lücken ohne Beitrag, und kurze
+// Besuche blitzen auf — Madeleines Besuch in Kapitel 1 dauerte 0.84 s statt
+// 1.66 s. Reihenfolge und Zuordnung bleiben unberührt. Die Klangfolge zählt
+// über denselben Rang, Bild und Ton bleiben synchron.
 function ovStandFuer(p) {
   if (!ovElemente.length) return 0;
   let stelle = constrain(p, 0, 1) * (ovElemente.length - 1);

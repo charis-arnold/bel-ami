@@ -1,18 +1,17 @@
 /* =============================================================================
    geo-projektion.js — von Koordinaten zu Bildschirmpunkten
 
-   Diese Datei beantwortet eine einzige Frage: Wo auf dem Bildschirm liegt ein
-   Ort, von dem ich Längen- und Breitengrad kenne? Alles, was auf der Karte
-   gezeichnet wird, fragt zuerst hier nach (lonLatToScreen).
+   Beantwortet eine einzige Frage: Wo auf dem Bildschirm liegt ein Ort, von dem
+   ich Längen- und Breitengrad kenne? Alles, was auf der Karte gezeichnet wird,
+   fragt zuerst hier nach (lonLatToScreen).
 
-   Gerechnet wird ganz einfach mit Dreisatz: Der linke Bildrand ist der
-   westlichste Längengrad, der rechte der östlichste, dazwischen wird linear
-   verteilt. Echte Weltkarten brauchen dafür kompliziertere Formeln
-   (Mercator-Projektion), weil die Erde eine Kugel ist. Auf dem kleinen
-   Ausschnitt von Paris ist der Unterschied so winzig, dass man ihn nicht sieht.
+   Gerechnet wird mit Dreisatz: linker Bildrand = westlichster Längengrad,
+   rechter = östlichster, dazwischen linear verteilt. Echte Weltkarten brauchen
+   dafür die Mercator-Projektion, weil die Erde eine Kugel ist; auf dem kleinen
+   Ausschnitt von Paris sieht man den Unterschied nicht.
 
-   Eine "Bbox" (bounding box) ist in dieser Datei immer dasselbe: ein Objekt
-   mit den vier Rändern west, east, south, north in Grad.
+   Eine "Bbox" ist hier immer dasselbe: ein Objekt mit den vier Rändern west,
+   east, south, north in Grad.
 ============================================================================= */
 
 // --- Bboxen der Kartenbilder ----------------------------------------------
@@ -34,16 +33,12 @@ let startBbox = { west: 2.221893023741224, east: 2.4280563814466545, south: 48.8
 // QGIS EPSG:3857: X 247907.651 .. 270857.651, Y 6244994.107 .. 6256724.107
 let uebersichtBbox = { west: 2.2269923194085774, east: 2.4331556771226127, south: 48.82366665448583, north: 48.892993566082404 };
 
-// kapitel01-qgis-karte-web.png (Kapitel 1). Die QGIS-Vorlage zeigt ganz Paris
-// im selben Fenster wie die Übersichtskarte. Gespeichert ist aber nur der
-// Ausschnitt um die Place de l'Opéra, dafür in voller Auflösung der Vorlage
-// (3600 × 1800 px, 51 556 px je Längengrad).
-//
-// Warum ausgeschnitten: Kapitel 1 zeigt immer nur dieses Viertel. Auf ganz
-// Paris skaliert hätte dieselbe Dateigrösse dort nur halb so viele Pixel — das
-// Bild wirkte unscharf, sobald es gross gezogen wird.
+// kapitel01-qgis-karte-web.png (Kapitel 1). Die QGIS-Vorlage zeigt ganz Paris;
+// gespeichert ist nur der Ausschnitt um die Place de l'Opéra, dafür in voller
+// Auflösung (3600 × 1800 px, 51 556 px je Längengrad). Auf ganz Paris skaliert
+// hätte dieselbe Dateigrösse nur halb so viele Pixel — unscharf beim Zoomen.
 // Der Rand ringsum ist Reserve, damit der Ausschnitt bei jedem Fensterformat
-// innerhalb des Bildes bleibt (siehe bboxZuLeinwandCrop unten).
+// im Bild bleibt (siehe bboxZuLeinwandCrop unten).
 let ch1ImgBbox = { west: 2.3001939857941989, east: 2.3700206945881144, south: 48.8628664101318222, north: 48.8858350169556459 };
 
 // --- Abgeleitete Ausschnitte ----------------------------------------------

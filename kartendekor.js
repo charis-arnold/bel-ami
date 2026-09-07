@@ -15,22 +15,19 @@
 // Rundwerte für die Balkenlänge in Metern, Übersicht bis Kapitel-Zoom.
 const MASSSTAB_SCHRITTE = [10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000, 2500, 5000, 10000, 20000, 25000, 50000, 100000];
 
-// Längste erlaubte Balkenbreite. Klingt nach Kosmetik, entscheidet aber, WELCHE
-// Stufe erscheint — und bei 160 fiel sie auf grossen Bildschirmen nach unten
-// durch: 200 m hätten dort 172 px gebraucht, zwölf zu viel, also blieben 100 m
-// mit 86 px übrig. Der Balken wurde damit kürzer, je grösser das Fenster.
-// Dasselbe im Übersichtsakt, wo 1 km auf 500 m fiel.
+// Längste erlaubte Balkenbreite. Entscheidet, WELCHE Stufe erscheint: bei 160 px
+// fiel sie auf grossen Bildschirmen durch — 200 m hätten dort 172 px gebraucht,
+// also blieben 100 m mit 86 px; im Übersichtsakt fiel 1 km auf 500 m. Ursache ist
+// die Lücke in der Reihe oben (100 → 200 ist Faktor 2, 200 → 250 nur 1.25):
+// reisst die Kappung, geht es gleich eine Verdopplung hinunter.
 //
-// Ursache ist die Lücke in der Reihe oben: zwischen 100 und 200 liegt ein
-// Faktor 2, zwischen 200 und 250 nur 1.25. Reisst die Kappung, geht es
-// gleich eine ganze Verdopplung hinunter.
+// 240 px fängt diese Fälle und hält Kapitel 1 und 2 auf derselben Stufe. Über
+// 993 durchgerechnete Fensterformate stimmen 93,8 % überein (bei 160 px: 70,9 %),
+// im üblichen Bereich um 1800x1300 alle.
 //
-// 240 px fängt diese Fälle und hält zugleich Kapitel 1 und 2 auf derselben
-// Stufe. Über 993 durchgerechnete Fensterformate stimmen damit 93,8 % überein
-// (bei 160 px waren es 70,9 %), und im üblichen Bereich um 1800x1300 alle.
-// Der Wert hängt an breite_m 6350 für Kapitel 2, siehe FEINJUSTIERUNG in
-// data-prep/05 bereinigen/schneide-kapitelkarten.py — wer eines ändert, muss
-// das andere nachrechnen.
+// ACHTUNG der Wert hängt an breite_m 6350 für Kapitel 2, siehe FEINJUSTIERUNG in
+// data-prep/05 bereinigen/schneide-kapitelkarten.py — wer eines ändert, muss das
+// andere nachrechnen.
 const MASSSTAB_MAX_PX = 240;
 
 function haversineMeter(lon1, lat1, lon2, lat2) {
