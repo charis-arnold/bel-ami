@@ -1172,7 +1172,6 @@ const LEISTE_AKTIV_TINTE = hexZuRgb('#C6D2D7');
 // ACHTUNG nicht LEISTE_GRUND umdefinieren: der färbt auch die Leiste selbst
 // (zeichneRegisterleiste weiter unten), und die soll hell bleiben.
 const LEISTE_REITER_ZU_GRUND = hexZuRgb(ROUTE_COLOR);
-const LEISTE_REITER_ZU_TINTE = LEISTE_GRUND;
 // Senkrechte Trennlinie zwischen den beiden Hälften des Balkens. Eigener,
 // heller Ton statt der Legendentinte: die Linie ordnet nur, sie benennt
 // nichts — in Tintenstärke las sie sich als Rahmen und nahm den Gruppen
@@ -1251,7 +1250,7 @@ function zeichneReiter(name, x, oben, titel, breite, offen, negativ = false) {
   // negativ heisst: der Reiter sitzt schon auf einer dunklen Fläche, es wird
   // keine Platte gezeichnet — dort trägt dieselbe helle Schrift wie beim
   // offenen Reiter. Nur der geschlossene mit eigener Platte steht auf Gold.
-  let tinte = (offen || negativ) ? LEISTE_AKTIV_TINTE : LEISTE_REITER_ZU_TINTE;
+  let tinte = (offen || negativ) ? LEISTE_AKTIV_TINTE : LEISTE_GRUND;
   letzteReiterLagen.push({ name, x0: x, y0: oben - LEISTE_REITER_H, x1: x + breite, y1: oben });
   push();
   noStroke();

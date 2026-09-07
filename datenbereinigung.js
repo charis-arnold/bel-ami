@@ -47,12 +47,10 @@ const FWERT_COLOR_RGB = hexZuRgb(FWERT_COLOR);
 // Fotomarker: dunkles Blaugrau, bewusst NICHT aus der Orange-Reihe. Sonst
 // stünden auf derselben Karte drei runde orange Zeichen mit drei Bedeutungen
 // — F-Wert-Punkte, Kapitelpunkte und Fotomarker.
-const FOTO_MARKER_FARBE = '#3A5058';
-const FOTO_MARKER_FARBE_RGB = hexZuRgb(FOTO_MARKER_FARBE);
+const FOTO_MARKER_FARBE_RGB = hexZuRgb('#3A5058');
 // Heller Kern im Marker, damit er auch auf dunklem Untergrund als Ring liest.
 // Derselbe Ton wie der Grund der Graph-Ansicht, aber eine eigene Entscheidung.
-const FOTO_MARKER_KERN_FARBE = '#E2E6E1';
-const FOTO_MARKER_KERN_FARBE_RGB = hexZuRgb(FOTO_MARKER_KERN_FARBE);
+const FOTO_MARKER_KERN_FARBE_RGB = hexZuRgb('#E2E6E1');
 
 // Die drei Gefühlskategorien, in Zeichenreihenfolge von innen nach aussen.
 //
@@ -355,8 +353,8 @@ function bereinigeUebersichtsrouten(rohdaten) {
 // Flächenproportional (sqrt), Standard bei proportional symbol maps: die
 // Fläche wächst linear mit n. maxRadius deckelt, der Schlussakt gibt Infinity.
 function kreisRadius(n, maxRadius = 100) {
-  const BASIS = 6, K = 15.5;
-  return n > 0 ? Math.min(maxRadius, BASIS + K * Math.sqrt(n)) : 0;
+  const BASIS = 6, WACHSTUM_PRO_WURZEL = 15.5;
+  return n > 0 ? Math.min(maxRadius, BASIS + WACHSTUM_PRO_WURZEL * Math.sqrt(n)) : 0;
 }
 
 // Aussenradius des ganzen Kreisdiagramms, an dem die F-Wert-Punkte ansetzen.

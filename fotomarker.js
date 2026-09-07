@@ -123,7 +123,7 @@ function zeichneFotoMarker(activeBbox, offsetX = mapOffsetX, offsetY = mapOffset
     let pos = lonLatToScreen(f.lon, f.lat, activeBbox, offsetX, offsetY);
     let hover = dist(mouseX, mouseY, pos.x, pos.y) < FOTO_MARKER_TREFFER_RADIUS;
     // Farbe bleibt beim Hover gleich — ein Wechsel ins Orange brächte genau
-    // die Verwechslung zurück, die FOTO_MARKER_FARBE vermeidet.
+    // die Verwechslung zurück, die FOTO_MARKER_FARBE_RGB vermeidet.
     let skala = hover ? 1.5 : 1;
     zeichneBlende(pos.x, pos.y, aussenRadius * skala,
       FOTO_MARKER_FARBE_RGB, FOTO_MARKER_KERN_FARBE_RGB);

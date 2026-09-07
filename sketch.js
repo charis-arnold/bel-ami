@@ -34,9 +34,7 @@ let weitereKapitelDaten = {}; // z.B. weitereKapitelDaten['04'].ortRuns
 let uebersichtsRouten = {};
 
 // Kapitel mit eigenem Kartenausschnitt (bilder-karten/kapitelXX-*): alle
-// ausser 01, das sein eigenes System hat. Die Ausschlussliste ist leer.
-const OHNE_EIGENEN_KARTENAUSSCHNITT = [];
-
+// ausser 01, das sein eigenes System hat — Ausnahmen gibt es keine.
 // vAnchor/hAnchor verschieben den sichtbaren Ausschnitt im Kapitelbild
 // (0 = oben/links, 1 = unten/rechts, 0.5 = Default), siehe coverCrop.
 let kapitelKarten = {
@@ -208,7 +206,6 @@ function preload() {
   // vergleicht dagegen), keine Eingangsdatei. Nicht löschen.
 
   Object.keys(kapitelKarten).forEach(nr => {
-    if (OHNE_EIGENEN_KARTENAUSSCHNITT.includes(nr)) return;
     kapitelKarten[nr].bild = loadImage(`bilder-karten/kapitel${nr}-karte.png`);
     kapitelKarten[nr].bboxRaw = loadJSON(`bilder-karten/kapitel${nr}-bbox.json`);
   });
