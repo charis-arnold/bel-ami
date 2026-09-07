@@ -65,9 +65,11 @@ jeder Datei:
    bliebe das Bild schwarz, ohne Fehlermeldung.
 
 Bei `datenbereinigung.js` hängt die Ladereihenfolge daran: Es ist Skript 1,
-und `kreisgrafik.js` (Skript 3) greift beim Laden auf `hexZuRgb` und
-`FWERT_PUNKT_FARBE` zu. Die IIFE läuft sofort und exportiert am Dateiende —
-beide Namen liegen also auf `window`, bevor Skript 2 beginnt.
+und `kreisgrafik.js` (Skript 3) greift beim Laden auf sechs seiner Namen zu —
+`hexZuRgb`, `ROUTE_COLOR`, `KREIS_KATEGORIEN`, `FWERT_PUNKTGROESSE`,
+`FWERT_LABELS` und `FWERT_PUNKT_DURCHMESSER`. Die IIFE läuft sofort und
+exportiert am Dateiende — alle sechs liegen also auf `window`, bevor Skript 2
+beginnt.
 
 Wo ein exportierter Name **veränderlich** ist und im Modul umgeschaltet wird,
 steht statt einer Wertzuweisung eine **Lesebindung** (`Object.defineProperty`
@@ -182,7 +184,7 @@ graph TD
     SK["11 · sketch.js — Orchestrierung"]
     SO["12 · sonifikation.js"]
 
-    DB ==>|"hexZuRgb, beim LADEN"| KG
+    DB ==>|"6 Namen, beim LADEN"| KG
     GEO ==>|"mapOffsetX/Y, beim LADEN"| FM
 
     P5 -.-> SK
@@ -215,7 +217,7 @@ einzeln geladen wurde:
 
 | Modul | braucht beim Laden | aus | Grund |
 |---|---|---|---|
-| `kreisgrafik.js` | `hexZuRgb` | `datenbereinigung.js` | `const FWERT_PUNKT_FARBE_RGB = hexZuRgb(FWERT_PUNKT_FARBE)` |
+| `kreisgrafik.js` | `hexZuRgb`, `ROUTE_COLOR`, `KREIS_KATEGORIEN`, `FWERT_PUNKTGROESSE`, `FWERT_LABELS`, `FWERT_PUNKT_DURCHMESSER` | `datenbereinigung.js` | Drei Stellen: `LEGENDE_TINTE_RGB` und die vier `LEISTE_*`-Farben rufen `hexZuRgb` (einmal mit `ROUTE_COLOR`); `LEGENDE_FWERT_ZEILEN` baut seine Liste aus den drei `FWERT_*`; `const DEMO_ANNOTATIONEN = baueDemoAnnotationen()` liest `KREIS_KATEGORIEN` |
 | `fotomarker.js` | `mapOffsetX`, `mapOffsetY` | `geo-projektion.js` | `let letzterFotoOffsetX = mapOffsetX, letzterFotoOffsetY = mapOffsetY` |
 
 Alle **zehn übrigen Module laden eigenständig**. Ihre Zugriffe nach aussen

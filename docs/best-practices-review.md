@@ -181,15 +181,20 @@ das dokumentierte Init-Muster.
 falsch — gleichnamige HTML-`id`-Attribute (`id="stage"`, `id="legendeBox"`),
 dieselbe Falle wie im Abschnitt [Toter Code](#toter-code).
 
-### A3 gehört nicht in die Sonifikations-Kapselung
+### A3 gehört nicht in die Sonifikations-Kapselung — erledigt
 
-`sonifikation.js:278` liest `spineEintraegeKapitel[nr]` direkt. Geprüft, ob
+**Erledigt.** `spineEintraegeKapitel` (`spine-horizontal.js:31`) ist
+modulintern; der Cache geht nicht mehr hinaus. Beide früheren Direktleser
+holen ihre Einträge über den exportierten Accessor `spineEintraegeFuer()` —
+`sonifikation.js:399` und `:709`, `sketch.js:533`. Die Begründung von damals
+steht zum Nachvollziehen hier:
+
+`sonifikation.js` las `spineEintraegeKapitel[nr]` direkt. Geprüft, ob
 sich das mit der Kapselung mitlösen lässt — **nein**, aus zwei Gründen:
 
-1. **Es würde nichts modulintern machen.** `spineEintraegeKapitel` wird von
-   *zwei* fremden Stellen gelesen: `sonifikation.js:278` **und**
-   `sketch.js:558`. Nur die eine umzustellen ändert an der Sichtbarkeit
-   nichts.
+1. **Es würde nichts modulintern machen.** `spineEintraegeKapitel` wurde von
+   *zwei* fremden Stellen gelesen, in `sonifikation.js` und in `sketch.js`.
+   Nur die eine umzustellen ändert an der Sichtbarkeit nichts.
 2. **`stelleSpineDatenBereit()` ist kein Accessor.** Die Funktion gibt nichts
    zurück, sie *füllt* die beiden Caches. `sonifikation.js` könnte die
    Einträge damit gar nicht holen — es bräuchte eine neue Funktion
@@ -240,7 +245,7 @@ einer anderen Datei benutzt:
 | `ortsveraenderung.js:198` | p5s `text()` — Parameter `text` von `ovLabelZeilen()` | niedrig | Wie oben. Beide Funktionen sind reine String-Helfer, die nur `textWidth()` brauchen |
 | `dom-aufbau.js:206` | p5s `text()` — destrukturierter Parameter `{ groesse, text }` | niedrig | Wie oben, zusätzlich: `dom-aufbau.js` baut DOM-Knoten und zeichnet nie auf den Canvas |
 | `ortsveraenderung.js:412` | p5s `max()` — lokales `let max` in `ueberstand` | niedrig | p5s `max()`/`min()` werden im Projekt nie benutzt; gerechnet wird durchgehend mit `Math.max` (28×) und `Math.min` (20×). Die Konvention schützt die Stelle |
-| `uebersichtsrouten.js:309` | p5s `key` — lokales `let key` | niedrig | p5s `key` wird nirgends gelesen; der Tastatur-Handler in `sketch.js:250` nimmt `e.key` vom DOM-Event |
+| `uebersichtsrouten.js:309` | p5s `key` — lokales `let key` | niedrig | p5s `key` wird nirgends gelesen; der Tastatur-Handler in `sketch.js:288` nimmt `e.key` vom DOM-Event |
 
 Keine dieser sechs erreicht das Gewicht des behobenen Falls. Dort ging es um
 eine **Projektfunktion**, die vier Module benutzen und die drei Zeilen entfernt
@@ -431,7 +436,7 @@ modulweiten Zustand setzt:
 | Fundstelle | Befund | Priorität | Begründung |
 |---|---|---|---|
 | ~~`uebersichtsrouten.js:291, 390, 452`~~ → `uebersichtsrouten.js:144` | **Erledigt.** `zeichneUebersichtsrouten()` wird jetzt unbedingt aufgerufen und übernimmt den Fall „wird nicht gezeichnet" selbst: bei `fortschritt <= 0` setzt sie Hover und Cursor zurück und steigt aus. Der `else`-Zweig in `draw()` ist ersatzlos entfallen | mittel | Kein `hoverZielUnterMaus()` extrahiert: Der Treffertest hängt an der Startpunkt-Geometrie samt Streuung deckungsgleicher Punkte, die erst im Zeichendurchlauf entsteht — ein Extrakt hätte sie dupliziert, also genau die Art Kopie, die dieses Review sonst bekämpft |
-| `sketch.js:277-833` | `draw()` ist 557 Zeilen lang und deckt Scroll-Akte, Kapitel-Zoom, Annotationsbox, Legende, Kapitelregister, Foto-Marker und Schlussakt ab | niedrig | Ein echter Befund, aber kein lohnender: Die Abschnitte teilen sich durchgehend Zwischenwerte (`activeBbox`, `zoomAmount`, `scrollFortschritt`), ein Aufteilen erzeugt vor allem lange Parameterlisten. Der Nutzen wäre Lesbarkeit, das Risiko real |
+| `sketch.js:316-838` | `draw()` ist 523 Zeilen lang und deckt Scroll-Akte, Kapitel-Zoom, Annotationsbox, Legende, Kapitelregister, Foto-Marker und Schlussakt ab | niedrig | Ein echter Befund, aber kein lohnender: Die Abschnitte teilen sich durchgehend Zwischenwerte (`activeBbox`, `zoomAmount`, `scrollFortschritt`), ein Aufteilen erzeugt vor allem lange Parameterlisten. Der Nutzen wäre Lesbarkeit, das Risiko real |
 
 `ovBaueDaten()` und `ovBerechneLayout()` (`ortsveraenderung.js:244`, `:302`)
 schreiben zwar Modulzustand, zeichnen aber nicht — sie sind memoisierte
@@ -450,9 +455,9 @@ eigenen Cache.
 | Fundstelle | Befund | Priorität | Begründung |
 |---|---|---|---|
 | alle 12 Module | 82 von 82 Funktionen erreichbar, keine ungenutzte Funktion | — | Über einen Aufruf-Graphen aller Module ermittelt, nicht dateiweise geraten. Ausgangspunkte: die fünf p5-Hooks plus die beiden Ladezeit-Aufrufe `hexZuRgb` und `wohnungSplitAi` |
-| `sketch.js:167, 206, 264, 277, 834` | `preload`, `setup`, `windowResized`, `draw`, `mousePressed` werden nirgends im Projekt aufgerufen | — | **Kein toter Code.** p5 sucht diese Namen am `window` und ruft sie selbst. Eine reine Textsuche meldet sie fälschlich als ungenutzt |
-| `sketch.js:15` | `naechstesKapitel()` — Textsuche findet einen Treffer in `index.html:43` | — | **Falscher Treffer:** Das ist das `id`-Attribut `naechstesKapitel`, kein Aufruf. Die Funktion ist trotzdem lebendig, aufgerufen aus `sketch.js:220` (Klick-Handler) und `sketch.js:593` (`draw`) |
-| `sketch.js:54` | `WEITERE_KAPITEL_NUMMERN` erscheint bei naiver Suche ungenutzt | — | **Falscher Treffer:** Alle drei Nutzungen stehen hinter einem Spread — `...WEITERE_KAPITEL_NUMMERN` in `sketch.js:175`, `sketch.js:196` und `dom-aufbau.js:107`. Ein Muster, das Punkt-Zugriffe ausschliesst, verwirft sie mit |
+| `sketch.js:185, 221, 316, 851, 890` | `preload`, `setup`, `draw`, `mousePressed`, `windowResized` werden nirgends im Projekt aufgerufen | — | **Kein toter Code.** p5 sucht diese Namen am `window` und ruft sie selbst. Eine reine Textsuche meldet sie fälschlich als ungenutzt |
+| `sketch.js:943` | `naechstesKapitel()` — Textsuche findet einen Treffer in `index.html:43` | — | **Falscher Treffer:** Das ist das `id`-Attribut `naechstesKapitel`, kein Aufruf. Die Funktion ist trotzdem lebendig, aufgerufen aus `sketch.js:263` (Klick-Handler) und `sketch.js:595` (`draw`) |
+| `sketch.js:30` | `WEITERE_KAPITEL_NUMMERN` erscheint bei naiver Suche ungenutzt | — | **Falscher Treffer:** Alle drei Nutzungen stehen hinter einem Spread — `...WEITERE_KAPITEL_NUMMERN` in `sketch.js:193`, `sketch.js:901` und `dom-aufbau.js:45`. Ein Muster, das Punkt-Zugriffe ausschliesst, verwirft sie mit |
 
 Die letzten drei Zeilen stehen hier, weil sie bei jeder Wiederholung dieser
 Prüfung erneut auffallen werden: Eine reine Textsuche meldet fünf Funktionen
@@ -607,16 +612,16 @@ bewegt.
 
 | Treiber | Fundstelle | braucht durchgehende Frames? |
 |---|---|---|
-| Weiche Zoom-Nachführung | `sketch.js:386` — `kapitelZoomAmount = lerp(…, 0.08)` je Frame | ja, solange sie läuft — und sie „läuft" formal ewig weiter |
-| Zeitbasierte Blenden | `sketch.js:751`, `:788`, `:796` über `millis()` | ja, für die Dauer der Blende |
+| Weiche Zoom-Nachführung | `uebersichtsrouten.js:319` — `kapitelZoomAmount = lerp(…, 0.08)` je Frame | ja, solange sie läuft — und sie „läuft" formal ewig weiter |
+| Zeitbasierte Blenden | `sketch.js:711`, `:739`, `:746` über `millis()` | ja, für die Dauer der Blende |
 | Graph-Animation „Play" | `spine-horizontal.js:135` — `grafikFortschritt` aus `millis()` | ja, während des Abspielens |
 | Hover über Kapitelpunkte | `uebersichtsrouten.js:389`, `:451` über `mouseX/mouseY`, `cursor()` `:460` | nein — `mousemove` würde reichen |
-| Scroll-Fortschritt | `sketch.js:268` `getScrollProgress()` liest `window.scrollY`; `kapitel1ZoomAmount` (`:335-337`) leitet sich direkt daraus ab, ohne Glättung | nein — `scroll` würde reichen |
+| Scroll-Fortschritt | `sketch.js:985` `getScrollProgress()` liest `window.scrollY`; `kapitel1ZoomAmount` (`:392`) leitet sich direkt daraus ab, ohne Glättung | nein — `scroll` würde reichen |
 
 | Fundstelle | Befund | Priorität | Begründung |
 |---|---|---|---|
-| `sketch.js:277` | Ein Umbau auf `noLoop()`/`redraw()` ist möglich, lohnt aber nicht als eigenständige Aufgabe | niedrig | Er bräuchte vier Auslöser (`scroll`, `mousemove`, `click`, `resize`) **und** ein „läuft gerade etwas?"-Prädikat. Genau das ist der teure Teil: `kapitelZoomAmount` nähert sich seinem Ziel per `lerp` nur asymptotisch — `uebersichtsrouten.js:329-334` hält das ausdrücklich fest („läuft nur asymptotisch gegen 1") und beschreibt gleich den Fehler, den ein zu naiver Nulltest an dieser Stelle schon einmal verursacht hat. Ein „fertig" gibt es nicht, man müsste eine Epsilon-Schwelle einführen. Falsch gewählt, bleibt die Animation sichtbar hängen — ein Fehlerbild, das nur auf langsamen Geräten auftritt und schwer zu reproduzieren ist |
-| `sketch.js:277` | Die durchgehende Bildrate ist die *Sichtbarkeit* des Problems, nicht seine Ursache | mittel | **Teilweise erledigt.** Der grösste Posten, den der Loop 60-mal pro Sekunde wiederholte, war die Doppelzählung aus dem [DRY-Abschnitt](#dry) — sie ist auf die Hälfte gesenkt, ohne den Lebenszyklus anzufassen. Offen bleibt, dass auch der verbleibende eine Scan pro Kreis und Frame ein Ergebnis neu berechnet, das sich zwischen zwei Scroll-Schritten nicht ändert; dafür bräuchte es den Cache. Ob der Loop danach überhaupt noch stört, wäre neu zu beurteilen |
+| `sketch.js:316` | Ein Umbau auf `noLoop()`/`redraw()` ist möglich, lohnt aber nicht als eigenständige Aufgabe | niedrig | Er bräuchte vier Auslöser (`scroll`, `mousemove`, `click`, `resize`) **und** ein „läuft gerade etwas?"-Prädikat. Genau das ist der teure Teil: `kapitelZoomAmount` nähert sich seinem Ziel per `lerp` nur asymptotisch — `uebersichtsrouten.js:329-334` hält das ausdrücklich fest („läuft nur asymptotisch gegen 1") und beschreibt gleich den Fehler, den ein zu naiver Nulltest an dieser Stelle schon einmal verursacht hat. Ein „fertig" gibt es nicht, man müsste eine Epsilon-Schwelle einführen. Falsch gewählt, bleibt die Animation sichtbar hängen — ein Fehlerbild, das nur auf langsamen Geräten auftritt und schwer zu reproduzieren ist |
+| `sketch.js:316` | Die durchgehende Bildrate ist die *Sichtbarkeit* des Problems, nicht seine Ursache | mittel | **Teilweise erledigt.** Der grösste Posten, den der Loop 60-mal pro Sekunde wiederholte, war die Doppelzählung aus dem [DRY-Abschnitt](#dry) — sie ist auf die Hälfte gesenkt, ohne den Lebenszyklus anzufassen. Offen bleibt, dass auch der verbleibende eine Scan pro Kreis und Frame ein Ergebnis neu berechnet, das sich zwischen zwei Scroll-Schritten nicht ändert; dafür bräuchte es den Cache. Ob der Loop danach überhaupt noch stört, wäre neu zu beurteilen |
 
 **Empfehlung:** Loop lassen, Rechenaufwand pro Frame senken. Die durchgehende
 Bildrate ist für ein scroll- und animationsgetriebenes Stück wie dieses
