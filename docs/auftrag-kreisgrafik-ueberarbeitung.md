@@ -1,4 +1,29 @@
-# Auftrag: Kreisgrafik-Überarbeitung (Farben, Neutral-Opazität, Valenz-Achse)
+# Auftrag: Kreisgrafik-Überarbeitung (Farben, Neutral-Opazität, Valenz-Achse) — erledigt
+
+**Erledigt.** Alle drei Punkte sind umgesetzt: `KREIS_KATEGORIEN` führt die
+neuen Werte (`js/datenbereinigung.js:71-75`), die neutrale Fläche ist gedämpft
+(`js/kreisgrafik.js:51`, `globalAlpha = 0.55 * alphaSkala`), und die Valenzachse
+ist gedreht. Der Auftrag steht zum Nachvollziehen unverändert darunter.
+
+**ACHTUNG die Vorgaben im folgenden Absatz gelten nicht mehr.** Er verlangt
+„keine IIFE-Body-Einrückung" und den „`window.X = X`-Export-Stil" — beides
+setzt die Modulkapselung voraus, und die ist inzwischen **zurückgenommen**:
+projektweit gibt es keine IIFE und kein `window.X = X` mehr. Was heute gilt,
+steht in [architektur.md](architektur.md); die Begründung für die Rücknahme
+im [Nachvollzug des Best-Practice-Reviews](best-practices-review.md). Die
+übrigen Vorgaben des Absatzes — statische Verifikation vor Browser-Tests, kein
+`'use strict'`, kein `Object.defineProperty` ausser bei mutierten Werten — sind
+weiterhin gültig; die letzte davon ist mit der Kapselung ohnehin gegenstandslos
+geworden.
+
+**Zwei Detailangaben unten stimmen nicht mehr:** Der Abschnitt „Nicht anfassen"
+nennt für `kreisRadius()` die Konstanten `BASIS=6, K=11.5`. Heute heissen sie
+`BASIS = 6, WACHSTUM_PRO_WURZEL = 15.5` (`js/datenbereinigung.js:350`) — `K`
+wurde in der Konstanten-Reinigung umbenannt. Und `zeichneVollkreis()`, auf das
+sich Punkt 2 bezieht, gibt es als eigene Funktion nicht mehr; die Dämpfung
+sitzt heute an der oben genannten Stelle.
+
+---
 
 Vor Beginn: `docs/architektur.md`, `docs/cleanup-log.md` und
 `docs/modularisierung-log.md` lesen und die dort festgelegten

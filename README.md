@@ -11,7 +11,8 @@ Die Arbeit folgt einem CAS-Setup: klar, reduziert und nachvollziehbar.
 
 ## Ordnerstruktur
 - js/: die zwölf Skripte, in der Ladereihenfolge aus index.html
-- json/: alle Eingangsdaten der Visualisierung
-- data-prep/: Textgrundlagen und Verarbeitungsschritte
-- data-prep/export/: optionale GIS-Arbeitsdateien
+- json/: die Eingangsdaten der Visualisierung, dazu zwei Artefakte der Pipeline (kreisvergleich-orte.json, kapitel01-sonifikation.json), die der Browser nicht lädt
+- bilder-karten/: die Kartenbilder und ihre Georeferenzen (kapitelXX-bbox.json)
+- docs/: Architektur, Logs und die Farbtafel
+- data-prep/: Textgrundlagen und Verarbeitungsschritte (Python-Pipeline)
 

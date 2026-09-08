@@ -1,8 +1,15 @@
 # Best-Practice-Review
 
 Prüfung des Codes gegen fünf Kriterien: globale Variablen, Single
-Responsibility, toter Code, DRY und der `draw()`-Loop. Geprüft wurde der Stand
-vom 22. August 2026 über alle zwölf Module (4532 Zeilen) plus `index.html`.
+Responsibility, toter Code, DRY und der `draw()`-Loop.
+
+**Erhoben am 22. August 2026** über alle zwölf Module (damals 4532 Zeilen) plus
+`index.html`. **Fortgeschrieben bis zum 8. September 2026** — die Module zählen
+heute 5829 Zeilen, und die Befunde unten sind laufend nachgezogen worden: was
+umgesetzt ist, trägt eine Erledigt-Markierung mit der Fundstelle im heutigen
+Code, die ursprüngliche Begründung bleibt jeweils als Nachvollzug darunter
+stehen. Datumsangaben im Text beziehen sich deshalb je nach Abschnitt auf
+verschiedene Stände; die Zeilenverweise sind auf den 8. September geprüft.
 
 **Stand der Umsetzung.** Der Befund wurde am 22. August 2026 erhoben. Seither
 umgesetzt: die Konsolidierung der Radius-Formel samt der beiden daran
@@ -13,8 +20,12 @@ in `kreisgrafik.js` (dort klammern sich jetzt alle sechs zeichnenden
 Funktionen einheitlich mit `push()`/`pop()`), die Fremdschreibzugriffe aus
 `draw()` samt dem `kapitelHover`-Knoten sowie die Kapitel-1-Datenregeln, die
 im Zeichenmodul standen. Die betroffenen Zeilen unten sind als **erledigt**
-markiert und tragen die Fundstelle im heutigen Code. Alles Übrige steht
-unverändert offen. Die Namensverdeckung wurde bei dieser Gelegenheit erstmals
+markiert und tragen die Fundstelle im heutigen Code. **Diese Aufzählung gibt
+den Stand vom 22. August wieder** — seither sind unter anderem der tote Zweig
+der Sonifikation, die Konstanten-Reinigung, der Umbau auf `noLoop()`/`redraw()`
+und die Rücknahme der Modulkapselung dazugekommen; massgeblich sind die
+Erledigt-Markierungen an den Befunden selbst. Die Namensverdeckung wurde bei
+dieser Gelegenheit erstmals
 systematisch über alle Module geprüft — Ergebnis unter
 [Globale Variablen](#namensverdeckung-systematisch-nachgeprüft).
 
