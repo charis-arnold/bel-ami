@@ -36,7 +36,7 @@ sondern nur: faktisch greift kein anderes Modul darauf zu.
 | **mittel** | ~~`draw()` schreibt in Variablen von drei fremden Modulen~~ — **erledigt**, alle fünf Zugriffe verlagert | Globale Variablen |
 | **mittel** | ~~`zeichneKreisLabels()` setzt sechs p5-Zeichenzustände und stellt keinen zurück~~ — **erledigt**, `push()`/`pop()` | Single Responsibility |
 | **mittel** | ~~`zeichneUebersichtsrouten()` zeichnet und setzt dabei `kapitelHover`~~ — **erledigt**, `draw()` zieht nichts mehr nach | Single Responsibility |
-| **mittel** | ~~139 der 266 Namen sind modulintern~~ — **erledigt**: alle 135 modulinternen Namen sind gekapselt, null bleiben global sichtbar | Globale Variablen |
+| **mittel** | ~~139 der 266 Namen sind modulintern~~ — die Kapselung wurde gebaut und auf Dozenten-Wunsch **wieder entfernt**; heute sind 321 der 476 Namen faktisch modulintern, aber alle global sichtbar | Globale Variablen |
 | **mittel** | ~~Kapitel-1-Datenregeln stehen im Zeichenmodul `kreisgrafik.js`~~ — **erledigt**, jetzt `ortRunSichtbar()` in `datenbereinigung.js` | Single Responsibility |
 | **mittel** | ~~`zeichneHalbkreis`/`zeichneVollkreis` setzen `globalCompositeOperation` hart zurück~~ — **erledigt**, `push()`/`pop()` | Single Responsibility |
 | **niedrig** | `draw()` läuft mit 557 Zeilen als eine Funktion | Single Responsibility |
@@ -49,70 +49,110 @@ sondern nur: faktisch greift kein anderes Modul darauf zu.
 
 ---
 
-## Globale Variablen
+## Globale Variablen — die Kapselung ist zurückgenommen
 
-Alle zwölf Module deklarieren zusammen **262 Namen im globalen Scope**: 90
-Funktionen und 172 Variablen/Konstanten. Davon werden **124 nur im eigenen
-Modul gebraucht**. Fünf davon sind p5-Lebenszyklus-Hooks (`preload`, `setup`,
-`draw`, `mousePressed`, `windowResized`), die global bleiben *müssen*, weil p5
-sie am `window` sucht — bleiben **119 echte Kandidaten** für Modul-Scope.
+**Ist-Stand.** Es gibt keine Kapselung mehr. Alle zwölf Module deklarieren ihre
+Namen direkt im globalen Scope; keine Datei steht in einer IIFE, und
+`window.X = X` kommt nirgends mehr vor. „Modulintern" heisst hier deshalb nicht
+*technisch* unsichtbar, sondern nur: faktisch greift kein anderes Modul darauf
+zu. Die Regeln, die das Projekt stattdessen trägt — projektweite
+Namenseindeutigkeit, keine Verdeckung von p5- oder Strudel-Namen, die fünf
+Hooks am `window` — stehen in [architektur.md](architektur.md).
 
-Die Zahl ist im Lauf der bisherigen Schritte *gestiegen*, nicht gefallen: Jede
-Konsolidierung hat Logik aus fremden Modulen in ihr Heimatmodul geholt und
+Frisch am Code erhoben (Deklarationen auf oberster Klammertiefe, kommentar- und
+stringbereinigt):
+
+| Modul | Namen gesamt | nur modulintern | extern genutzt | Anteil intern |
+|---|---|---|---|---|
+| `ortsveraenderung.js` | 38 | 35 | 3 | 92 % |
+| `kreisgrafik.js` | 130 | 117 | 13 | 90 % |
+| `kartendekor.js` | 18 | 15 | 3 | 83 % |
+| `sonifikation.js` | 60 | 50 | 10 | 83 % |
+| `annotationsbox.js` | 8 | 6 | 2 | 75 % |
+| `sketch.js` | 91 | 60 | 31 | 66 % |
+| `spine-horizontal.js` | 26 | 16 | 10 | 62 % |
+| `uebersichtsrouten.js` | 20 | 8 | 12 | 40 % |
+| `datenbereinigung.js` | 53 | 12 | 41 | 23 % |
+| `dom-aufbau.js` | 5 | 1 | 4 | 20 % |
+| `fotomarker.js` | 14 | 1 | 13 | 7 % |
+| `geo-projektion.js` | 13 | 0 | 13 | 0 % |
+| **Summe** | **476** | **321** | **155** | 67 % |
+
+Das sind 187 Funktionen und 289 Variablen/Konstanten. Die fünf p5-Hooks zählen
+als extern, weil p5 sie am `window` sucht. `datenbereinigung.js` ist mit 41
+extern gelesenen Namen die gemeinsame Ebene des Projekts, `geo-projektion.js`
+gibt alles heraus.
+
+**ACHTUNG diese Zahlen sind nicht mit denen im Nachvollzug unten vergleichbar.**
+Dort wurden 267 Namen gezählt, hier 476 — nicht weil das Projekt gewachsen
+wäre, sondern weil damals neun Module in einer IIFE standen und nur die
+Deklarationen der jeweiligen Kapsel gezählt wurden. Wer die Reihen
+gegenüberstellt, vergleicht zwei verschiedene Fragen.
+
+### Nachvollzug: der Kapselungsversuch und warum er wieder wegkam
+
+Alles Folgende beschreibt einen **früheren Stand**. Neun der zwölf Module
+standen zeitweise in einer IIFE und gaben ihre Schnittstelle über
+`window.X = X` heraus, veränderliche Werte über eine Lesebindung. Diese
+Kapselung ist auf Wunsch des Dozenten wieder entfernt worden — für ein Projekt
+ohne Bundler und ohne ES-Module war sie mehr Zeremonie als Schutz, und sie
+machte jede Datei um eine Einrückungsebene und einen Exportblock länger. Die
+Analyse bleibt hier stehen, weil die Zuordnung intern/extern, die sie erhoben
+hat, weiter gilt: sie ist die Grundlage der Tabelle oben.
+
+Erhoben wurde damals so: **262 Namen im globalen Scope**, 90 Funktionen und
+172 Variablen/Konstanten, davon **124 nur im eigenen Modul gebraucht**. Fünf
+sind p5-Hooks, die global bleiben müssen — blieben **119 Kandidaten** für
+Modul-Scope.
+
+Die Zahl war im Lauf der Schritte *gestiegen*, nicht gefallen: Jede
+Konsolidierung hatte Logik aus fremden Modulen in ihr Heimatmodul geholt und
 dort intern gemacht. `ortRunSichtbar()` machte fünf Namen in
 `datenbereinigung.js` intern, `kapitelHatEigeneAnsicht()` das vielgelesene
 `kapitelKarten` in `sketch.js`, `spieleSonifikationFuer()` die beiden
 `spiele*SonifikationAudio` in `sonifikation.js`.
 
-**Die Vorarbeit ist damit abgeschlossen.** Die systematische Prüfung auf
-falsch platzierte Regeln (siehe Abschnitt unten) hat ausser diesen dreien
-nichts mehr gefunden, was die Zuordnung noch verschieben würde.
+#### Wie viel jedes Modul nach aussen gab
 
-### Wie viel jedes Modul nach aussen gibt
-
-| Modul | gekapselt | Namen gesamt | nur modulintern | extern genutzt | Anteil intern |
+| Modul | damals gekapselt | Namen gesamt | nur modulintern | extern genutzt | Anteil intern |
 |---|---|---|---|---|---|
-| `ortsveraenderung.js` | **ja** (8 Exporte) | 44 | 36 | 8 | 81 % |
-| `sonifikation.js` | **ja** (4 Exporte) | 21 | 17 | 4 | 80 % |
-| `annotationsbox.js` | **ja** (2 Exporte) | 7 | 5 | 2 | 71 % |
-| `kreisgrafik.js` | **ja** (5 Exporte) | 13 | 8 | 5 | 61 % |
-| `spine-horizontal.js` | **ja** (11 Exporte) | 25 | 14 | 11 | 56 % |
-| `kartendekor.js` | **ja** (2 Exporte) | 4 | 2 | 2 | 50 % |
-| `sketch.js` | **ja** (35 Exporte) | 70 | 35 | 35 | 50 % |
-| `uebersichtsrouten.js` | **ja** (10 Exporte) | 16 | 6 | 10 | 38 % |
-| `datenbereinigung.js` | **ja** (26 Exporte) | 38 | 12 | 26 | 32 % |
+| `ortsveraenderung.js` | ja (8 Exporte) | 44 | 36 | 8 | 81 % |
+| `sonifikation.js` | ja (4 Exporte) | 21 | 17 | 4 | 80 % |
+| `annotationsbox.js` | ja (2 Exporte) | 7 | 5 | 2 | 71 % |
+| `kreisgrafik.js` | ja (5 Exporte) | 13 | 8 | 5 | 61 % |
+| `spine-horizontal.js` | ja (11 Exporte) | 25 | 14 | 11 | 56 % |
+| `kartendekor.js` | ja (2 Exporte) | 4 | 2 | 2 | 50 % |
+| `sketch.js` | ja (35 Exporte) | 70 | 35 | 35 | 50 % |
+| `uebersichtsrouten.js` | ja (10 Exporte) | 16 | 6 | 10 | 38 % |
+| `datenbereinigung.js` | ja (26 Exporte) | 38 | 12 | 26 | 32 % |
 | `geo-projektion.js` | — *(geprüft, bewusst nicht)* | 9 | 0 | 9 | 0 % |
 | `fotomarker.js` | nein | 14 | 0 | 14 | 0 % |
 | `dom-aufbau.js` | nein | 6 | 0 | 6 | 0 % |
 | **Summe** | **9 von 12** | **267** | **135** | **132** | 51 % |
 
-Stand am Code erhoben, nicht aus dieser Doku fortgeschrieben: Die Prüfung
-sucht strukturell nach einer umschliessenden sofort ausgeführten Funktion
-(Klammertiefe auf kommentarbereinigtem Quelltext), nicht nach einer bestimmten
-Schreibweise. **Punkt 8 ist abgeschlossen.** Neun der zwölf Module stehen in einer IIFE:
-`sketch.js`, `datenbereinigung.js`, `spine-horizontal.js`,
-`uebersichtsrouten.js`, `ortsveraenderung.js`, `kreisgrafik.js`,
-`sonifikation.js`, `annotationsbox.js` und `kartendekor.js`.
-
-**Alle 135 modulinternen Namen sind aus dem globalen Scope entfernt — null
-bleiben sichtbar.** Die drei übrigen Module (`geo-projektion.js`,
-`fotomarker.js`, `dom-aufbau.js`) sind bewusst ungekapselt: Bei ihnen wird
-jeder Top-Level-Name von aussen gelesen, eine Kapsel brächte null. Bei
-`fotomarker.js` einzeln gegengeprüft.
+Der Kapselungsstand wurde strukturell erhoben, nicht per Textsuche: gesucht
+wurde eine umschliessende sofort ausgeführte Funktion über die Klammertiefe auf
+kommentarbereinigtem Quelltext, nicht eine bestimmte Schreibweise. Zum damaligen
+Abschluss standen neun der zwölf Module in einer IIFE, und **alle 135
+modulinternen Namen waren aus dem globalen Scope entfernt.** Die drei übrigen
+(`geo-projektion.js`, `fotomarker.js`, `dom-aufbau.js`) blieben bewusst
+ungekapselt: Bei ihnen wurde jeder Top-Level-Name von aussen gelesen, eine
+Kapsel hätte null gebracht. Bei `fotomarker.js` einzeln gegengeprüft.
 
 Der Weg dorthin lief über vier Vorarbeiten, die im Verlauf nötig wurden:
 
 | Vorarbeit | wofür |
 |---|---|
-| Regeln ins Heimatmodul holen (`ortRunSichtbar`, `kapitelHatEigeneAnsicht`, `spieleSonifikationFuer`) | verschob die Zuordnung intern/extern, musste vor der Kapselung geschehen |
+| Regeln ins Heimatmodul holen (`ortRunSichtbar`, `kapitelHatEigeneAnsicht`, `spieleSonifikationFuer`) | verschob die Zuordnung intern/extern, musste vor der Kapselung geschehen — **diese Vorarbeit gilt weiter**, sie hat die Modulschnitte verbessert, unabhängig von der Kapsel |
 | Fremdschreibzugriffe aus `draw()` | `draw()` schrieb je Frame in drei fremde Module |
 | Handler-Dreieck | `uebersichtsrouten.js` schrieb in `spine-horizontal.js` und `sketch.js` — blockierte beide |
 | Rückgabewerte statt Seiteneffekte in `dom-aufbau.js` | acht DOM-Handles — der letzte Blocker für `sketch.js` |
 
-Von den ursprünglich 21 modulübergreifenden Schreibzugriffen sind **7**
+Von den ursprünglich 21 modulübergreifenden Schreibzugriffen blieben **7**
 übrig, alle von `sketch.js` nach `fotomarker.js` (einmalige Initialisierung
-in `preload`/`setup`). Sie blockieren nur `fotomarker.js`, wo ohnehin nichts
-zu kapseln ist.
+in `preload`/`setup`). Sie blockierten nur `fotomarker.js`, wo ohnehin nichts
+zu kapseln gewesen wäre. Die Reduktion von 21 auf 7 ist der bleibende Gewinn
+dieser Vorarbeit — sie gilt unabhängig von der zurückgenommenen Kapselung.
 
 #### Korrektur: zwölf Namen waren nie extern
 
@@ -128,38 +168,35 @@ und zwölf `sketch.js`-Namen kommen dort vor: `stage`, `naechstesKapitel`,
 Abschnitt [Toter Code](#toter-code), wo `id="naechstesKapitel"` schon einmal
 eine Funktion fälschlich als tot gemeldet hatte.
 
-Geprüft, ob dadurch bei den acht bereits gekapselten Modulen etwas
-fälschlich exportiert wurde: **nein** — der Effekt tritt nur bei `sketch.js`
-auf. Für künftige Erhebungen gilt: `index.html` gehört nur dann als
-Referenzquelle dazu, wenn sie ein Inline-Skript enthält.
+Geprüft, ob dadurch bei den acht damals gekapselten Modulen etwas
+fälschlich exportiert wurde: **nein** — der Effekt trat nur bei `sketch.js`
+auf. Für künftige Erhebungen gilt weiterhin: `index.html` gehört nur dann als
+Referenzquelle dazu, wenn sie ein Inline-Skript enthält. Sie enthält keines
+(erneut geprüft).
 
 **`geo-projektion.js` wurde geprüft und bewusst ausgelassen.** Alle neun
-Namen werden extern gelesen, keiner ist intern — eine Kapsel würde rund
-20 Zeilen kosten und null Namen entfernen. Dasselbe gilt für `fotomarker.js`
-und `dom-aufbau.js`. Die drei sind reine Werkzeugkästen; der einzige
-Gewinn wäre, dass künftige Ergänzungen dort intern statt global entstünden.
-Das ist die Zeremonie derzeit nicht wert, bleibt aber jederzeit nachholbar.
+Namen wurden extern gelesen, keiner war intern — eine Kapsel hätte rund
+20 Zeilen gekostet und null Namen entfernt. Dasselbe galt für `fotomarker.js`
+und `dom-aufbau.js`: drei reine Werkzeugkästen, die alles nach aussen geben.
 
-`geo-projektion.js`, `fotomarker.js` und `dom-aufbau.js` geben alles nach
-aussen — bei ihnen ist nichts zu kapseln. Sie sind reine Werkzeugkästen.
-
-### Veränderliche Exporte: die Hürde für die restlichen neun Module
+#### Veränderliche Exporte: die Hürde, an der das Muster teuer wurde
 
 Bei `sonifikation.js` trat erstmals ein Fall auf, den die ersten beiden
 Kapselungen nicht hatten: ein **veränderliches** `let`, das drinnen
 umgeschaltet und draussen gelesen wird. `window.x = x` kopiert dabei nur den
-Wert beim Laden — die Flagge bliebe für immer `false`. Empirisch
+Wert beim Laden — die Flagge wäre für immer `false` geblieben. Empirisch
 nachgestellt und bestätigt; im konkreten Fall hätte `beendeSonifikationAudio()`
 von den drei externen Stellen nie mehr gerufen werden können, der Ton wäre
 beim Ansichtswechsel weitergelaufen.
 
-Die Lösung dort: eine **Lesebindung** über `Object.defineProperty(window, …,
-{ get })`. Sie hält die Aufrufstellen unverändert, liest live und lässt
+Die Lösung dort war eine **Lesebindung** über `Object.defineProperty(window, …,
+{ get })`. Sie hielt die Aufrufstellen unverändert, las live und liess
 Schreibzugriffe von aussen wirkungslos — was der tatsächlichen Nutzung
-entspricht, denn alle drei Leser lesen nur.
+entsprach, denn alle drei Leser lesen nur.
 
-**Das trägt aber nur, solange von aussen nicht geschrieben wird.** Eine
-Erhebung über alle Module zeigt, wo das der Fall ist:
+**Das trug aber nur, solange von aussen nicht geschrieben wurde.** Eine
+Erhebung über alle Module zeigte, wo das der Fall war — und genau diese Liste
+war der Grund, das Muster als zu aufwendig zu bewerten:
 
 | Modul | veränderliche Exporte | von aussen geschrieben? |
 |---|---|---|
@@ -169,19 +206,19 @@ Erhebung über alle Module zeigt, wo das der Fall ist:
 | `fotomarker.js` | 9 | **ja** — `sketch.js` füllt die fünf `fotoPopup*`-Handles und `fotoMarkerListe` |
 | `sketch.js` | viele | **ja** — `dom-aufbau.js` (9 DOM-Handles), `spine-horizontal.js` und `uebersichtsrouten.js` (`kapitelAnsichtsModus`) |
 
-Damit ist die Reihenfolge für den Rest vorgezeichnet: `geo-projektion.js` und
-`uebersichtsrouten.js` sind mit dem bekannten Muster plus Lesebindung machbar.
-`spine-horizontal.js`, `fotomarker.js` und `sketch.js` brauchen vorher, dass
-die Fremdschreibzugriffe aufgelöst werden — bei `spine-horizontal.js` ist das
-genau das [Dreieck aus Ereignis-Handlern](#wer-in-wessen-zustand-schreibt),
-das dieses Review schon als offen führt, bei `fotomarker.js` und `sketch.js`
-das dokumentierte Init-Muster.
+Damit war die Reihenfolge für den Rest vorgezeichnet: `geo-projektion.js` und
+`uebersichtsrouten.js` wären mit dem bekannten Muster plus Lesebindung machbar
+gewesen. `spine-horizontal.js`, `fotomarker.js` und `sketch.js` hätten vorher
+gebraucht, dass die Fremdschreibzugriffe aufgelöst werden. Dass drei von zwölf
+Modulen eine zusätzliche Umbaustufe gebraucht hätten, nur um eine Sichtbarkeit
+herzustellen, die ohne Bundler ohnehin niemand erzwingt, gab den Ausschlag für
+die Rücknahme.
 
 *Nebenbemerkung zur Erhebung:* Treffer „gelesen von index.html" sind zum Teil
 falsch — gleichnamige HTML-`id`-Attribute (`id="stage"`, `id="legendeBox"`),
 dieselbe Falle wie im Abschnitt [Toter Code](#toter-code).
 
-### A3 gehört nicht in die Sonifikations-Kapselung — erledigt
+#### A3 gehörte nicht in die Sonifikations-Kapselung — erledigt
 
 **Erledigt.** `spineEintraegeKapitel` (`spine-horizontal.js:27`) ist
 modulintern; der Cache geht nicht mehr hinaus. Beide früheren Direktleser
@@ -201,30 +238,31 @@ sich das mit der Kapselung mitlösen lässt — **nein**, aus zwei Gründen:
    (`spineEintraegeFuer(nr)`), also einen Entwurfsschritt, nicht einen
    mechanischen Austausch.
 
-A3 gehört deshalb in die Kapselung von `spine-horizontal.js`, wo beide Leser
-zusammen behandelt werden und die Entscheidung über einen echten Lazy-Getter
-ohnehin ansteht.
+A3 gehörte deshalb zur Kapselung von `spine-horizontal.js`, wo beide Leser
+zusammen behandelt wurden. Der Accessor `spineEintraegeFuer()` ist geblieben,
+auch nachdem die Kapsel wieder wegfiel — er ist die bessere Schnittstelle,
+unabhängig von der Sichtbarkeit.
 
-### Kandidaten für Modul-Scope
+#### Kandidaten für Modul-Scope, wie sie damals abgearbeitet wurden
 
 | Fundstelle | Befund | Priorität | Begründung |
 |---|---|---|---|
-| ~~`ortsveraenderung.js:42-302`~~ | **Erledigt.** Die Datei steht in einer IIFE und gibt nur acht Namen über `window.*` heraus; 36 sind modulintern | mittel | Erster gekapselter Modul. Der Rumpf ist bewusst nicht eingerückt — bei 656 Zeilen hätte das jede Zeile als geändert markiert und `git blame` zerstört; so ist der Diff eine reine Einfügung von 30 Zeilen. Nachgewiesen: Exportliste exakt (8 gebraucht, 8 exportiert, nichts fehlt oder ist überflüssig), Rumpf byteweise unverändert, alle 36 internen Namen von aussen unsichtbar, alle 8 Exportwerte identisch zur Vorher-Fassung |
-| ~~`sonifikation.js:44-184`~~ | **Erledigt.** Die Datei steht in einer IIFE und gibt vier Namen heraus; 17 sind modulintern, darunter der gesamte Zustand (`sonifikationDaten`, `sonifikationBereit`, `sonifikationSpielplan`, `sonifikationTimeoutId`) | mittel | Drittes gekapseltes Modul. **Erster Fall mit veränderlichem Export:** `sonifikationSpieltGerade` wird drinnen umgeschaltet und draussen gelesen — eine einfache `window.X = X`-Zuweisung hätte die Flagge beim Laden eingefroren (empirisch nachgewiesen). Deshalb dort eine Lesebindung über `Object.defineProperty`; die drei übrigen Exporte bleiben einfache Zuweisungen |
-| ~~`spine-horizontal.js:150-178`~~ | **Erledigt.** Die Datei steht in einer IIFE und gibt elf Namen heraus; 14 sind modulintern — die neun `SPINE_*`-Konstanten, `spineLayout`, `spineLayoutCache`, `grafikStartZeit` und **beide Spine-Caches** | mittel | Achtes gekapseltes Modul. Drei Exporte sind Lesebindungen (`grafikSpielt`, `grafikFortschritt`, `grafikPlayAusblendStart`). Erst möglich durch die Auflösung des Handler-Dreiecks — vorher schrieb `uebersichtsrouten.js` in genau diese drei hinein, was eine Lesebindung wirkungslos gemacht hätte |
-| ~~`kreisgrafik.js:56-333`~~ | **Erledigt.** Die Datei steht in einer IIFE und gibt fünf Namen über `window.*` heraus; acht sind modulintern (`HATCH_SPACING`, `drawHatchedCircle`, `zeichneKreisLabels`, `zeichneHalbkreis`, `zeichneVollkreis`, `FWERT_PUNKT_FARBE_RGB` und die beiden `FWERT_PUNKT_*_ABSTAND`-Konstanten) | mittel | Zweites gekapseltes Modul, gleiche Bauart wie `ortsveraenderung.js`: Rumpf nicht eingerückt, Diff eine reine Einfügung. Anders als dort hat diese Datei eine **Ladezeit-Abhängigkeit** (`hexZuRgb` für `FWERT_PUNKT_FARBE_RGB`) — die IIFE läuft sofort, der Aufruf findet zum selben Zeitpunkt statt wie vorher, geprüft im Vorher/Nachher-Vergleich |
-| ~~`sketch.js:6-158`~~ | **Erledigt.** Die Datei steht in einer IIFE und gibt 35 Namen heraus; 35 sind modulintern | niedrig | Neuntes und letztes gekapseltes Modul, das grösste des Projekts. **17 der 35 Exporte sind Lesebindungen** — anders als anderswo wird hier fast jeder `let` erst in `preload`/`setup`/`draw` gesetzt, also nach dem Lauf der IIFE; eine Wertkopie wäre durchweg `undefined`. Die fünf p5-Hooks stehen in der Kapsel und werden explizit exportiert, weil p5 sie am `window` sucht |
-| ~~`uebersichtsrouten.js:87-513`~~ | **Erledigt.** Die Datei steht in einer IIFE und gibt zehn Namen heraus; sechs sind modulintern (`KAPITEL_SCHEIBE_GRUNDANTEIL`, `KAPITEL_NACHGLUEHEN`, `scheibenCache`, `kapitelHitze`, `setzeKapitelAnsichtZurueck`, `oeffneKapitelZoom`) | niedrig | Viertes gekapseltes Modul. Drei der zehn Exporte (`zoomedKapitel`, `kapitelZoomAmount`, `kapitelHover`) sind Lesebindungen — sie werden laufend umgeschaltet. **Erst möglich, weil `draw()` seine Schreibzugriffe darauf abgegeben hat**: Wären sie noch da, hätte die Bindung sie wirkungslos gemacht |
-| ~~`datenbereinigung.js:92-352`~~ | **Erledigt.** Die Datei steht in einer IIFE und gibt 26 Namen heraus — die grösste Schnittstelle im Projekt; zwölf sind modulintern | niedrig | Siebtes gekapseltes Modul und das mit der grössten Exportliste. Kein Export wird intern mutiert, deshalb 26 einfache Zuweisungen und keine Lesebindung. Der kritische Punkt war die Ladereihenfolge: `kreisgrafik.js` greift beim Laden auf `hexZuRgb`/`FWERT_PUNKT_FARBE` zu — die IIFE läuft sofort und exportiert am Dateiende, geprüft durch Laden beider Dateien in Folge |
-| ~~`annotationsbox.js:54-58`~~ | **Erledigt.** Die Datei steht in einer IIFE und gibt zwei Namen heraus; fünf sind modulintern (die vier Mass-Konstanten und `annotationBoxPositionCache`) | niedrig | Fünftes gekapseltes Modul. Kein Export ist veränderlich — beide sind `const` bzw. `function`, deshalb einfache Zuweisungen ohne Lesebindung |
-| ~~`kartendekor.js:25-36`~~ | **Erledigt.** Die Datei steht in einer IIFE und gibt zwei Zeichenfunktionen heraus; `haversineMeter` und `MASSSTAB_SCHRITTE` sind modulintern | niedrig | Sechstes gekapseltes Modul. `haversineMeter` ist damit von aussen nicht mehr aufrufbar — richtig so, ihr einziger Aufrufer (`zeichneMassstabsleiste`) sitzt im selben Modul. Der Querverweis in `geo-projektion.js:34` ist um diesen Hinweis ergänzt |
+| ~~`ortsveraenderung.js:42-302`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab nur acht Namen über `window.*` heraus; 36 waren modulintern | mittel | Erster gekapselter Modul. Der Rumpf ist bewusst nicht eingerückt — bei 656 Zeilen hätte das jede Zeile als geändert markiert und `git blame` zerstört; so ist der Diff eine reine Einfügung von 30 Zeilen. Nachgewiesen: Exportliste exakt (8 gebraucht, 8 exportiert, nichts fehlt oder ist überflüssig), Rumpf byteweise unverändert, alle 36 internen Namen von aussen unsichtbar, alle 8 Exportwerte identisch zur Vorher-Fassung |
+| ~~`sonifikation.js:44-184`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab vier Namen heraus; 17 waren modulintern, darunter der gesamte Zustand (`sonifikationDaten`, `sonifikationBereit`, `sonifikationSpielplan`, `sonifikationTimeoutId`) | mittel | Drittes gekapseltes Modul. **Erster Fall mit veränderlichem Export:** `sonifikationSpieltGerade` wird drinnen umgeschaltet und draussen gelesen — eine einfache `window.X = X`-Zuweisung hätte die Flagge beim Laden eingefroren (empirisch nachgewiesen). Deshalb dort eine Lesebindung über `Object.defineProperty`; die drei übrigen Exporte bleiben einfache Zuweisungen |
+| ~~`spine-horizontal.js:150-178`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab elf Namen heraus; 14 waren modulintern — die neun `SPINE_*`-Konstanten, `spineLayout`, `spineLayoutCache`, `grafikStartZeit` und **beide Spine-Caches** | mittel | Achtes gekapseltes Modul. Drei Exporte sind Lesebindungen (`grafikSpielt`, `grafikFortschritt`, `grafikPlayAusblendStart`). Erst möglich durch die Auflösung des Handler-Dreiecks — vorher schrieb `uebersichtsrouten.js` in genau diese drei hinein, was eine Lesebindung wirkungslos gemacht hätte |
+| ~~`kreisgrafik.js:56-333`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab fünf Namen über `window.*` heraus; acht waren modulintern (`HATCH_SPACING`, `drawHatchedCircle`, `zeichneKreisLabels`, `zeichneHalbkreis`, `zeichneVollkreis`, `FWERT_PUNKT_FARBE_RGB` und die beiden `FWERT_PUNKT_*_ABSTAND`-Konstanten) | mittel | Zweites gekapseltes Modul, gleiche Bauart wie `ortsveraenderung.js`: Rumpf nicht eingerückt, Diff eine reine Einfügung. Anders als dort hat diese Datei eine **Ladezeit-Abhängigkeit** (`hexZuRgb` für `FWERT_PUNKT_FARBE_RGB`) — die IIFE läuft sofort, der Aufruf findet zum selben Zeitpunkt statt wie vorher, geprüft im Vorher/Nachher-Vergleich |
+| ~~`sketch.js:6-158`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab 35 Namen heraus; 35 waren modulintern | niedrig | Neuntes und letztes gekapseltes Modul, das grösste des Projekts. **17 der 35 Exporte sind Lesebindungen** — anders als anderswo wird hier fast jeder `let` erst in `preload`/`setup`/`draw` gesetzt, also nach dem Lauf der IIFE; eine Wertkopie wäre durchweg `undefined`. Die fünf p5-Hooks stehen in der Kapsel und werden explizit exportiert, weil p5 sie am `window` sucht |
+| ~~`uebersichtsrouten.js:87-513`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab zehn Namen heraus; sechs waren modulintern (`KAPITEL_SCHEIBE_GRUNDANTEIL`, `KAPITEL_NACHGLUEHEN`, `scheibenCache`, `kapitelHitze`, `setzeKapitelAnsichtZurueck`, `oeffneKapitelZoom`) | niedrig | Viertes gekapseltes Modul. Drei der zehn Exporte (`zoomedKapitel`, `kapitelZoomAmount`, `kapitelHover`) sind Lesebindungen — sie werden laufend umgeschaltet. **Erst möglich, weil `draw()` seine Schreibzugriffe darauf abgegeben hat**: Wären sie noch da, hätte die Bindung sie wirkungslos gemacht |
+| ~~`datenbereinigung.js:92-352`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab 26 Namen heraus — die grösste Schnittstelle im Projekt; zwölf waren modulintern | niedrig | Siebtes gekapseltes Modul und das mit der grössten Exportliste. Kein Export wird intern mutiert, deshalb 26 einfache Zuweisungen und keine Lesebindung. Der kritische Punkt war die Ladereihenfolge: `kreisgrafik.js` greift beim Laden auf `hexZuRgb`/`FWERT_PUNKT_FARBE` zu — die IIFE läuft sofort und exportiert am Dateiende, geprüft durch Laden beider Dateien in Folge |
+| ~~`annotationsbox.js:54-58`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab zwei Namen heraus; fünf waren modulintern (die vier Mass-Konstanten und `annotationBoxPositionCache`) | niedrig | Fünftes gekapseltes Modul. Kein Export ist veränderlich — beide sind `const` bzw. `function`, deshalb einfache Zuweisungen ohne Lesebindung |
+| ~~`kartendekor.js:25-36`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab zwei Zeichenfunktionen heraus; `haversineMeter` und `MASSSTAB_SCHRITTE` waren modulintern | niedrig | Sechstes gekapseltes Modul. `haversineMeter` ist damit von aussen nicht mehr aufrufbar — richtig so, ihr einziger Aufrufer (`zeichneMassstabsleiste`) sitzt im selben Modul. Der Querverweis in `geo-projektion.js:34` ist um diesen Hinweis ergänzt |
 
 ### Zwei Befunde, die nicht nur Kosmetik sind
 
 | Fundstelle | Befund | Priorität | Begründung |
 |---|---|---|---|
-| ~~`kreisgrafik.js:345`~~ → `kreisgrafik.js:353` | **Erledigt.** Der dritte Parameter von `zeichneFwertPunkte()` hiess `kreisRadius` und verdeckte die gleichnamige globale Funktion aus `datenbereinigung.js:320`, die vier Module benutzen. Er heisst jetzt `radius` | **hoch** | Im Rumpf war `kreisRadius` die Zahl, nicht die Funktion. Unschädlich nur, solange dort niemand die Funktion braucht — mit `groessterKreisRadius` daneben wäre die Stelle zusätzlich verwirrend geworden |
-| ~~`sketch.js:281, 386, 505, 812-814`~~ | **Erledigt.** `draw()` schrieb in Variablen dreier fremder Module — faktisch fünf Zugriffe, denn `:295` schrieb zusätzlich in `spineEintraegeKapitel[…]`. Alle sind in ihr besitzendes Modul gewandert: `aktualisiereKapitelZoom()` und der Hover-Guard in `uebersichtsrouten.js`, `merkeKartenlage()` in `fotomarker.js`, `stelleSpineDatenBereit()` in `spine-horizontal.js`. `draw()` schreibt jetzt nur noch eigene Variablen (`letzterZoomKapitel`, `kapitel1ZoomAmount`) | mittel | Das war die eigentliche Hürde vor jeder Kapselung. Sie ist weg — die Lesezugriffe von aussen bleiben und stören erst bei einer echten IIFE-Umstellung |
+| ~~`kreisgrafik.js:345`~~ → `kreisgrafik.js:339` | **Erledigt.** Der dritte Parameter von `zeichneFwertPunkte()` hiess `kreisRadius` und verdeckte die gleichnamige globale Funktion aus `datenbereinigung.js:349`, die vier Module benutzen. Er heisst jetzt `radius` | **hoch** | Im Rumpf war `kreisRadius` die Zahl, nicht die Funktion. Unschädlich nur, solange dort niemand die Funktion braucht — mit `groessterKreisRadius` daneben wäre die Stelle zusätzlich verwirrend geworden |
+| ~~`sketch.js:281, 386, 505, 812-814`~~ | **Erledigt.** `draw()` schrieb in Variablen dreier fremder Module — faktisch fünf Zugriffe, denn `:295` schrieb zusätzlich in `spineEintraegeKapitel[…]`. Alle sind in ihr besitzendes Modul gewandert: `aktualisiereKapitelZoom()` und der Hover-Guard in `uebersichtsrouten.js`, `merkeKartenlage()` in `fotomarker.js`, `stelleSpineDatenBereit()` in `spine-horizontal.js`. `draw()` schreibt jetzt nur noch eigene Variablen (`letzterZoomKapitel`, `kapitel1ZoomAmount`) | mittel | Das war damals die Hürde vor jeder Kapselung. Der Umbau hat aber unabhängig davon Bestand: Jedes Modul besitzt seinen Zustand jetzt selbst, und das gilt auch ohne Kapsel weiter |
 
 ### Namensverdeckung: systematisch nachgeprüft
 
@@ -289,8 +327,7 @@ Daten-Neubau kann es lautlos auseinanderlaufen.
 
 - `ortsveraenderung.js` (36 interne Namen) — davon 24 `OV_*`-Layoutkonstanten,
   genuin eigene. `VERGLEICHS_KNOTEN` sind aktspezifische Daten, die kein
-  anderes Modul braucht. Kein Umzug nötig; das Modul ist der **beste erste
-  IIFE-Kandidat**.
+  anderes Modul braucht. Kein Umzug nötig.
 - `sonifikation.js` — `elementDauerSek()` (`sonifikation.js:480`) und
   `baueElementStimmen()` (`:382`) rechnen aus den eigenen Elementdaten Dauern und Lautstärken. Eigene
   Domäne, keine fremde Regel.
@@ -394,7 +431,7 @@ abläuft. Die Alternative wäre, den Ton-Stopp wieder in beide Handler zu
 duplizieren — dann wäre `setzeGrafikZurueck()` ein Reset, der den Ton
 weiterlaufen liesse.
 
-**Wirkung auf die Kapselung:** `spine-horizontal.js` empfängt jetzt **null**
+**Wirkung auf die damalige Kapselung:** `spine-horizontal.js` empfängt **null**
 Fremdschreibzugriffe und ist damit kapselbar — seine fünf extern gelesenen
 veränderlichen Namen werden von aussen nur noch gelesen, die Lesebindung
 trägt. Das wären 12 weitere Namen. **`sketch.js` bleibt blockiert**: Gruppe B
@@ -685,16 +722,20 @@ Alle Zahlen sind aus dem Code erhoben, keine aus den Kommentaren übernommen.
 Geprüft wurden die zwölf Module aus `index.html` plus `index.html` selbst;
 `style.css` und `docs/` nur, wo sie Verweise auf Code enthalten.
 
-- **Deklarationen (zuletzt 262 Namen):** Quelltext zuerst kommentar- und
-  stringbereinigt, dann `function`/`let`/`const`/`var` je Datei gezählt —
-  Klammertiefe mitgeführt, damit Deklarationen *innerhalb* von Funktionen
-  nicht mitzählen. Mehrfachdeklarationen auf einer Zeile (`let a, b, c;`)
-  aufgelöst.
-  **Falle bei gekapselten Modulen:** Steht die Datei in einer IIFE, liegen
-  ihre Deklarationen auf Klammertiefe 1, nicht 0 — ein Zähler, der nur Tiefe 0
-  nimmt, meldet für `ortsveraenderung.js` schlicht **null Namen**. Die
-  Erhebung muss deshalb zuerst feststellen, ob eine Datei gekapselt ist, und
-  dann auf der passenden Tiefe zählen.
+- **Deklarationen (zuletzt 476 Namen, davon 187 Funktionen):** Quelltext zuerst
+  kommentar- und stringbereinigt, dann `function`/`let`/`const`/`var` je Datei
+  gezählt — Klammertiefe mitgeführt, damit Deklarationen *innerhalb* von
+  Funktionen nicht mitzählen. Mehrfachdeklarationen auf einer Zeile
+  (`let a, b, c;`) aufgelöst. Gegengeprüft mit einer unabhängigen Methode
+  (Zeilen, die in Spalte 0 mit `function` bzw. `const`/`let`/`var` beginnen):
+  187 und 275 — dieselbe Zahl, die 14 Differenz bei den Variablen sind genau
+  die Mehrfachdeklarationen.
+  **ACHTUNG frühere Erhebungen dieses Dokuments nennen 262 bzw. 267 Namen.**
+  Die stammen aus der Zeit der Kapselung: Standen neun Dateien in einer IIFE,
+  lagen ihre Deklarationen auf Klammertiefe 1, und gezählt wurde je Kapsel.
+  Ein Zähler, der nur Tiefe 0 nimmt, hätte damals für `ortsveraenderung.js`
+  schlicht **null Namen** gemeldet. Beide Reihen messen Verschiedenes und sind
+  nicht gegeneinander zu lesen.
 - **Modulintern vs. extern:** für jeden Top-Level-Namen über alle Dateien
   gesucht, mit Wortgrenzen und ohne Punkt-Zugriffe (`obj.name` zählt nicht).
   Zeilen wurden gezählt, nicht nur Dateien, damit „einmal erwähnt" von
@@ -762,12 +803,14 @@ Geprüft wurden die zwölf Module aus `index.html` plus `index.html` selbst;
   Randfälle: leeres Objekt, fehlende Kategorien, Werte über dem 100px-Deckel,
   `unrated` allein. Dazu vier Skalierungsstufen und beide `maxRadius`-Varianten
   (100 und `Infinity`). 7592 Vergleiche, 0 Abweichungen.
-- **Kapselungsstand:** strukturell geprüft, nicht per Textsuche nach einer
-  bestimmten Schreibweise: erste Code-Zeile nach dem Header auf eine
+- **Kapselungsstand (historisch):** strukturell geprüft, nicht per Textsuche
+  nach einer bestimmten Schreibweise: erste Code-Zeile nach dem Header auf eine
   umschliessende sofort ausgeführte Funktion getestet (auch `(() => {…})()`,
   `!function`, führendes Semikolon), dann die Klammertiefe über die ganze
   Datei mitgeführt. Zusätzlich für gekapselte Module geprüft, ob der
   Exportblock exakt der Menge der von aussen gebrauchten Namen entspricht.
+  Dieselbe Prüfung meldet heute **null gekapselte Module** — die Kapselung ist
+  zurückgenommen, siehe [Globale Variablen](#globale-variablen--die-kapselung-ist-zurückgenommen).
 - **Zeichenzustand:** alle `push()`/`pop()`-, `save()`/`restore()`- und
   `textStyle`/`textAlign`/`textFont`-Aufrufe über alle Module aufgelistet und
   gegeneinander gehalten, um zu bestimmen, welche Module aufräumen und welche
