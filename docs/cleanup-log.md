@@ -180,7 +180,7 @@ erhalten.
 ### Prüfungen nach der Änderung
 
 - **Verbleibende Referenzen:** nur noch `sketch.js:143` (die stehengelassene
-  Deklaration) und `datenbereinigung.js:290` (die Funktionsdefinition).
+  Deklaration) und `datenbereinigung.js:287` (die Funktionsdefinition).
 - **Syntax:** `sketch.js` parst fehlerfrei (JavaScriptCore, `new Function(quelltext)`).
 - **Diff:** ausschliesslich Löschungen (`1 file changed, 2 deletions(-)`).
 - **`kreisvergleich-orte.json`:** unverändert, von `git status` nicht gemeldet.
@@ -191,12 +191,12 @@ erhalten.
    referenzlos — zusammen mit dem Kommentarblock 139–142 rund 5 Zeilen. Nur auf
    ausdrückliche Freigabe zu entfernen.~~
    → **erledigt im [Nachtrag zu Schritt 2](#nachtrag-zu-schritt-2--verwaiste-deklaration-und-funktion-entfernt).**
-2. ~~**`bereinigeKreisVergleichOrte()` (`datenbereinigung.js:290`)** hat mit
+2. ~~**`bereinigeKreisVergleichOrte()` (`datenbereinigung.js:287`)** hat mit
    Zeile 245 ihre einzige Aufrufstelle verloren und ist damit toter Code
    geworden. `datenbereinigung.js` lag ausserhalb dieses Schritts und wurde
    nicht angefasst.~~
    → **erledigt im [Nachtrag zu Schritt 2](#nachtrag-zu-schritt-2--verwaiste-deklaration-und-funktion-entfernt).**
-3. **NUL-Byte in `datenbereinigung.js:438`** (siehe methodischer Hinweis oben).
+3. **NUL-Byte in `datenbereinigung.js:435`** (siehe methodischer Hinweis oben).
    Ob das Zeichen im Sentinel-Präfix `'\x00PARIS_ALLGEMEIN'` beabsichtigt ist
    oder ein Kopierunfall, ist ungeklärt. Es stört Werkzeuge, die die Datei als
    Text behandeln (grep, teilweise Editoren und Diff-Ansichten).
@@ -465,7 +465,7 @@ Vier Namen mussten einzeln geklärt werden, drei davon führten zu Einschränkun
 |---|---|---|
 | `revealIndex` | 14 Fundstellen im Projekt; die Berechnung in Zeile 705 landete in `rv`, das **nirgends gelesen** wurde. Die übrigen Nutzungen sind unabhängig. | löschbar |
 | `stageRect` | nur in den Zeilen 712/713 gebraucht — beide im Löschbereich | mit entfernt |
-| `GEDANKEN_FILTER` | nach dem Löschen von Zeile 714 weiterhin in `datenbereinigung.js:149` gebraucht (baut `GEDANKEN_ORTRUN_UNTERDRUECKT`) | **bleibt** |
+| `GEDANKEN_FILTER` | nach dem Löschen von Zeile 714 weiterhin in `datenbereinigung.js:146` gebraucht (baut `GEDANKEN_ORTRUN_UNTERDRUECKT`) | **bleibt** |
 | `.ortspunkt` | dieselbe CSS-Klasse nutzen `baueKartenMarkierungen`, `baueStationsMarker` und `baueZwischenMarker` | **bleibt** |
 
 Zusätzlich zwei Korrekturen an der Auftragsbeschreibung:
@@ -499,7 +499,7 @@ Zusätzlich zwei Korrekturen an der Auftragsbeschreibung:
 
 **`stationenData.gedanken` hat keinen Leser mehr.** Das Feld wird in
 `kapitel01-stationen.json` weiterhin geführt und in
-`datenbereinigung.js:273` normalisiert (`rohdaten.gedanken = arrayFuer(rohdaten.gedanken)`),
+`datenbereinigung.js:270` normalisiert (`rohdaten.gedanken = arrayFuer(rohdaten.gedanken)`),
 aber von keiner Stelle mehr ausgewertet. Die Normalisierung ist harmlos und
 generisch; ob das JSON-Feld bleiben soll, ist eine Datenfrage und wurde hier
 nicht entschieden — die Python-Pipeline erzeugt es weiterhin.
@@ -1312,7 +1312,7 @@ Ebenso das bewusst deaktivierte `KARTEN_MARKER_SICHTBAR` aus
 enthielt mit `d3.group()` den **einzigen** d3-Aufruf im gesamten Projekt; nach
 ihrer Entfernung ist `<script src="https://d3js.org/d3.v6.min.js">`
 (`index.html:10`) eine Abhängigkeit ohne Nutzer. Die verbliebene Erwähnung in
-`datenbereinigung.js:336` („Zählt per d3.rollup") ist ein Kommentar, dessen
+`datenbereinigung.js:333` („Zählt per d3.rollup") ist ein Kommentar, dessen
 Funktion längst mit reinem JavaScript arbeitet.
 
 **Nicht angefasst** — das Entfernen einer externen Abhängigkeit ist eine eigene
@@ -1446,7 +1446,7 @@ begründeten **Nicht**-Entfernung.
 
 Der Befund aus [Schritt 4](#schritt-4--gedanken-spalte-vollständig-entfernt)
 lautete: das Feld hat keinen Leser mehr. Das stimmt für den Code — die einzige
-Berührung ist die Normalisierung in `datenbereinigung.js:266`
+Berührung ist die Normalisierung in `datenbereinigung.js:263`
 (`rohdaten.gedanken = arrayFuer(rohdaten.gedanken)`), eine Schreiboperation
 ohne Leser seit `a47fdd9`. Drei Befunde sprechen dennoch gegen ein Entfernen:
 
@@ -1572,7 +1572,7 @@ noch — das ist eine Bestandsaufnahme von vor der Bereinigung und beschreibt
 korrekt den damaligen Stand. Nicht anzufassen.
 
 **Nicht Teil dieses Punkts: `rohdaten.gedanken`.** Die Normalisierungszeile
-(`datenbereinigung.js:176`) ist in [Schritt 13 C](#c-stationendatengedanken--geprüft-und-bewusst-behalten)
+(`datenbereinigung.js:173`) ist in [Schritt 13 C](#c-stationendatengedanken--geprüft-und-bewusst-behalten)
 geprüft und **bewusst behalten** worden — das Feld ist redaktionell befüllt,
 es ist die Herkunft der noch aktiven `GEDANKEN_FILTER`/`GEDANKEN_ZIEL_ORT`-Kette,
 und die Python-Pipeline schreibt es weiterhin. Diese Entscheidung steht; sie
@@ -1582,7 +1582,7 @@ soll beim Aufräumen von A) nicht versehentlich mit aufgerollt werden.
 
 Unabhängig von der Gedanken-Spalte, gleicher Durchgang gefunden.
 
-`SCROLL_MEILENSTEINE.kreisVergleichFadeEnd` (`0.750967`, `datenbereinigung.js:162`)
+`SCROLL_MEILENSTEINE.kreisVergleichFadeEnd` (`0.750967`, `datenbereinigung.js:159`)
 wird von keiner Stelle gelesen. Das Ausblenden der Übersichtskarte im
 Schlussakt, das der Schlüssel laut seinem früheren Kommentar steuerte, läuft
 über `OV_KARTE_AUS = [0.12, 0.32]` in `ortsveraenderung.js:56`, ausgewertet

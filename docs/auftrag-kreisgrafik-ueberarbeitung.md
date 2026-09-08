@@ -1,7 +1,7 @@
 # Auftrag: Kreisgrafik-Überarbeitung (Farben, Neutral-Opazität, Valenz-Achse) — erledigt
 
 **Erledigt.** Alle drei Punkte sind umgesetzt: `KREIS_KATEGORIEN` führt die
-neuen Werte (`js/datenbereinigung.js:71-75`), die neutrale Fläche ist gedämpft
+neuen Werte (`js/datenbereinigung.js:68-72`), die neutrale Fläche ist gedämpft
 (`js/kreisgrafik.js:51`, `globalAlpha = 0.55 * alphaSkala`), und die Valenzachse
 ist gedreht. Der Auftrag steht zum Nachvollziehen unverändert darunter.
 
@@ -18,7 +18,7 @@ geworden.
 
 **Zwei Detailangaben unten stimmen nicht mehr:** Der Abschnitt „Nicht anfassen"
 nennt für `kreisRadius()` die Konstanten `BASIS=6, K=11.5`. Heute heissen sie
-`BASIS = 6, WACHSTUM_PRO_WURZEL = 15.5` (`js/datenbereinigung.js:350`) — `K`
+`BASIS = 6, WACHSTUM_PRO_WURZEL = 15.5` (`js/datenbereinigung.js:347`) — `K`
 wurde in der Konstanten-Reinigung umbenannt. Und `zeichneVollkreis()`, auf das
 sich Punkt 2 bezieht, gibt es als eigene Funktion nicht mehr; die Dämpfung
 sitzt heute an der oben genannten Stelle.

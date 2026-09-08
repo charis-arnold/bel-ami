@@ -40,7 +40,7 @@ sondern nur: faktisch greift kein anderes Modul darauf zu.
 
 | Nutzen | Befund | Kriterium |
 |---|---|---|
-| **hoch** | ~~Dieselbe Radius-Formel liegt fünfmal im Code, an vier Stellen als Kopie~~ — **erledigt**, jetzt `groessterKreisRadius()` in `datenbereinigung.js:340` | DRY |
+| **hoch** | ~~Dieselbe Radius-Formel liegt fünfmal im Code, an vier Stellen als Kopie~~ — **erledigt**, jetzt `groessterKreisRadius()` in `datenbereinigung.js:337` | DRY |
 | **hoch** | ~~Pro Frame und Ortskreis wird `daten.annotationen` zweimal vollständig durchlaufen~~ — **erledigt**, jetzt ein Scan über `zaehleBandCounts()` | DRY |
 | **hoch** | ~~`zeichneKreiseFuerRun()` liefert den Radius nur als Nebenprodukt des Zeichnens~~ — **erledigt**, die Funktion gibt nichts mehr zurück | Single Responsibility |
 | **hoch** | ~~Parameter `kreisRadius` verdeckt die gleichnamige globale Funktion~~ — **erledigt**, heisst jetzt `radius` | Globale Variablen |
@@ -53,7 +53,7 @@ sondern nur: faktisch greift kein anderes Modul darauf zu.
 | **niedrig** | `draw()` läuft mit 557 Zeilen als eine Funktion | Single Responsibility |
 | **niedrig** | ~~`noLoop()`/`redraw()` wäre möglich, aber der Umbau ist gross und der Gewinn klein~~ — **erledigt**, `noLoop()` in `sketch.js:323`, vier Auslöser und die selbstabschaltende Schleife `planeRedraw()` | draw()-Loop |
 | **niedrig** | ~~Farbwerte aus `KREIS_KATEGORIEN` werden an drei Stellen in drei Formate übersetzt~~ — **erledigt**, jetzt `rgbZuHex()` in `datenbereinigung.js:27` | DRY |
-| **niedrig** | ~~Das Font-Literal `'Source Sans 3', sans-serif` steht zwölfmal im Code~~ — **erledigt**, jetzt `SCHRIFT_SANS` in `datenbereinigung.js:103` | DRY |
+| **niedrig** | ~~Das Font-Literal `'Source Sans 3', sans-serif` steht zwölfmal im Code~~ — **erledigt**, jetzt `SCHRIFT_SANS` in `datenbereinigung.js:100` | DRY |
 | **niedrig** | ~~`wohnungFilterFuerOrt()` wird zweimal mit demselben Argument aufgerufen~~ — **erledigt** | DRY |
 | **niedrig** | Sechs Stellen verdecken p5-Globals (`color`, `text` ×4, `key`) — alle heute wirkungslos | Globale Variablen |
 | — | **Toter Code: nichts gefunden.** Alle 82 Funktionen sind erreichbar | Toter Code |
@@ -264,7 +264,7 @@ unabhängig von der Sichtbarkeit.
 | ~~`kreisgrafik.js:56-333`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab fünf Namen über `window.*` heraus; acht waren modulintern (`HATCH_SPACING`, `drawHatchedCircle`, `zeichneKreisLabels`, `zeichneHalbkreis`, `zeichneVollkreis`, `FWERT_PUNKT_FARBE_RGB` und die beiden `FWERT_PUNKT_*_ABSTAND`-Konstanten) | mittel | Zweites gekapseltes Modul, gleiche Bauart wie `ortsveraenderung.js`: Rumpf nicht eingerückt, Diff eine reine Einfügung. Anders als dort hat diese Datei eine **Ladezeit-Abhängigkeit** (`hexZuRgb` für `FWERT_PUNKT_FARBE_RGB`) — die IIFE läuft sofort, der Aufruf findet zum selben Zeitpunkt statt wie vorher, geprüft im Vorher/Nachher-Vergleich |
 | ~~`sketch.js:6-158`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab 35 Namen heraus; 35 waren modulintern | niedrig | Neuntes und letztes gekapseltes Modul, das grösste des Projekts. **17 der 35 Exporte sind Lesebindungen** — anders als anderswo wird hier fast jeder `let` erst in `preload`/`setup`/`draw` gesetzt, also nach dem Lauf der IIFE; eine Wertkopie wäre durchweg `undefined`. Die fünf p5-Hooks stehen in der Kapsel und werden explizit exportiert, weil p5 sie am `window` sucht |
 | ~~`uebersichtsrouten.js:87-513`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab zehn Namen heraus; sechs waren modulintern (`KAPITEL_SCHEIBE_GRUNDANTEIL`, `KAPITEL_NACHGLUEHEN`, `scheibenCache`, `kapitelHitze`, `setzeKapitelAnsichtZurueck`, `oeffneKapitelZoom`) | niedrig | Viertes gekapseltes Modul. Drei der zehn Exporte (`zoomedKapitel`, `kapitelZoomAmount`, `kapitelHover`) sind Lesebindungen — sie werden laufend umgeschaltet. **Erst möglich, weil `draw()` seine Schreibzugriffe darauf abgegeben hat**: Wären sie noch da, hätte die Bindung sie wirkungslos gemacht |
-| ~~`datenbereinigung.js:92-352`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab 26 Namen heraus — die grösste Schnittstelle im Projekt; zwölf waren modulintern | niedrig | Siebtes gekapseltes Modul und das mit der grössten Exportliste. Kein Export wird intern mutiert, deshalb 26 einfache Zuweisungen und keine Lesebindung. Der kritische Punkt war die Ladereihenfolge: `kreisgrafik.js` greift beim Laden auf `hexZuRgb`/`FWERT_PUNKT_FARBE` zu — die IIFE läuft sofort und exportiert am Dateiende, geprüft durch Laden beider Dateien in Folge |
+| ~~`datenbereinigung.js:89-349`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab 26 Namen heraus — die grösste Schnittstelle im Projekt; zwölf waren modulintern | niedrig | Siebtes gekapseltes Modul und das mit der grössten Exportliste. Kein Export wird intern mutiert, deshalb 26 einfache Zuweisungen und keine Lesebindung. Der kritische Punkt war die Ladereihenfolge: `kreisgrafik.js` greift beim Laden auf `hexZuRgb`/`FWERT_PUNKT_FARBE` zu — die IIFE läuft sofort und exportiert am Dateiende, geprüft durch Laden beider Dateien in Folge |
 | ~~`annotationsbox.js:54-58`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab zwei Namen heraus; fünf waren modulintern (die vier Mass-Konstanten und `annotationBoxPositionCache`) | niedrig | Fünftes gekapseltes Modul. Kein Export ist veränderlich — beide sind `const` bzw. `function`, deshalb einfache Zuweisungen ohne Lesebindung |
 | ~~`kartendekor.js:25-36`~~ | **Erledigt (damals).** Die Datei stand in einer IIFE und gab zwei Zeichenfunktionen heraus; `haversineMeter` und `MASSSTAB_SCHRITTE` waren modulintern | niedrig | Sechstes gekapseltes Modul. `haversineMeter` ist damit von aussen nicht mehr aufrufbar — richtig so, ihr einziger Aufrufer (`zeichneMassstabsleiste`) sitzt im selben Modul. Der Querverweis in `geo-projektion.js:34` ist um diesen Hinweis ergänzt |
 
@@ -272,7 +272,7 @@ unabhängig von der Sichtbarkeit.
 
 | Fundstelle | Befund | Priorität | Begründung |
 |---|---|---|---|
-| ~~`kreisgrafik.js:345`~~ → `kreisgrafik.js:339` | **Erledigt.** Der dritte Parameter von `zeichneFwertPunkte()` hiess `kreisRadius` und verdeckte die gleichnamige globale Funktion aus `datenbereinigung.js:349`, die vier Module benutzen. Er heisst jetzt `radius` | **hoch** | Im Rumpf war `kreisRadius` die Zahl, nicht die Funktion. Unschädlich nur, solange dort niemand die Funktion braucht — mit `groessterKreisRadius` daneben wäre die Stelle zusätzlich verwirrend geworden |
+| ~~`kreisgrafik.js:345`~~ → `kreisgrafik.js:339` | **Erledigt.** Der dritte Parameter von `zeichneFwertPunkte()` hiess `kreisRadius` und verdeckte die gleichnamige globale Funktion aus `datenbereinigung.js:346`, die vier Module benutzen. Er heisst jetzt `radius` | **hoch** | Im Rumpf war `kreisRadius` die Zahl, nicht die Funktion. Unschädlich nur, solange dort niemand die Funktion braucht — mit `groessterKreisRadius` daneben wäre die Stelle zusätzlich verwirrend geworden |
 | ~~`sketch.js:281, 386, 505, 812-814`~~ | **Erledigt.** `draw()` schrieb in Variablen dreier fremder Module — faktisch fünf Zugriffe, denn `:295` schrieb zusätzlich in `spineEintraegeKapitel[…]`. Alle sind in ihr besitzendes Modul gewandert: `aktualisiereKapitelZoom()` und der Hover-Guard in `uebersichtsrouten.js`, `merkeKartenlage()` in `fotomarker.js`, `stelleSpineDatenBereit()` in `spine-horizontal.js`. `draw()` schreibt jetzt nur noch eigene Variablen (`letzterZoomKapitel`, `kapitel1ZoomAmount`) | mittel | Das war damals die Hürde vor jeder Kapselung. Der Umbau hat aber unabhängig davon Bestand: Jedes Modul besitzt seinen Zustand jetzt selbst, und das gilt auch ohne Kapsel weiter |
 
 ### Namensverdeckung: systematisch nachgeprüft
@@ -487,7 +487,7 @@ Canvas-Zustand und Zeichnen-plus-Messen:
 | ~~`kreisgrafik.js:166-171`~~ → `kreisgrafik.js:206` | **Erledigt.** `zeichneKreisLabels()` setzte `noStroke()`, `fill()`, `textFont()`, `textSize()`, `textStyle(BOLD)` und `textAlign()` und stellte keinen davon zurück. Steht jetzt zwischen `push()` und `pop()` | mittel | Der Zustand leckte in alles, was danach zeichnete — nachweislich: der Kommentar bei `uebersichtsrouten.js:334-338` nennt genau diese Funktion als Ursache dafür, dass die Kapitel-Badges ihre Deckkraft erbten |
 | ~~`kreisgrafik.js:200-212`~~ → `kreisgrafik.js:241-246` | **Erledigt an der Ursache.** `zeichneKreiseFuerRun()` und `zeichneFwertPunkte()` klammern sich jetzt selbst; ihr `pop()` gleicht p5s Zwischenspeicher wieder ab. Die Direktzuweisung in `zeichneKreisLabels` blieb bewusst stehen — dort wird ohnehin über `drawingContext.fillText` gezeichnet und die Farbe wechselt je Label. Ihr Kommentar nennt jetzt diesen Grund statt des früheren Notbehelfs | mittel | Die Umgehung sass beim Opfer, nicht bei der Ursache |
 | ~~`kreisgrafik.js:229-240`, `245-254`~~ → `kreisgrafik.js:276`, `:293` | **Erledigt.** Beide setzten `globalCompositeOperation` nach dem Zeichnen hart auf `'source-over'`. Jetzt `push()`/`pop()` — der vorherige Wert wird wiederhergestellt statt angenommen | mittel | Auch `drawHatchedCircle` (`:91`) wurde von `ctx.save()`/`restore()` auf `push()`/`pop()` umgestellt: `restore()` stellt den Canvas zurück, lässt p5s Zwischenspeicher aber falsch |
-| ~~`kreisgrafik.js:98-111`~~ → `datenbereinigung.js:404` | **Erledigt.** Die vier Ausschlussgründe (Route noch nicht so weit, vorzeitige Erwähnung, Kapitel-1-Unterdrückung, Wohnung-Split) standen als Kaskade in der Zeichenschleife. Sie sind zu `ortRunSichtbar()` im Datenmodul geworden; `zeichneKreiseOrtRuns` prüft nur noch eine Zeile | mittel | **Die fünf Namen lagen nie im Zeichenmodul** — sie waren immer in `datenbereinigung.js` deklariert, nur die *Anwendung* stand am falschen Ort. Dabei kam heraus, dass `ortRunsFuerSpine` dieselbe Zwei-Set-Regel mit demselben `daten === stationenData`-Gate ein zweites Mal anwandte; beide nutzen jetzt `istKapitel1Unterdrueckt()` |
+| ~~`kreisgrafik.js:98-111`~~ → `datenbereinigung.js:401` | **Erledigt.** Die vier Ausschlussgründe (Route noch nicht so weit, vorzeitige Erwähnung, Kapitel-1-Unterdrückung, Wohnung-Split) standen als Kaskade in der Zeichenschleife. Sie sind zu `ortRunSichtbar()` im Datenmodul geworden; `zeichneKreiseOrtRuns` prüft nur noch eine Zeile | mittel | **Die fünf Namen lagen nie im Zeichenmodul** — sie waren immer in `datenbereinigung.js` deklariert, nur die *Anwendung* stand am falschen Ort. Dabei kam heraus, dass `ortRunsFuerSpine` dieselbe Zwei-Set-Regel mit demselben `daten === stationenData`-Gate ein zweites Mal anwandte; beide nutzen jetzt `istKapitel1Unterdrueckt()` |
 | `kreisgrafik.js:93-151` | `zeichneKreiseOrtRuns()` filtert, projiziert, zählt, zeichnet und sammelt zugleich Label-Kandidaten für die anschliessende Kollisionsauflösung | mittel | Fünf Aufgaben in 58 Zeilen. Der Schnitt zwischen Sammeln und Zeichnen ist bereits angelegt (`labelKandidaten` → `zeichneKreisLabels`) — er müsste nur konsequent bis zur Auswahl der Orte durchgezogen werden |
 
 ### Gegenprobe über alle Module
@@ -539,7 +539,7 @@ Fünf Stellen berechneten „grösster Kreisradius über alle Kategorien" aus
 denselben `bandCounts`, nach derselben Formel
 `max(kreisRadius(neg + pos + neutral + unrated))` über `KREIS_KATEGORIEN`.
 Sie sind zu **`groessterKreisRadius(bandCounts, maxRadius = 100, radiusSkala = 1)`**
-in `datenbereinigung.js:358` zusammengelegt — dort, weil die Funktion
+in `datenbereinigung.js:355` zusammengelegt — dort, weil die Funktion
 `KREIS_KATEGORIEN` und `kreisRadius` direkt nebenan vorfindet und weil alle
 vier Aufrufer ohnehin an `datenbereinigung.js` hängen: der Umzug hat **keine
 einzige neue Modul-Abhängigkeit** erzeugt.
@@ -608,7 +608,7 @@ graph TD
 ```
 
 `zaehleBandCounts(annotationen)` ist der aus der Zählfunktion herausgelöste
-zweite Schritt (`datenbereinigung.js:412`). Er musste dorthin, weil er
+zweite Schritt (`datenbereinigung.js:409`). Er musste dorthin, weil er
 `valenzBucket()` braucht, das modulintern in `datenbereinigung.js` liegt.
 `zaehleAnnotationenLiveNachOrtBasis()` behält Signatur und Verhalten und ist
 jetzt ein Zweizeiler über beiden Schritten — die zwei gecachten Aufrufer
@@ -634,7 +634,7 @@ nachher — exakt 50 %.**
 
 Dass die beiden Scans überhaupt redundant sein *können*, ist nachprüfbar:
 `daten.annotationen` wird im ganzen Projekt an genau einer Stelle geschrieben
-(`datenbereinigung.js:323`, in `bereinigeStationenDaten()`, `:316`), und die läuft
+(`datenbereinigung.js:320`, in `bereinigeStationenDaten()`, `:313`), und die läuft
 einmalig in `preload`/`setup`, nie in `draw()`.
 
 **Nicht gemacht:** der im Befund erwähnte Cache über `annIndex`. Sein Schlüssel
@@ -647,8 +647,8 @@ bleibt eine eigene Entscheidung.
 
 | Fundstelle | Befund | Priorität | Begründung |
 |---|---|---|---|
-| ~~drei Stellen in `kreisgrafik.js` und `dom-aufbau.js`~~ | **Erledigt.** Dasselbe `k.farbe`-Zahlentripel aus `KREIS_KATEGORIEN` wurde in drei Formate übersetzt: `#rrggbb` per `toString(16)`, `rgba(…)` per Template-String, `rgb(…)` per `join(', ')` | niedrig | Genau der empfohlene Helfer ist gebaut: `rgbZuHex()` in `datenbereinigung.js:27`, Gegenstück zu `hexZuRgb()`. Er bedient beide Hex-Stellen (`datenbereinigung.js:82` für die Kategorienfarben, `kreisgrafik.js:312` für `drawHatchedCircle`); die `join(', ')`-Fassung gibt es im Projekt nicht mehr. Übrig bleibt die `rgba(…)`-Schreibweise, die aber keine zweite Übersetzung ist, sondern die Canvas-Form mit Alpha |
-| ~~6 Module, 12 Vorkommen~~ | **Erledigt.** Das Literal `"'Source Sans 3', sans-serif"` stand zwölfmal im Code | niedrig | Es steht jetzt genau einmal, als `SCHRIFT_SANS` in `datenbereinigung.js:103`, daneben `SCHRIFT_SERIF` (`:104`). Sechs Module lesen die Konstante an elf Stellen (`ortsveraenderung.js` allein viermal) — das Literal selbst steht nur noch in der Deklaration |
+| ~~drei Stellen in `kreisgrafik.js` und `dom-aufbau.js`~~ | **Erledigt.** Dasselbe `k.farbe`-Zahlentripel aus `KREIS_KATEGORIEN` wurde in drei Formate übersetzt: `#rrggbb` per `toString(16)`, `rgba(…)` per Template-String, `rgb(…)` per `join(', ')` | niedrig | Genau der empfohlene Helfer ist gebaut: `rgbZuHex()` in `datenbereinigung.js:27`, Gegenstück zu `hexZuRgb()`. Er bedient beide Hex-Stellen (`datenbereinigung.js:79` für die Kategorienfarben, `kreisgrafik.js:312` für `drawHatchedCircle`); die `join(', ')`-Fassung gibt es im Projekt nicht mehr. Übrig bleibt die `rgba(…)`-Schreibweise, die aber keine zweite Übersetzung ist, sondern die Canvas-Form mit Alpha |
+| ~~6 Module, 12 Vorkommen~~ | **Erledigt.** Das Literal `"'Source Sans 3', sans-serif"` stand zwölfmal im Code | niedrig | Es steht jetzt genau einmal, als `SCHRIFT_SANS` in `datenbereinigung.js:100`, daneben `SCHRIFT_SERIF` (`:101`). Sechs Module lesen die Konstante an elf Stellen (`ortsveraenderung.js` allein viermal) — das Literal selbst steht nur noch in der Deklaration |
 
 ### Ausdrücklich kein Befund: Winkelberechnung
 

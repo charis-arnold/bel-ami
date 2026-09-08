@@ -60,9 +60,6 @@ const GRUNDTINTE = hexZuRgb('#1A1A1A');
 // Keine Farbreihe: die drei Töne trennen sich in Hue UND Helligkeit — Gold
 // (HSL 46° 64% 47%), Altrosa (7° 25% 65%), Nachtblau (222° 28% 28%).
 //
-// OFFEN docs/Legende.pdf zeigt noch die alte Goldreihe
-// (#BA9E00 / #C49600 / #CCAA00) und ist nachzuziehen.
-//
 // ACHTUNG die Schlüssel stehen wörtlich in den Daten — als
 // annotation.category und als Schlüssel in ortRuns[].bandCounts in allen
 // kapitelXX-stationen.json sowie in kreisvergleich-orte.json. Geschrieben
