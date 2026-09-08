@@ -689,8 +689,9 @@ function draw() {
   // sonifikation.js. Tut ausserhalb der dreizehn Schritte nichts und wechselt
   // das Muster nur an Schrittgrenzen — der Aufruf je Frame ist billig.
   aktualisiereIntroKlang(progress);
-  // Der Tonschalter gehört zum Titelbild und geht mit der dunklen Karte.
-  introTonEl.classList.toggle('verborgen', progress >= SCROLL_MEILENSTEINE.kartenwechselEnd);
+  // Der Tonschalter gehört zum Titelbild und geht mit der dunklen Karte: er
+  // beginnt zu weichen, sobald die Überblendung einsetzt, nicht erst danach.
+  introTonEl.classList.toggle('verborgen', progress >= SCROLL_MEILENSTEINE.kartenwechselStart);
 
   // Begleittexte: jedes <p class="begleittext"> blendet in seinem eigenen
   // data-von/data-bis-Fenster ein und aus. Neue Texte brauchen kein JS.
