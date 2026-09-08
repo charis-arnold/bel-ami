@@ -41,10 +41,10 @@ sondern nur: faktisch greift kein anderes Modul darauf zu.
 | **mittel** | ~~`zeichneHalbkreis`/`zeichneVollkreis` setzen `globalCompositeOperation` hart zurück~~ — **erledigt**, `push()`/`pop()` | Single Responsibility |
 | **niedrig** | `draw()` läuft mit 557 Zeilen als eine Funktion | Single Responsibility |
 | **niedrig** | ~~`noLoop()`/`redraw()` wäre möglich, aber der Umbau ist gross und der Gewinn klein~~ — **erledigt**, `noLoop()` in `sketch.js:323`, vier Auslöser und die selbstabschaltende Schleife `planeRedraw()` | draw()-Loop |
-| **niedrig** | Farbwerte aus `KREIS_KATEGORIEN` werden an drei Stellen in drei Formate übersetzt | DRY |
-| **niedrig** | Das Font-Literal `'Source Sans 3', sans-serif` steht zwölfmal im Code | DRY |
+| **niedrig** | ~~Farbwerte aus `KREIS_KATEGORIEN` werden an drei Stellen in drei Formate übersetzt~~ — **erledigt**, jetzt `rgbZuHex()` in `datenbereinigung.js:27` | DRY |
+| **niedrig** | ~~Das Font-Literal `'Source Sans 3', sans-serif` steht zwölfmal im Code~~ — **erledigt**, jetzt `SCHRIFT_SANS` in `datenbereinigung.js:103` | DRY |
 | **niedrig** | ~~`wohnungFilterFuerOrt()` wird zweimal mit demselben Argument aufgerufen~~ — **erledigt** | DRY |
-| **niedrig** | Sechs Stellen verdecken p5-Globals (`color`, `text` ×3, `max`, `key`) — alle heute wirkungslos | Globale Variablen |
+| **niedrig** | Sechs Stellen verdecken p5-Globals (`color`, `text` ×4, `key`) — alle heute wirkungslos | Globale Variablen |
 | — | **Toter Code: nichts gefunden.** Alle 82 Funktionen sind erreichbar | Toter Code |
 
 ---
@@ -183,10 +183,10 @@ dieselbe Falle wie im Abschnitt [Toter Code](#toter-code).
 
 ### A3 gehört nicht in die Sonifikations-Kapselung — erledigt
 
-**Erledigt.** `spineEintraegeKapitel` (`spine-horizontal.js:31`) ist
+**Erledigt.** `spineEintraegeKapitel` (`spine-horizontal.js:27`) ist
 modulintern; der Cache geht nicht mehr hinaus. Beide früheren Direktleser
-holen ihre Einträge über den exportierten Accessor `spineEintraegeFuer()` —
-`sonifikation.js:399` und `:709`, `sketch.js:533`. Die Begründung von damals
+holen ihre Einträge über den Accessor `spineEintraegeFuer()`
+(`spine-horizontal.js:72`) — `sonifikation.js:292` und `sketch.js:542`. Die Begründung von damals
 steht zum Nachvollziehen hier:
 
 `sonifikation.js` las `spineEintraegeKapitel[nr]` direkt. Geprüft, ob
@@ -236,16 +236,23 @@ Destrukturierungen und lokalen `let`/`const`/`var` aller zwölf Module gegen die
 **Verdeckungen von Projektnamen: null.** `kreisRadius` war die einzige, und sie
 ist behoben. Sechs Stellen verdecken p5-Globals — alle sind heute wirkungslos,
 weil das Projekt den verdeckten Namen an keiner Stelle benutzt oder ihn nur in
-einer anderen Datei benutzt:
+einer anderen Datei benutzt.
+
+**Stand nach dem Aufräum-Durchgang neu erhoben.** Es sind weiterhin sechs, aber
+teils andere: die früher gemeldete Destrukturierung `{ groesse, text }` in
+`dom-aufbau.js` und das lokale `let max` in `ortsveraenderung.js` gibt es nicht
+mehr; dafür kamen zwei `text`-Parameter in `kreisgrafik.js` hinzu, die die
+erste Erhebung nicht erfasst hatte. Die Zusammensetzung ist damit `color` ×1,
+`text` ×4, `key` ×1:
 
 | Fundstelle | Verdeckt | Priorität | Warum es heute nichts ausmacht |
 |---|---|---|---|
-| `kreisgrafik.js:62` | p5s `color()` — Parameter `color` von `drawHatchedCircle()` | niedrig | Von den sechs die einzige mit realem Restrisiko: `color()` wird im Projekt tatsächlich aufgerufen (`fotomarker.js:81-82`), und `drawHatchedCircle` ist eine Zeichenfunktion, in der ein `color()`-Aufruf plausibel wäre. Nur: er steht dort nicht, und die Verdeckung wirkt ausschliesslich in diesem einen Rumpf |
-| `ortsveraenderung.js:176` | p5s `text()` — Parameter `text` von `ovTextUmbruch()` | niedrig | **p5s `text()` wird im ganzen Projekt kein einziges Mal aufgerufen.** Wegen des dokumentierten Unsichtbarkeits-Bugs läuft aller Text über `drawingContext.fillText()` (13 Stellen). Die Falle kann nicht zuschnappen, solange diese Regel gilt |
-| `ortsveraenderung.js:198` | p5s `text()` — Parameter `text` von `ovLabelZeilen()` | niedrig | Wie oben. Beide Funktionen sind reine String-Helfer, die nur `textWidth()` brauchen |
-| `dom-aufbau.js:206` | p5s `text()` — destrukturierter Parameter `{ groesse, text }` | niedrig | Wie oben, zusätzlich: `dom-aufbau.js` baut DOM-Knoten und zeichnet nie auf den Canvas |
-| `ortsveraenderung.js:412` | p5s `max()` — lokales `let max` in `ueberstand` | niedrig | p5s `max()`/`min()` werden im Projekt nie benutzt; gerechnet wird durchgehend mit `Math.max` (28×) und `Math.min` (20×). Die Konvention schützt die Stelle |
-| `uebersichtsrouten.js:309` | p5s `key` — lokales `let key` | niedrig | p5s `key` wird nirgends gelesen; der Tastatur-Handler in `sketch.js:288` nimmt `e.key` vom DOM-Event |
+| `kreisgrafik.js:66` | p5s `color()` — Parameter `color` von `drawHatchedCircle()` | niedrig | Galt früher als die einzige mit Restrisiko, weil `color()` damals in `fotomarker.js` aufgerufen wurde. **Auch das ist weg:** p5s `color()` steht heute an keiner Stelle des Projekts mehr, der Fotomarker setzt seine Farbe über `ctx.fillStyle` (`fotomarker.js:77-78`) |
+| `kreisgrafik.js:687` | p5s `text()` — Parameter `text` von `beschriftungsBreite()` | niedrig | **p5s `text()` wird im ganzen Projekt kein einziges Mal aufgerufen.** Wegen des dokumentierten Unsichtbarkeits-Bugs läuft aller Text über `drawingContext.fillText()`. Die Falle kann nicht zuschnappen, solange diese Regel gilt |
+| `kreisgrafik.js:935` | p5s `text()` — Parameter `text` der Pfeilfunktion `hinzu` | niedrig | Wie oben. Sammelt nur Label-Objekte in eine Liste |
+| `ortsveraenderung.js:96` | p5s `text()` — Parameter `text` von `ovTextUmbruch()` | niedrig | Wie oben |
+| `ortsveraenderung.js:114` | p5s `text()` — Parameter `text` von `ovLabelZeilen()` | niedrig | Wie oben. Beide `ov*`-Funktionen sind reine String-Helfer, die nur `textWidth()` brauchen |
+| `uebersichtsrouten.js:174` | p5s `key` — lokales `let key` | niedrig | p5s `key` wird nirgends gelesen; der Tastatur-Handler in `sketch.js:286-287` nimmt `e.key` vom DOM-Event |
 
 Keine dieser sechs erreicht das Gewicht des behobenen Falls. Dort ging es um
 eine **Projektfunktion**, die vier Module benutzen und die drei Zeilen entfernt
@@ -266,10 +273,10 @@ Auffälligkeiten empirisch nachgeprüft.
 
 | Fundstelle | Befund | Status |
 |---|---|---|
-| `uebersichtsrouten.js:409`, `:546`, `:571`, `sketch.js:18` | „Hat Kapitel X eine eigene Ansicht?" — dieselbe Regel viermal, jedes Mal aus `kapitelKarten` (sketch.js) und `KAPITEL_MIT_SPINE_PANEL` (datenbereinigung.js) zusammengebaut; die vierte Stelle sogar nur zur Hälfte | **erledigt** → `kapitelHatEigeneAnsicht()` in `sketch.js` |
-| `spine-horizontal.js:155-156` | Sonifikations-Dispatch: „welcher Ton für welche Ansicht" im Grafikmodul entschieden | **erledigt** → `spieleSonifikationFuer()` in `sonifikation.js` |
+| ~~`uebersichtsrouten.js`, 3 Stellen, `sketch.js`~~ | „Hat Kapitel X eine eigene Ansicht?" — dieselbe Regel viermal, jedes Mal aus `kapitelKarten` (sketch.js) und `KAPITEL_MIT_SPINE_PANEL` (datenbereinigung.js) zusammengebaut; die vierte Stelle sogar nur zur Hälfte | **erledigt** → `kapitelHatEigeneAnsicht()` in `sketch.js:978` |
+| `spine-horizontal.js:133` | Sonifikations-Dispatch: „welcher Ton für welche Ansicht" im Grafikmodul entschieden | **erledigt** → `spieleSonifikationFuer()` in `sonifikation.js:233` |
 | ~~`sonifikation.js:278`~~ → `sonifikation.js:296` | **Erledigt.** Griff direkt in `spineEintraegeKapitel[nr]`. Jetzt über `spineEintraegeFuer(nr)` in `spine-horizontal.js` | erledigt — zusammen mit der Kapselung dieses Moduls |
-| `ortsveraenderung.js:41` | `VERGLEICHS_KNOTEN.daten` trägt handgepflegte Kennzahlen (`'12 Kapitel'`, `'240 Annotationen'`, `'37 F-Werte'`), die `ovBaueDaten`/`ovStand` daneben live berechnen | offen — **Datenpflege, kein Modulschnitt** |
+| `ortsveraenderung.js:12` | `VERGLEICHS_KNOTEN.daten` trägt handgepflegte Kennzahlen (`:15` etwa `'12 Kapitel'`, `'240 Annotationen'`, `'37 F-Werte'`), die `ovBaueDaten` (`:149`) und `ovStand` (`:226`) daneben live berechnen | offen — **Datenpflege, kein Modulschnitt** |
 
 Zum letzten Punkt nachgerechnet: Bei allen sieben Knoten stimmen Kapitelzahl,
 Annotationen und F-Werte **exakt** mit den berechneten Werten überein, bei
@@ -284,8 +291,9 @@ Daten-Neubau kann es lautlos auseinanderlaufen.
   genuin eigene. `VERGLEICHS_KNOTEN` sind aktspezifische Daten, die kein
   anderes Modul braucht. Kein Umzug nötig; das Modul ist der **beste erste
   IIFE-Kandidat**.
-- `sonifikation.js` — `baueSpielplan`/`baueGainFolge` rechnen aus
-  Stationsdaten Dauern und Lautstärken. Eigene Domäne, keine fremde Regel.
+- `sonifikation.js` — `elementDauerSek()` (`sonifikation.js:480`) und
+  `baueElementStimmen()` (`:382`) rechnen aus den eigenen Elementdaten Dauern und Lautstärken. Eigene
+  Domäne, keine fremde Regel.
 - `sketch.js:draw()` liest 53× Namen aus `uebersichtsrouten.js` — der grösste
   Zähler überhaupt, aber das ist Orchestrierung („was ist gerade sichtbar?"),
   keine verlagerte Regel.
@@ -405,16 +413,22 @@ gleichzeitig?
 
 **Einen Toggle für neutrale F-Werte gibt es im Code nicht.** Neutrale und
 unbewertete F-Wert-Annotationen werden nicht geschaltet, sondern fest in das
-dritte 120°-Drittel einsortiert (`kreisgrafik.js:361-372`). Die einzigen
-Umschalter im Projekt sind `setzeKapitelAnsichtModus()` (Karte/Graph) und
-`toggleGrafikPlay()`, beide in `spine-horizontal.js` — und beide sind
+dritte 120°-Drittel einsortiert (`kreisgrafik.js:343-347`). Die einzigen
+Umschalter im Projekt sind `setzeKapitelAnsichtModus()` (`spine-horizontal.js:82`,
+Karte/Graph) und `toggleGrafikPlay()` (`:126`) — und beide sind
 Event-Handler ohne Zeichenaufruf, also gerade *keine* Vermischung.
 
-**`kreisgrafik.js` verändert überhaupt keinen Modul-Zustand.** Die Datei hat
-kein einziges `let` auf oberster Ebene; alle fünf Top-Level-Namen sind `const`
-(`kreisgrafik.js:56`, `:330-333`), vier davon Literale, einer ein
-`hexZuRgb()`-Aufruf. Die gesuchte Vermischung
-„zeichnet UND verändert State" gibt es dort in dieser Form nicht.
+**`kreisgrafik.js` hält fast keinen Modul-Zustand.** Von den 74 Top-Level-Namen
+sind 70 `const`; genau vier sind `let`, und alle vier sind Zwischenspeicher fürs
+Zeichnen, keine Ablaufsteuerung: `einheitsRadiusCache` (`kreisgrafik.js:470`),
+`letzteKlangZeilen`/`klangZeilenFrame` (`:582-583`) und `letzteReiterLagen`
+(`:1159`) — die drei letzten merken sich Trefferflächen, damit `mousePressed()`
+sie lesen kann. Die gesuchte Vermischung „zeichnet UND steuert den Ablauf" gibt
+es dort nicht.
+
+**ACHTUNG:** Der ursprüngliche Befund sprach von „fünf Top-Level-Namen, kein
+einziges `let`". Das galt für den damaligen Stand; seither sind die
+Deklarationen aller Dateien nach oben gruppiert worden.
 
 Was es stattdessen gibt, sind zwei andere Vermischungen — geteilter
 Canvas-Zustand und Zeichnen-plus-Messen:
@@ -436,14 +450,14 @@ modulweiten Zustand setzt:
 | Fundstelle | Befund | Priorität | Begründung |
 |---|---|---|---|
 | ~~`uebersichtsrouten.js:291, 390, 452`~~ → `uebersichtsrouten.js:144` | **Erledigt.** `zeichneUebersichtsrouten()` wird jetzt unbedingt aufgerufen und übernimmt den Fall „wird nicht gezeichnet" selbst: bei `fortschritt <= 0` setzt sie Hover und Cursor zurück und steigt aus. Der `else`-Zweig in `draw()` ist ersatzlos entfallen | mittel | Kein `hoverZielUnterMaus()` extrahiert: Der Treffertest hängt an der Startpunkt-Geometrie samt Streuung deckungsgleicher Punkte, die erst im Zeichendurchlauf entsteht — ein Extrakt hätte sie dupliziert, also genau die Art Kopie, die dieses Review sonst bekämpft |
-| `sketch.js:316-838` | `draw()` ist 523 Zeilen lang und deckt Scroll-Akte, Kapitel-Zoom, Annotationsbox, Legende, Kapitelregister, Foto-Marker und Schlussakt ab | niedrig | Ein echter Befund, aber kein lohnender: Die Abschnitte teilen sich durchgehend Zwischenwerte (`activeBbox`, `zoomAmount`, `scrollFortschritt`), ein Aufteilen erzeugt vor allem lange Parameterlisten. Der Nutzen wäre Lesbarkeit, das Risiko real |
+| `sketch.js:330-848` | `draw()` ist 519 Zeilen lang und deckt Scroll-Akte, Kapitel-Zoom, Annotationsbox, Legende, Kapitelregister, Foto-Marker und Schlussakt ab | niedrig | Ein echter Befund, aber kein lohnender: Die Abschnitte teilen sich durchgehend Zwischenwerte (`activeBbox`, `zoomAmount`, `scrollFortschritt`), ein Aufteilen erzeugt vor allem lange Parameterlisten. Der Nutzen wäre Lesbarkeit, das Risiko real |
 
-`ovBaueDaten()` und `ovBerechneLayout()` (`ortsveraenderung.js:244`, `:302`)
+`ovBaueDaten()` und `ovBerechneLayout()` (`ortsveraenderung.js:149`, `:275`)
 schreiben zwar Modulzustand, zeichnen aber nicht — sie sind memoisierte
 Vorberechnungen und damit sauber getrennt. Dasselbe gilt für
-`kapitelScheiben()` (`uebersichtsrouten.js:90`), `spineLayout()`
-(`spine-horizontal.js:178`) und `annotationBoxPosition()`
-(`annotationsbox.js:60`) — alle drei schreiben ausschliesslich in ihren
+`kapitelScheiben()` (`uebersichtsrouten.js:23`), `spineLayout()`
+(`spine-horizontal.js:149`) und `annotationBoxPosition()`
+(`annotationsbox.js:40`) — alle drei schreiben ausschliesslich in ihren
 eigenen Cache.
 
 ---
@@ -456,8 +470,8 @@ eigenen Cache.
 |---|---|---|---|
 | alle 12 Module | 82 von 82 Funktionen erreichbar, keine ungenutzte Funktion | — | Über einen Aufruf-Graphen aller Module ermittelt, nicht dateiweise geraten. Ausgangspunkte: die fünf p5-Hooks plus die beiden Ladezeit-Aufrufe `hexZuRgb` und `wohnungSplitAi` |
 | `sketch.js:185, 221, 316, 851, 890` | `preload`, `setup`, `draw`, `mousePressed`, `windowResized` werden nirgends im Projekt aufgerufen | — | **Kein toter Code.** p5 sucht diese Namen am `window` und ruft sie selbst. Eine reine Textsuche meldet sie fälschlich als ungenutzt |
-| `sketch.js:943` | `naechstesKapitel()` — Textsuche findet einen Treffer in `index.html:43` | — | **Falscher Treffer:** Das ist das `id`-Attribut `naechstesKapitel`, kein Aufruf. Die Funktion ist trotzdem lebendig, aufgerufen aus `sketch.js:263` (Klick-Handler) und `sketch.js:595` (`draw`) |
-| `sketch.js:30` | `WEITERE_KAPITEL_NUMMERN` erscheint bei naiver Suche ungenutzt | — | **Falscher Treffer:** Alle drei Nutzungen stehen hinter einem Spread — `...WEITERE_KAPITEL_NUMMERN` in `sketch.js:193`, `sketch.js:901` und `dom-aufbau.js:45`. Ein Muster, das Punkt-Zugriffe ausschliesst, verwirft sie mit |
+| `sketch.js:984` | `naechstesKapitel()` — die Textsuche fand damals einen Treffer in `index.html` | — | **Falscher Treffer:** Das war das gleichnamige `id`-Attribut, kein Aufruf; es steht heute nicht mehr im HTML. Die Funktion ist lebendig, aufgerufen aus `sketch.js:261` (Klick-Handler) und `sketch.js:604` (`draw`) |
+| `sketch.js:26` | `WEITERE_KAPITEL_NUMMERN` erscheint bei naiver Suche ungenutzt | — | **Falscher Treffer:** Alle drei Nutzungen stehen hinter einem Spread — `...WEITERE_KAPITEL_NUMMERN` in `sketch.js:194`, `sketch.js:942` und `dom-aufbau.js:45`. Ein Muster, das Punkt-Zugriffe ausschliesst, verwirft sie mit |
 
 Die letzten drei Zeilen stehen hier, weil sie bei jeder Wiederholung dieser
 Prüfung erneut auffallen werden: Eine reine Textsuche meldet fünf Funktionen
@@ -477,18 +491,18 @@ Fünf Stellen berechneten „grösster Kreisradius über alle Kategorien" aus
 denselben `bandCounts`, nach derselben Formel
 `max(kreisRadius(neg + pos + neutral + unrated))` über `KREIS_KATEGORIEN`.
 Sie sind zu **`groessterKreisRadius(bandCounts, maxRadius = 100, radiusSkala = 1)`**
-in `datenbereinigung.js:340` zusammengelegt — dort, weil die Funktion
+in `datenbereinigung.js:358` zusammengelegt — dort, weil die Funktion
 `KREIS_KATEGORIEN` und `kreisRadius` direkt nebenan vorfindet und weil alle
 vier Aufrufer ohnehin an `datenbereinigung.js` hängen: der Umzug hat **keine
 einzige neue Modul-Abhängigkeit** erzeugt.
 
 | vorher | jetzt | Argumente |
 |---|---|---|
-| `kreisgrafik.js:284-288` (in der Zeichenschleife) | `kreisgrafik.js:293` | `maxRadius`, `radiusSkala` durchgereicht |
-| `spine-horizontal.js:359-366` | `spine-horizontal.js:355` | Vorgaben |
-| `spine-horizontal.js:191-196` | `spine-horizontal.js:191` | Vorgaben |
-| `annotationsbox.js:83-87` | `annotationsbox.js:86` | Vorgaben |
-| `ortsveraenderung.js:235-243` (`ovRadiusAus()`) | `ortsveraenderung.js:258`, `:265`, `:526` | `Infinity`, teils mit `kreisSkala` |
+| in `zeichneKreiseOrtRuns()` | `kreisgrafik.js:136`, dazu `:333` und `:473` | `maxRadius`, `radiusSkala` durchgereicht |
+| in `spineLayout()` | `spine-horizontal.js:160` | Vorgaben |
+| in `zeichneSpineHorizontal()` | `spine-horizontal.js:283` | Vorgaben |
+| in `annotationBoxPosition()` | `annotationsbox.js:64` | Vorgaben |
+| `ovRadiusAus()` in `ortsveraenderung.js` | `ortsveraenderung.js:187`, `:378` | `Infinity`, teils mit `kreisSkala` |
 
 **Nebeneffekt:** `spine-horizontal.js`, `annotationsbox.js` und
 `ortsveraenderung.js` nutzten `KREIS_KATEGORIEN` und `kreisRadius`
@@ -546,7 +560,7 @@ graph TD
 ```
 
 `zaehleBandCounts(annotationen)` ist der aus der Zählfunktion herausgelöste
-zweite Schritt (`datenbereinigung.js:411`). Er musste dorthin, weil er
+zweite Schritt (`datenbereinigung.js:412`). Er musste dorthin, weil er
 `valenzBucket()` braucht, das modulintern in `datenbereinigung.js` liegt.
 `zaehleAnnotationenLiveNachOrtBasis()` behält Signatur und Verhalten und ist
 jetzt ein Zweizeiler über beiden Schritten — die zwei gecachten Aufrufer
@@ -554,10 +568,10 @@ jetzt ein Zweizeiler über beiden Schritten — die zwei gecachten Aufrufer
 
 | Stelle | vorher | jetzt |
 |---|---|---|
-| `kreisgrafik.js:119` + `:128` | 2 Scans je Ortskreis, **jeden Frame** | `kreisgrafik.js:124-125`, 1 Scan |
-| `spine-horizontal.js:346` + `:347` | 2 Scans je Eintrag, **jeden Frame**, dazu `wohnungFilterFuerOrt()` doppelt | `spine-horizontal.js:348-351`, 1 Scan, 1 Filteraufruf |
-| `ortsveraenderung.js:246` + `:247` | 2 Scans je Knoten und Kapitel, einmalig | `ortsveraenderung.js:247-250`, 1 Scan |
-| `annotationsbox.js:85`, `spine-horizontal.js:190` | nur Zählung, kein Doppelscan | unverändert |
+| in `zeichneKreiseOrtRuns()` | 2 Scans je Ortskreis, **jeden Frame** | `kreisgrafik.js:133-134`, 1 Scan |
+| in `zeichneSpineHorizontal()` | 2 Scans je Eintrag, **jeden Frame**, dazu `wohnungFilterFuerOrt()` doppelt | `spine-horizontal.js:275-276`, 1 Scan, 1 Filteraufruf |
+| in `ovStand()` | 2 Scans je Knoten und Kapitel, einmalig | `ortsveraenderung.js:248-250`, 1 Scan |
+| `annotationsbox.js:63`, `spine-horizontal.js:159` | nur Zählung, kein Doppelscan | unverändert |
 
 **Nachgewiesen gleichwertig und tatsächlich halbiert:** Die alte
 Zählimplementierung wurde wörtlich erhalten und gegen den neuen Pfad laufen
@@ -572,7 +586,7 @@ nachher — exakt 50 %.**
 
 Dass die beiden Scans überhaupt redundant sein *können*, ist nachprüfbar:
 `daten.annotationen` wird im ganzen Projekt an genau einer Stelle geschrieben
-(`datenbereinigung.js:269`, in `bereinigeStationenDaten()`), und die läuft
+(`datenbereinigung.js:323`, in `bereinigeStationenDaten()`, `:316`), und die läuft
 einmalig in `preload`/`setup`, nie in `draw()`.
 
 **Nicht gemacht:** der im Befund erwähnte Cache über `annIndex`. Sein Schlüssel
@@ -585,20 +599,20 @@ bleibt eine eigene Entscheidung.
 
 | Fundstelle | Befund | Priorität | Begründung |
 |---|---|---|---|
-| `kreisgrafik.js:290`, `:233`/`:249`, `dom-aufbau.js:143`/`:165`/`:186` | Dasselbe `k.farbe`-Zahlentripel aus `KREIS_KATEGORIEN` wird in drei Formate übersetzt: `#rrggbb` per `toString(16)`, `rgba(…)` per Template-String, `rgb(…)` per `join(', ')` | niedrig | Drei Schreibweisen für eine Farbe. Zwei Helfer neben `hexZuRgb()` in `datenbereinigung.js` würden es vereinheitlichen — aber es funktioniert, und keiner der drei Orte ist fehleranfällig |
-| 6 Module, 12 Vorkommen | Das Literal `"'Source Sans 3', sans-serif"` steht zwölfmal im Code (`ortsveraenderung.js` allein fünfmal) | niedrig | Eine Konstante `SANS_FONT` neben den übrigen Stilkonstanten. Rein kosmetisch, aber billig — und die Schriftwahl liegt ohnehin schon doppelt vor, hier und als `var(--sans)` in `style.css` |
+| ~~drei Stellen in `kreisgrafik.js` und `dom-aufbau.js`~~ | **Erledigt.** Dasselbe `k.farbe`-Zahlentripel aus `KREIS_KATEGORIEN` wurde in drei Formate übersetzt: `#rrggbb` per `toString(16)`, `rgba(…)` per Template-String, `rgb(…)` per `join(', ')` | niedrig | Genau der empfohlene Helfer ist gebaut: `rgbZuHex()` in `datenbereinigung.js:27`, Gegenstück zu `hexZuRgb()`. Er bedient beide Hex-Stellen (`datenbereinigung.js:82` für die Kategorienfarben, `kreisgrafik.js:312` für `drawHatchedCircle`); die `join(', ')`-Fassung gibt es im Projekt nicht mehr. Übrig bleibt die `rgba(…)`-Schreibweise, die aber keine zweite Übersetzung ist, sondern die Canvas-Form mit Alpha |
+| ~~6 Module, 12 Vorkommen~~ | **Erledigt.** Das Literal `"'Source Sans 3', sans-serif"` stand zwölfmal im Code | niedrig | Es steht jetzt genau einmal, als `SCHRIFT_SANS` in `datenbereinigung.js:103`, daneben `SCHRIFT_SERIF` (`:104`). Sechs Module lesen die Konstante an elf Stellen (`ortsveraenderung.js` allein viermal) — das Literal selbst steht nur noch in der Deklaration |
 
 ### Ausdrücklich kein Befund: Winkelberechnung
 
 Die Winkel-Logik ist **nicht** dupliziert, sondern sauber zentralisiert. Die
 Aufteilung Halbkreis/F-Wert-Punkte liegt vollständig in `kreisgrafik.js`
-(`:271` Parameter `winkel`, `:345` Parameter `anordnung`, Gruppenmitten
-`:361-363`). Alle Aufrufer übergeben nur noch Werte: `PI` und `'obenUnten'`
-aus Karte und Graph, der Default `-HALF_PI` und `'seitlich'` aus dem
-Schlussakt. Eigene Trigonometrie ausserhalb von `kreisgrafik.js` gibt es nur
-in `kartendekor.js:98-101` (Windrosen-Zacken) und
-`uebersichtsrouten.js:370` (Streuung deckungsgleicher Startpunkte) — beides
-inhaltlich unabhängig.
+(`:258` und `:331`, jeweils Parameter `winkel`, dazu `nurHaelften`;
+Gruppenmitten `:343-344`). Alle Aufrufer übergeben nur Werte: `PI` aus Karte
+und Graph (`kreisgrafik.js:137`, `spine-horizontal.js:290`), sonst gilt der
+Default `-HALF_PI`. Eigene Trigonometrie ausserhalb von `kreisgrafik.js` gibt
+es nur in `kartendekor.js:38-39` (Haversine-Distanz für die Massstabsleiste)
+und `uebersichtsrouten.js:221-222` (Streuung deckungsgleicher Startpunkte) —
+beides inhaltlich unabhängig.
 
 ---
 

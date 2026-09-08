@@ -103,12 +103,11 @@ function dauerProSchritt() {
 // Kapitel 1 nutzt die Dauer des Audiostücks, 02–18 dieselbe Geschwindigkeit
 // pro Spine-Eintrag — sonst wirken kurze Kapitel hastig durchgespult.
 function aktuelleGrafikAnimationDauer() {
-  // Im Elementmodell zählt die Zahl der Klänge, nicht die der Orte: Kapitel 2
-  // spielt an einem einzigen Ort und bekäme über die Ortsformel unten 2,6 s
-  // für 118 Elemente. Die Sonifikation gibt null zurück, wenn sie nicht
-  // zuständig ist — dann gilt weiter die Ortsformel.
-  let ausElementen = typeof sonifikationElementDauerMs === 'function'
-    ? sonifikationElementDauerMs(zoomedKapitel) : null;
+  // Es zählt die Zahl der Klänge, nicht die der Orte: Kapitel 2 spielt an
+  // einem einzigen Ort und bekäme über die Ortsformel unten 2,6 s für 118
+  // Elemente. sonifikationElementDauerMs() gibt null zurück, wenn es für das
+  // Kapitel keine Elemente gibt — dann gilt weiter die Ortsformel.
+  let ausElementen = sonifikationElementDauerMs(zoomedKapitel);
   if (ausElementen) return ausElementen;
 
   // Ohne Elementmodell zählt der Ortsvergleich Kapitel statt Spine-Einträge;
