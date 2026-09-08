@@ -334,7 +334,7 @@ function zeichneSpineHorizontal(eintraege, fortschritt, daten = stationenData) {
     // manchmal unsichtbar, obwohl der Context korrekt gesetzt ist. Deshalb
     // wird hier und an drei Stellen oben direkt über drawingContext
     // gezeichnet. Ursache ungeklärt, nur umgangen.
-    drawingContext.fillStyle = `rgba(${GRUNDTINTE.r}, ${GRUNDTINTE.g}, ${GRUNDTINTE.b}, ${alphaSkala})`;
+    drawingContext.fillStyle = `rgba(${LABEL_TINTE.r}, ${LABEL_TINTE.g}, ${LABEL_TINTE.b}, ${alphaSkala})`;
     drawingContext.fillText(e.text, x, textY);
   });
 
