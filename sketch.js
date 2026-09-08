@@ -99,6 +99,10 @@ let letzterZoomKapitel = null; // bleibt waehrend des Ausblendens gesetzt, siehe
 // Uhr des Kapitel-Einstiegstexts, gesetzt von starteKapitelEinstieg().
 let kapitelEinstiegsStartMillis = null;
 
+// Ein Redraw ist über requestAnimationFrame vorgemerkt. Verhindert, dass ein
+// Scroll- oder Mausereignis-Sturm hundert Zeichnungen je Frame auslöst.
+let redrawGeplant = false;
+
 // Welche Annotation steht gerade in der Box. draw() schreibt den Text nur bei
 // einem Wechsel, nicht in jedem Frame — sonst überschriebe es 60-mal je
 // Sekunde alles, was der Browser in die Box gesetzt hat, etwa seine
@@ -298,6 +302,20 @@ function setup() {
   ({ modusZeile, planEintrag, graphEintrag, leerzeile, alleEintrag } = baueKapitelRegister());
   baueStationsMarker();
   baueZwischenMarker();
+
+  // Ab hier zeichnet draw() nicht mehr von selbst 60-mal je Sekunde, sondern
+  // nur noch auf Anforderung. Jede Stelle, die etwas verändert, muss deshalb
+  // planeRedraw() rufen.
+  //
+  // ACHTUNG die Klick- und Tastenlistener hängen in der CAPTURE-Phase am
+  // document: haltKlickAuf() stoppt bei einigen Bedienelementen die
+  // Weitergabe des mousedown, und in der Blasenphase käme hier nichts mehr an.
+  // mousedown UND click, weil DOM-Handler wie das Kapitelregister erst am
+  // click hängen — der kommt nach dem mousedown.
+  window.addEventListener('scroll', planeRedraw, { passive: true });
+  ['mousedown', 'click', 'keydown'].forEach(art =>
+    document.addEventListener(art, planeRedraw, true));
+  noLoop();
 }
 
 // ---------------------------------------------------------------------------
@@ -876,6 +894,37 @@ function mousePressed() {
 
 function windowResized() {
   resizeCanvas(stage.offsetWidth, stage.offsetHeight);
+  redraw();
+}
+
+// Merkt einen Redraw für das nächste Bild vor. Mehrere Aufrufe im selben Bild
+// ergeben eine Zeichnung, nicht viele. Läuft danach so lange weiter, wie sich
+// noch etwas bewegt, und schaltet sich dann selbst ab.
+function planeRedraw() {
+  if (redrawGeplant) return;
+  redrawGeplant = true;
+  requestAnimationFrame(function weiter() {
+    redraw();
+    if (etwasBewegtSich()) requestAnimationFrame(weiter);
+    else redrawGeplant = false;
+  });
+}
+
+// Läuft gerade eine Bewegung, die von sich aus weiterzeichnen muss? Alle
+// Werte hier erreichen ihr Ziel exakt oder enden nach einer festen Dauer —
+// sonst hörte die Schleife oben nie auf.
+function etwasBewegtSich() {
+  return grafikSpielt
+    || legendeAus !== (legendenLeisteOffen ? 1 : 0)
+    || infoAus !== (projekttextOffen ? 1 : 0)
+    || kapitelZoomAmount !== (zoomedKapitel ? 1 : 0)
+    || imZeitFade(kapitelEinstiegsStartMillis)
+    || imZeitFade(grafikPlayAusblendStart);
+}
+
+// Läuft eine der beiden zeitbasierten Blenden noch?
+function imZeitFade(start) {
+  return start !== null && millis() - start < KAPITEL_EINSTIEG_FADE_MS;
 }
 
 // ---------------------------------------------------------------------------

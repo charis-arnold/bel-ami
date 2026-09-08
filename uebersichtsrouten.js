@@ -312,7 +312,12 @@ function setzeKapitelAnsichtZurueck() {
 // ACHTUNG genau einmal pro Frame ticken — deshalb ruft draw() direkt und
 // nicht zeichneUebersichtsrouten(), die beim Ausblenden nicht mehr läuft.
 function aktualisiereKapitelZoom() {
-  kapitelZoomAmount = lerp(kapitelZoomAmount, zoomedKapitel ? 1 : 0, 0.08);
+  let ziel = zoomedKapitel ? 1 : 0;
+  let neu = lerp(kapitelZoomAmount, ziel, 0.08);
+  // Am Ende auf den Zielwert einrasten, wie naehereRegister() in sketch.js.
+  // Ohne das käme der Wert nie exakt an, und die Redraw-Schleife in
+  // planeRedraw() hätte kein Ende.
+  kapitelZoomAmount = Math.abs(ziel - neu) < 0.002 ? ziel : neu;
 }
 
 // ACHTUNG setzt voraus, dass die Scrollposition schon im Übersichtsakt liegt —
