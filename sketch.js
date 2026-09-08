@@ -313,6 +313,11 @@ function setup() {
   // mousedown UND click, weil DOM-Handler wie das Kapitelregister erst am
   // click hängen — der kommt nach dem mousedown.
   window.addEventListener('scroll', planeRedraw, { passive: true });
+  // Hover: die Kapitelpunkte, der Fotomarker-Tooltip und der Cursor über den
+  // Klangzeilen lesen mouseX/mouseY in draw() — ohne dieses Ereignis merkte
+  // niemand, dass die Maus sich bewegt hat. planeRedraw() drosselt auf ein
+  // Bild, ein Mausweg über den Schirm kostet also nicht mehr als ein Scroll.
+  window.addEventListener('mousemove', planeRedraw, { passive: true });
   ['mousedown', 'click', 'keydown'].forEach(art =>
     document.addEventListener(art, planeRedraw, true));
   noLoop();
