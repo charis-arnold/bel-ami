@@ -569,6 +569,49 @@ bbox-Dateien erzeugt die Python-Pipeline
 
 ---
 
+## Wann `draw()` läuft
+
+Nicht dauernd. `setup()` schliesst mit `noLoop()` (`sketch.js:323`), p5
+zeichnet danach nur noch auf Anforderung.
+
+**ACHTUNG die wichtigste Regel dieses Abschnitts:** Wer Zustand ändert, der
+sich im Bild niederschlägt, muss dafür sorgen, dass wieder gezeichnet wird.
+Für alles, was aus einem Maus-, Tasten- oder Scrollereignis kommt, erledigen
+das die vier Auslöser in `setup()` von selbst. Ein Timer, ein
+`fetch()`-Rückruf oder ein `setTimeout` ist dort **nicht** dabei und braucht
+einen eigenen `planeRedraw()`-Aufruf — sonst bleibt die Änderung unsichtbar,
+bis der Benutzer zufällig die Maus bewegt. Heute braucht das keiner: der
+einzige Timer im Projekt ist die Selbstabschaltung der Wiedergabe
+(`sonifikation.js:310`), und die setzt mit `sonifikationSpieltGerade` nur
+einen Wert, den keine Zeichenfunktion liest.
+
+| Auslöser | Fundstelle | deckt ab |
+|---|---|---|
+| `scroll` am `window` | `sketch.js:315` | den gesamten Scroll-Fortschritt |
+| `mousemove` am `window` | `:320` | Hover auf Kapitelpunkten, Fotomarker-Tooltip, Cursor über den Klangzeilen |
+| `mousedown`, `click`, `keydown` am `document` | `:321-322` | jede Bedienung: Register, Play, Popups, Tastatur |
+| `windowResized()` | `:902` | ruft nach `resizeCanvas()` direkt `redraw()` |
+
+Die drei Ereignisse am `document` hängen in der **Capture**-Phase, nicht in
+der Blasenphase: `haltKlickAuf()` stoppt bei einigen Bedienelementen die
+Weitergabe des `mousedown`, in der Blasenphase käme also nichts mehr an.
+
+Alle Auslöser gehen durch `planeRedraw()` (`:908`). Die Funktion drosselt über
+`requestAnimationFrame` auf höchstens eine Zeichnung je Bild und läuft danach
+so lange weiter, wie `etwasBewegtSich()` (`:921`) noch eine laufende Bewegung
+meldet — dann schaltet sie sich selbst ab.
+
+**ACHTUNG jede Animation muss ihr Ziel exakt erreichen.** `etwasBewegtSich()`
+vergleicht auf Gleichheit; ein Wert, der sich seinem Ziel nur asymptotisch
+nähert, hielte die Schleife für immer am Laufen. Die beiden `lerp`-Nachführungen
+rasten deshalb unterhalb von 0.002 auf den Zielwert ein: `naehereRegister()`
+(`sketch.js:1090`) für die Registerleisten, `aktualisiereKapitelZoom()`
+(`uebersichtsrouten.js:314`) für den Kapitelzoom. Die zeitbasierten Blenden
+enden über `imZeitFade()` (`sketch.js:931`) nach `KAPITEL_EINSTIEG_FADE_MS`,
+die Graph-Animation über `grafikSpielt` (`spine-horizontal.js:143`).
+
+---
+
 ## Datenfluss von der Quelle zum Bild
 
 ```mermaid
@@ -580,7 +623,7 @@ graph TD
     JSON --> PRE["preload() in sketch.js"]
     BILD --> PRE
     PRE --> BER["bereinigeEingangsdaten()<br/>datenbereinigung.js"]
-    BER --> DRAW["draw() — jeder Frame"]
+    BER --> DRAW["draw() — auf Anlass, nicht je Frame"]
     DRAW --> CANVAS["p5-Canvas"]
 ```
 

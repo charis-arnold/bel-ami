@@ -40,7 +40,7 @@ sondern nur: faktisch greift kein anderes Modul darauf zu.
 | **mittel** | ~~Kapitel-1-Datenregeln stehen im Zeichenmodul `kreisgrafik.js`~~ — **erledigt**, jetzt `ortRunSichtbar()` in `datenbereinigung.js` | Single Responsibility |
 | **mittel** | ~~`zeichneHalbkreis`/`zeichneVollkreis` setzen `globalCompositeOperation` hart zurück~~ — **erledigt**, `push()`/`pop()` | Single Responsibility |
 | **niedrig** | `draw()` läuft mit 557 Zeilen als eine Funktion | Single Responsibility |
-| **niedrig** | `noLoop()`/`redraw()` wäre möglich, aber der Umbau ist gross und der Gewinn klein | draw()-Loop |
+| **niedrig** | ~~`noLoop()`/`redraw()` wäre möglich, aber der Umbau ist gross und der Gewinn klein~~ — **erledigt**, `noLoop()` in `sketch.js:323`, vier Auslöser und die selbstabschaltende Schleife `planeRedraw()` | draw()-Loop |
 | **niedrig** | Farbwerte aus `KREIS_KATEGORIEN` werden an drei Stellen in drei Formate übersetzt | DRY |
 | **niedrig** | Das Font-Literal `'Source Sans 3', sans-serif` steht zwölfmal im Code | DRY |
 | **niedrig** | ~~`wohnungFilterFuerOrt()` wird zweimal mit demselben Argument aufgerufen~~ — **erledigt** | DRY |
@@ -602,34 +602,66 @@ inhaltlich unabhängig.
 
 ---
 
-## draw()-Loop
+## draw()-Loop — erledigt
 
-`noLoop()`, `redraw()` und `frameRate()` kommen im gesamten Projekt **nicht
-vor**. p5 zeichnet durchgehend mit der Standard-Bildrate, auch wenn sich nichts
-bewegt.
+**Erledigt.** Das Projekt zeichnet nicht mehr durchgehend. `setup()` schliesst
+mit `noLoop()` (`sketch.js:323`), gezeichnet wird nur noch auf Anlass. Davor
+hängen vier Auslöser, alle in `setup()`: `scroll` (`:315`), `mousemove`
+(`:320`) sowie `mousedown`/`click`/`keydown` (`:321-322`) — die drei letzten in
+der **Capture**-Phase am `document`, weil `haltKlickAuf()` bei einigen
+Bedienelementen die Weitergabe stoppt und in der Blasenphase nichts mehr
+ankäme. Der vierte ist `windowResized()`, das nach dem `resizeCanvas()` selbst
+`redraw()` ruft (`:902`).
 
-### Was den Loop tatsächlich braucht
+Alle gehen durch `planeRedraw()` (`:908`). Die Funktion drosselt über
+`requestAnimationFrame` auf ein Bild — mehrere Aufrufe im selben Frame ergeben
+eine Zeichnung, nicht viele — und läuft danach so lange weiter, wie
+`etwasBewegtSich()` (`:921`) eine laufende Bewegung meldet. Sonst schaltet sie
+sich selbst ab.
 
-| Treiber | Fundstelle | braucht durchgehende Frames? |
+| Was `etwasBewegtSich()` prüft | Hört auf, weil |
+|---|---|
+| `grafikSpielt` | `spine-horizontal.js:143` setzt das Flag bei `grafikFortschritt >= 1` zurück |
+| `legendeAus`, `infoAus` | `naehereRegister()` (`sketch.js:1090`) rastet unterhalb von 0.002 auf den Zielwert ein |
+| `kapitelZoomAmount` | `aktualisiereKapitelZoom()` (`uebersichtsrouten.js:314`) rastet seit diesem Umbau genauso ein (`:320`) |
+| Die zwei zeitbasierten Blenden | `imZeitFade()` (`sketch.js:931`) ist nach `KAPITEL_EINSTIEG_FADE_MS` fertig |
+
+Die Epsilon-Schwelle, die der Eintrag unten als „den teuren Teil" führte, ist
+damit eine Zeile: `uebersichtsrouten.js:320`. Sie hat dieselbe Form und
+dieselbe Schranke wie `naehereRegister()`, das im Projekt schon vorher so
+einrastete — es war also keine neue Grösse zu wählen, sondern eine bestehende
+zu übernehmen. Die vier Auslöser, die der Eintrag vorhersagte (`scroll`,
+`mousemove`, `click`, `resize`), sind genau die vier geworden.
+
+Die Begründung von damals steht zum Nachvollziehen hier:
+
+`noLoop()`, `redraw()` und `frameRate()` kamen im gesamten Projekt **nicht
+vor**. p5 zeichnete durchgehend mit der Standard-Bildrate, auch wenn sich
+nichts bewegte.
+
+**Was den Loop tatsächlich brauchte:**
+
+| Treiber | braucht durchgehende Frames? |
+|---|---|
+| Weiche Zoom-Nachführung — `kapitelZoomAmount = lerp(…, 0.08)` je Frame | ja, solange sie läuft — und sie „läuft" formal ewig weiter |
+| Zeitbasierte Blenden über `millis()` | ja, für die Dauer der Blende |
+| Graph-Animation „Play" — `grafikFortschritt` aus `millis()` | ja, während des Abspielens |
+| Hover über Kapitelpunkte über `mouseX/mouseY`, dazu `cursor()` | nein — `mousemove` würde reichen |
+| Scroll-Fortschritt — `getScrollProgress()` liest `window.scrollY`; `kapitel1ZoomAmount` leitet sich direkt daraus ab, ohne Glättung | nein — `scroll` würde reichen |
+
+| Befund | Priorität | Begründung |
 |---|---|---|
-| Weiche Zoom-Nachführung | `uebersichtsrouten.js:319` — `kapitelZoomAmount = lerp(…, 0.08)` je Frame | ja, solange sie läuft — und sie „läuft" formal ewig weiter |
-| Zeitbasierte Blenden | `sketch.js:711`, `:739`, `:746` über `millis()` | ja, für die Dauer der Blende |
-| Graph-Animation „Play" | `spine-horizontal.js:135` — `grafikFortschritt` aus `millis()` | ja, während des Abspielens |
-| Hover über Kapitelpunkte | `uebersichtsrouten.js:389`, `:451` über `mouseX/mouseY`, `cursor()` `:460` | nein — `mousemove` würde reichen |
-| Scroll-Fortschritt | `sketch.js:985` `getScrollProgress()` liest `window.scrollY`; `kapitel1ZoomAmount` (`:392`) leitet sich direkt daraus ab, ohne Glättung | nein — `scroll` würde reichen |
+| Ein Umbau auf `noLoop()`/`redraw()` ist möglich, lohnt aber nicht als eigenständige Aufgabe | niedrig | Er bräuchte vier Auslöser (`scroll`, `mousemove`, `click`, `resize`) **und** ein „läuft gerade etwas?"-Prädikat. Genau das ist der teure Teil: `kapitelZoomAmount` nähert sich seinem Ziel per `lerp` nur asymptotisch. Ein „fertig" gibt es nicht, man müsste eine Epsilon-Schwelle einführen. Falsch gewählt, bleibt die Animation sichtbar hängen — ein Fehlerbild, das nur auf langsamen Geräten auftritt und schwer zu reproduzieren ist. Welchen Schaden ein zu naiver Nulltest an genau dieser Stelle anrichtet, steht in [`bugfix-log.md`, Fix 1](bugfix-log.md) |
+| Die durchgehende Bildrate ist die *Sichtbarkeit* des Problems, nicht seine Ursache | mittel | **Teilweise erledigt.** Der grösste Posten, den der Loop 60-mal pro Sekunde wiederholte, war die Doppelzählung aus dem [DRY-Abschnitt](#dry) — sie ist auf die Hälfte gesenkt, ohne den Lebenszyklus anzufassen. Offen bleibt, dass auch der verbleibende eine Scan pro Kreis und Frame ein Ergebnis neu berechnet, das sich zwischen zwei Scroll-Schritten nicht ändert; dafür bräuchte es den Cache. Ob der Loop danach überhaupt noch stört, wäre neu zu beurteilen |
 
-| Fundstelle | Befund | Priorität | Begründung |
-|---|---|---|---|
-| `sketch.js:316` | Ein Umbau auf `noLoop()`/`redraw()` ist möglich, lohnt aber nicht als eigenständige Aufgabe | niedrig | Er bräuchte vier Auslöser (`scroll`, `mousemove`, `click`, `resize`) **und** ein „läuft gerade etwas?"-Prädikat. Genau das ist der teure Teil: `kapitelZoomAmount` nähert sich seinem Ziel per `lerp` nur asymptotisch — `uebersichtsrouten.js:329-334` hält das ausdrücklich fest („läuft nur asymptotisch gegen 1") und beschreibt gleich den Fehler, den ein zu naiver Nulltest an dieser Stelle schon einmal verursacht hat. Ein „fertig" gibt es nicht, man müsste eine Epsilon-Schwelle einführen. Falsch gewählt, bleibt die Animation sichtbar hängen — ein Fehlerbild, das nur auf langsamen Geräten auftritt und schwer zu reproduzieren ist |
-| `sketch.js:316` | Die durchgehende Bildrate ist die *Sichtbarkeit* des Problems, nicht seine Ursache | mittel | **Teilweise erledigt.** Der grösste Posten, den der Loop 60-mal pro Sekunde wiederholte, war die Doppelzählung aus dem [DRY-Abschnitt](#dry) — sie ist auf die Hälfte gesenkt, ohne den Lebenszyklus anzufassen. Offen bleibt, dass auch der verbleibende eine Scan pro Kreis und Frame ein Ergebnis neu berechnet, das sich zwischen zwei Scroll-Schritten nicht ändert; dafür bräuchte es den Cache. Ob der Loop danach überhaupt noch stört, wäre neu zu beurteilen |
-
-**Empfehlung:** Loop lassen, Rechenaufwand pro Frame senken. Die durchgehende
-Bildrate ist für ein scroll- und animationsgetriebenes Stück wie dieses
-vertretbar; sie ist nur deshalb spürbar, weil in jedem Frame Ergebnisse neu
-berechnet werden, die sich zwischen zwei Scroll-Schritten gar nicht ändern.
-Der erste Schritt in diese Richtung ist gemacht — die Scans pro Frame sind
-halbiert. Der `noLoop()`-Umbau steht damit noch weniger zur Debatte als
-vorher.
+**Empfehlung von damals:** Loop lassen, Rechenaufwand pro Frame senken. Die
+durchgehende Bildrate sei für ein scroll- und animationsgetriebenes Stück wie
+dieses vertretbar; sie sei nur deshalb spürbar, weil in jedem Frame Ergebnisse
+neu berechnet werden, die sich zwischen zwei Scroll-Schritten gar nicht ändern.
+Der Cache aus dem zweiten Befund ist bis heute nicht gebaut — der Umbau kam
+trotzdem, weil er kleiner ausfiel als angenommen: 54 eingefügte Zeilen in
+`sketch.js` und 7 in `uebersichtsrouten.js`, Kommentare und Leerzeilen
+eingerechnet, bei einer einzigen ersetzten Zeile.
 
 ---
 
