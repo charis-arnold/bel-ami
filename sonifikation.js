@@ -4,31 +4,21 @@
    Liefert NUR den Ton zum Play-Button der Graph-Ansicht; die Spine läuft
    parallel mit derselben Gesamtdauer. Zeitbasiert, nicht scroll-gekoppelt.
 
-   Zwei Modelle nebeneinander:
-   - Stationsmodell (02–18, und Kapitel 1 bei MODUS 'stationen'): eine Tonstufe
-     je Station, drei F-Wert-Kategorien als drei Ebenen in c-moll. Zeitplan aus
-     kapitel01-sonifikation.json.
-   - Elementmodell (Prototyp, nur Kapitel 1): ein Klang je Element, drei
-     Gefühlskategorien als Instrumente, Tonhöhe aus dem Kreisradius.
+   Ein Klang je Element: die drei Gefühlskategorien als Instrumente, Tonhöhe
+   aus dem Kreisradius.
 ============================================================================= */
 
 // --- Strudel-Anbindung ----------------------------------------------------
 
 // Dieselben zwei CDN-Quellen, die strudel.cc selbst lädt. @strudel/web bringt
 // keine Samples mit; gm_*-Sounds brauchen ein Extrapaket und bleiben draussen.
+// VCSL hat keine Streicher und keine Klarinetten. Was die Bank hat und das
+// Elementmodell weiter unten benutzt: Harfe, Vibraphon, Klavier, Xylophon
+// und das Orgelpedal.
 const SONIFIKATION_SAMPLE_BAENKE = [
   ['https://strudel.b-cdn.net/piano.json', 'https://strudel.b-cdn.net/piano/'],
   ['https://strudel.b-cdn.net/vcsl.json', 'https://strudel.b-cdn.net/VCSL/'],
 ];
-
-// VCSL hat keine Streicher und keine Klarinetten. Was die Bank hat und das
-// Elementmodell weiter unten benutzt: Harfe, Vibraphon, Klavier, Xylophon
-// und das Orgelpedal.
-const SONIFIKATION_INSTRUMENTE = {
-  ort_loest_emotion_aus: { sound: 'piano', attack: 0.02, release: 0.6, octave: 3 },
-  emotion_faerbt_raum: { sound: 'pipeorgan_quiet', attack: 0.25, release: 1.2, octave: 4 },
-  koerper_als_sensor: { sound: 'sax', attack: 0.12, release: 0.8, octave: 4 },
-};
 
 // ACHTUNG initStrudel() muss im Klick-Handler laufen (Autoplay-Policy) und
 // gibt in @strudel/web@1.0.3 nichts zurück — setcps/cpm sind von aussen nicht
@@ -36,32 +26,21 @@ const SONIFIKATION_INSTRUMENTE = {
 // über .slow() gesteuert.
 const SONIFIKATION_STANDARD_CPS = 0.5;
 
-// --- Stationsmodell: Zeitplan ---------------------------------------------
+// --- Gesamtdauer ----------------------------------------------------------
 
 // Gesamtdauer des Stücks — bewusst hier (nicht in Python) als gestalterischer
 // Wert; erste Annahme, per Ohr anzupassen.
 const SONIFIKATION_GESAMTDAUER_SEK = 45;
 
-// Dauer je Station: Basiswert plus Anteile aus Gehstrecke und Annotationen.
-// Die beiden Skalen sind Stellschrauben, keine gemessenen Grössen.
-const SONIFIKATION_GEWICHT_BASIS = 3;
-const SONIFIKATION_GEWICHT_STRECKEN_SKALA = 200; // Meter pro Gewichtspunkt
-const SONIFIKATION_GEWICHT_ANNOTATION_SKALA = 0.6; // Gewichtspunkte pro Annotation
 
-
-// --- Prototyp: ein Klang je Element (nur Kapitel 1) --------------------
+// --- Ein Klang je Element -------------------------------------------------
 //
-// Dreht die Zuordnung des Stationsmodells um: dort tragen die F-WERT-TYPEN die
-// Instrumente, hier die drei GEFÜHLSKATEGORIEN; die F-Werte bekommen als
+// Die drei GEFÜHLSKATEGORIEN tragen die Instrumente; die F-Werte bekommen als
 // Instrument 4 eine eigene Stimme. Die Tonebene ist damit gebaut wie die
 // Grafik — Bänder sind Kategorien, Punkte am Rand sind F-Werte.
 //
 // Jedes Element klingt einmal. Die Tonhöhe folgt dem Kreisradius; weil der mit
 // der Wurzel wächst, springt ein junger Kreis hörbar, ein voller kriecht.
-
-// Umschalter zum Vergleichen: 'stationen' spielt die bisherige Fassung —
-// Kapitel 1 aus kapitel01-sonifikation.json, 02–18 aus den Spine-Einträgen.
-const SONIFIKATION_MODUS = 'elemente';
 
 // Spieldauer im Elementmodell. Nicht die Zahl der Orte zählt, sondern die
 // der Klänge: Kapitel 2 spielt an einem einzigen Ort und bekäme über die
@@ -193,12 +172,8 @@ const ELEMENT_NEG_OKTAVEN = -1;
 
 // --- Laufzeitzustand ------------------------------------------------------
 
-let sonifikationDaten = null;
 let sonifikationBereit = false;
 let sonifikationSpieltGerade = false;
-
-// Zeitplan in Sekunden ab Start, nur modulintern für den Audio-Aufbau.
-let sonifikationSpielplan = null;
 
 let sonifikationTimeoutId = null;
 
@@ -206,49 +181,6 @@ let sonifikationTimeoutId = null;
 // gerade erzeugt. Keine neue Datei nötig: alles steht in den
 // kapitelXX-stationen.json, die auch das Bild liest.
 let elementCache = {};
-
-async function ladeSonifikationDaten() {
-  if (sonifikationDaten) return sonifikationDaten;
-  let antwort = await fetch('kapitel01-sonifikation.json');
-  sonifikationDaten = await antwort.json();
-  return sonifikationDaten;
-}
-
-function baueSpielplan(stationen) {
-  let gewichte = stationen.map(s =>
-    SONIFIKATION_GEWICHT_BASIS
-    + (s.wegstreckeVorherM + s.wegstreckeEigenM) / SONIFIKATION_GEWICHT_STRECKEN_SKALA
-    + s.anzahlAnnotationen * SONIFIKATION_GEWICHT_ANNOTATION_SKALA
-  );
-  let summeGewichte = gewichte.reduce((a, b) => a + b, 0);
-
-  let ende = 0;
-  let revealIndexVorher = 0;
-  return stationen.map((s, i) => {
-    let dauer = (gewichte[i] / summeGewichte) * SONIFIKATION_GESAMTDAUER_SEK;
-    let start = ende;
-    ende += dauer;
-    let eintrag = {
-      station: s.station, ort: s.ort, start, ende, dauer,
-      revealIndexVorher,
-      revealIndexEigen: s.revealIndexMax,
-    };
-    revealIndexVorher = s.revealIndexMax;
-    return eintrag;
-  });
-}
-
-// Gain-Folge je Kategorie, auf maxAnzahl normiert. Dieselben @-Gewichte wie
-// die Notenfolge, sonst laufen Gain- und Notenwechsel auseinander.
-function baueGainFolge(stationen, spielplan, kategorie, maxAnzahl) {
-  return stationen
-    .map((s, i) => {
-      let n = s.fWertAnteile[kategorie] || 0;
-      let wert = n > 0 ? (n / maxAnzahl).toFixed(2) : '0';
-      return `${wert}@${spielplan[i].dauer.toFixed(3)}`;
-    })
-    .join(' ');
-}
 
 async function stelleSonifikationBereit() {
   if (sonifikationBereit) return;
@@ -283,25 +215,8 @@ async function stelleSonifikationBereit() {
   sonifikationBereit = true;
 }
 
-// Gemeinsamer Wiedergabe-Kern: beide Aufrufer bauen nur die Noten- und
-// Gain-Folgen, gespielt wird hier auf denselben drei Ebenen.
-function spieleSchichten(notenFolge, gainFolgenProKategorie, slowFaktor, gesamtdauerSek) {
-  let layers = Object.entries(SONIFIKATION_INSTRUMENTE).map(([kategorie, instr]) =>
-    n(notenFolge)
-      .scale(`c${instr.octave}:minor`)
-      .s(instr.sound)
-      .gain(gainFolgenProKategorie[kategorie])
-      .attack(instr.attack)
-      .release(instr.release)
-      .room(0.3)
-      .slow(slowFaktor)
-  );
-
-  starteWiedergabe(stack(...layers), gesamtdauerSek);
-}
-
-// Start plus Selbstabschaltung. Beide Modelle teilen sich das, damit der
-// Play-Zustand an einer einzigen Stelle gesetzt wird.
+// Start plus Selbstabschaltung. Setzt den Play-Zustand an einer einzigen
+// Stelle.
 function starteWiedergabe(pattern, gesamtdauerSek) {
   pattern.play();
 
@@ -316,9 +231,7 @@ function starteWiedergabe(pattern, gesamtdauerSek) {
 // Wählt den Ton zur offenen Ansicht: Kapitel 1, wenn keines gezoomt ist.
 // Ohne await, der Aufrufer wartet ohnehin nicht.
 function spieleSonifikationFuer(kapitelNr) {
-  if (SONIFIKATION_MODUS === 'elemente') return spieleElementAudio(kapitelNr);
-  if (kapitelNr) return spieleKapitelSonifikationAudio(kapitelNr);
-  return spieleKapitel1SonifikationAudio();
+  return spieleElementAudio(kapitelNr);
 }
 
 // ---------------------------------------------------------------------------
@@ -571,9 +484,8 @@ function elementDauerSek(kapitelNr) {
 }
 
 // Für spine-horizontal.js: dieselbe Dauer in Millisekunden, oder null, wenn
-// das Elementmodell nicht zuständig ist — dann gilt dort die Ortsformel.
+// es für das Kapitel keine Elemente gibt — dann gilt dort die Ortsformel.
 function sonifikationElementDauerMs(kapitelNr) {
-  if (SONIFIKATION_MODUS !== 'elemente') return null;
   // Der Ortsvergleich braucht keine Spine-Daten, seine Kreise sind die Orte.
   if (!laeuftOrtsvergleich()) stelleSpineDatenBereit(kapitelNr || undefined);
   let sek = elementDauerSek(kapitelNr);
@@ -654,71 +566,6 @@ async function spieleElementAudio(kapitelNr) {
 }
 
 
-
-// Reiner Audio-Start. Die Spine läuft unabhängig parallel und nutzt dieselbe
-// SONIFIKATION_GESAMTDAUER_SEK, deshalb bleiben beide Uhren synchron.
-async function spieleKapitel1SonifikationAudio() {
-  await stelleSonifikationBereit();
-  let daten = await ladeSonifikationDaten();
-  let stationen = daten.stationen;
-  let maxAnzahl = Math.max(...stationen.map(s => s.anzahlAnnotationen));
-
-  sonifikationSpielplan = baueSpielplan(stationen);
-
-  // Eine Tonstufe je Station, Länge über die @-Gewichte aus baueSpielplan.
-  // .slow() dehnt den einen Zyklus auf SONIFIKATION_GESAMTDAUER_SEK.
-  let notenFolge = sonifikationSpielplan.map((e, i) => `${i}@${e.dauer.toFixed(3)}`).join(' ');
-  let slowFaktor = SONIFIKATION_GESAMTDAUER_SEK / (1 / SONIFIKATION_STANDARD_CPS);
-
-  let gainFolgenProKategorie = {};
-  Object.keys(SONIFIKATION_INSTRUMENTE).forEach(kategorie => {
-    gainFolgenProKategorie[kategorie] = baueGainFolge(stationen, sonifikationSpielplan, kategorie, maxAnzahl);
-  });
-
-  spieleSchichten(notenFolge, gainFolgenProKategorie, slowFaktor, SONIFIKATION_GESAMTDAUER_SEK);
-}
-
-// Kapitel 02–18 lesen dieselben Spine-Einträge wie die Graph-Ansicht, Ton
-// und Bild teilen so die Struktur ohne eigene Python-Datei.
-
-// 'rueckkehr'-Schritte bleiben stumm ('~'): eine Rückkehr lässt den alten
-// Kreis weiterwachsen, was sich sequenziell nicht nachbilden liesse.
-async function spieleKapitelSonifikationAudio(nr) {
-  await stelleSonifikationBereit();
-  let daten = datenFuerKapitel(nr);
-  let eintraege = spineEintraegeFuer(nr);
-  if (!daten || !eintraege || !eintraege.length) return;
-
-  let annotationen = daten.annotationen;
-  let fWertAnteileJeSchritt = eintraege.map((e, j) => {
-    let bis = j + 1 < eintraege.length ? eintraege[j + 1].rv - 1 : annotationen.length - 1;
-    let anteile = { ort_loest_emotion_aus: 0, emotion_faerbt_raum: 0, koerper_als_sensor: 0 };
-    for (let ai = e.rv; ai <= bis; ai++) {
-      let a = annotationen[ai];
-      if (a && a.hasFwert && a.fWertType in anteile) anteile[a.fWertType]++;
-    }
-    return { anteile, anzahl: Math.max(0, bis - e.rv + 1) };
-  });
-  let maxAnzahl = Math.max(1, ...fWertAnteileJeSchritt.map(s => s.anzahl));
-
-  let melodieIndex = 0;
-  let notenFolge = eintraege.map(e => e.typ === 'rueckkehr' ? '~' : String(melodieIndex++)).join(' ');
-
-  let gainFolgenProKategorie = {};
-  Object.keys(SONIFIKATION_INSTRUMENTE).forEach(kategorie => {
-    gainFolgenProKategorie[kategorie] = eintraege.map((e, j) =>
-      e.typ === 'rueckkehr' ? '0' : (fWertAnteileJeSchritt[j].anteile[kategorie] / maxAnzahl).toFixed(2)
-    ).join(' ');
-  });
-
-  // aktuelleGrafikAnimationDauer() (spine-horizontal.js) liest zoomedKapitel
-  // selbst — hier korrekt, weil der Aufruf nur aus toggleGrafikPlay kommt.
-  let gesamtdauerSek = aktuelleGrafikAnimationDauer() / 1000;
-  let slowFaktor = gesamtdauerSek / (1 / SONIFIKATION_STANDARD_CPS);
-
-  spieleSchichten(notenFolge, gainFolgenProKategorie, slowFaktor, gesamtdauerSek);
-}
-
 // --- Legendenklang: Masse -------------------------------------------------
 
 const KATEGORIE_KLANG_SEK = 2;
@@ -790,7 +637,7 @@ function beendeSonifikationAudio() {
 // Introstück: die Kategorienstimmen über der dunklen Karte
 // ---------------------------------------------------------------------------
 //
-// Drittes Wiedergabemodell neben Stations- und Elementmodell, und das einzige
+// Zweites Wiedergabemodell neben dem Elementmodell, und das einzige
 // scrollgekoppelte. Läuft über den Titel und die zwölf .begleittext-Texte —
 // dreizehn Schritte à 98vh, zusammen 1276vh, siehe SCROLL_MEILENSTEINE in
 // datenbereinigung.js.

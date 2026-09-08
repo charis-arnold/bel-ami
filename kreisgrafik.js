@@ -585,9 +585,8 @@ let klangZeilenFrame = -1;
 // Instrumentname erst beim Zeichnen anhängen: sonifikation.js wird nach dieser
 // Datei geladen, beim Auswerten der Liste oben gibt es den Namen noch nicht.
 function fwertZeilenMitKlang(alpha) {
-  let instr = typeof ELEMENT_FWERT_INSTRUMENT !== 'undefined' ? ELEMENT_FWERT_INSTRUMENT : null;
   return LEGENDE_FWERT_ZEILEN.map(z => ({
-    ...z, alpha, text: instr ? `${z.text} (${instr.name})` : z.text,
+    ...z, alpha, text: `${z.text} (${ELEMENT_FWERT_INSTRUMENT.name})`,
   }));
 }
 
