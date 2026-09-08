@@ -40,9 +40,9 @@ statt `'undefined'` zu liefern — ein `typeof`-Wächter schützt hier also nich
 gegen die Ladereihenfolge, sondern ist selbst die Fehlerquelle.
 
 Bei `datenbereinigung.js` hängt die Ladereihenfolge daran: Es ist Skript 1,
-und `kreisgrafik.js` (Skript 3) greift beim Laden auf sechs seiner Namen zu —
-`hexZuRgb`, `ROUTE_COLOR`, `KREIS_KATEGORIEN`, `FWERT_PUNKTGROESSE`,
-`FWERT_LABELS` und `FWERT_PUNKT_DURCHMESSER`. Diese Datei nach hinten zu
+und `kreisgrafik.js` (Skript 3) greift beim Laden auf fünf seiner Namen zu —
+`hexZuRgb`, `KREIS_KATEGORIEN`, `FWERT_PUNKTGROESSE`, `FWERT_LABELS` und
+`FWERT_PUNKT_DURCHMESSER`. Diese Datei nach hinten zu
 schieben bricht `kreisgrafik.js`.
 
 ---
@@ -150,7 +150,7 @@ graph TD
     SK["11 · sketch.js — Orchestrierung"]
     SO["12 · sonifikation.js"]
 
-    DB ==>|"6 Namen, beim LADEN"| KG
+    DB ==>|"5 Namen, beim LADEN"| KG
     GEO ==>|"mapOffsetX/Y, beim LADEN"| FM
 
     P5 -.-> SK
@@ -183,7 +183,7 @@ einzeln geladen wurde:
 
 | Modul | braucht beim Laden | aus | Grund |
 |---|---|---|---|
-| `kreisgrafik.js` | `hexZuRgb`, `ROUTE_COLOR`, `KREIS_KATEGORIEN`, `FWERT_PUNKTGROESSE`, `FWERT_LABELS`, `FWERT_PUNKT_DURCHMESSER` | `datenbereinigung.js` | Drei Stellen: `LEGENDE_TINTE_RGB` und die vier `LEISTE_*`-Farben rufen `hexZuRgb` (einmal mit `ROUTE_COLOR`); `LEGENDE_FWERT_ZEILEN` baut seine Liste aus den drei `FWERT_*`; `const DEMO_ANNOTATIONEN = baueDemoAnnotationen()` liest `KREIS_KATEGORIEN` |
+| `kreisgrafik.js` | `hexZuRgb`, `KREIS_KATEGORIEN`, `FWERT_PUNKTGROESSE`, `FWERT_LABELS`, `FWERT_PUNKT_DURCHMESSER` | `datenbereinigung.js` | Drei Stellen: `LEGENDE_TINTE_RGB` und die drei `LEISTE_*`-Farben rufen `hexZuRgb`; `LEGENDE_FWERT_ZEILEN` baut seine Liste aus den drei `FWERT_*`; `const DEMO_ANNOTATIONEN = baueDemoAnnotationen()` liest `KREIS_KATEGORIEN` |
 | `fotomarker.js` | `mapOffsetX`, `mapOffsetY` | `geo-projektion.js` | `let letzterFotoOffsetX = mapOffsetX, letzterFotoOffsetY = mapOffsetY` |
 
 Alle **zehn übrigen Module laden eigenständig**. Ihre Zugriffe nach aussen

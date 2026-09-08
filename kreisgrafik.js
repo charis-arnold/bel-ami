@@ -1106,6 +1106,10 @@ const LEISTE_REITER_INFO = 'Info';  // Beschriftung des zweiten Registers
 
 // --- Farben ---------------------------------------------------------------
 
+// Grund des Legendenbalkens, zugleich die Schrift des geschlossenen Reiters.
+//
+// ACHTUNG nicht umdefinieren, ohne beides zu prüfen: der Wert färbt auch die
+// Leiste selbst (zeichneRegisterleiste weiter unten), und die soll hell bleiben.
 const LEISTE_GRUND = hexZuRgb('#E2E6E1');
 // Der Projekttext liegt dunkel auf, damit die helle Serifenschrift trägt —
 // im selben Blaugrau wie die Legendentinte und das Kapitelmenü.
@@ -1113,12 +1117,6 @@ const INFO_GRUND = '#3A5058';
 const INFO_ALPHA = 0.94;
 // Schrift des offenen Reiters, wie .kapitel-register-item.aktiv in style.css.
 const LEISTE_AKTIV_TINTE = hexZuRgb('#C6D2D7');
-// Fläche des GESCHLOSSENEN Reiters: das Gold der Route. Die Schrift darauf
-// nimmt den hellen Leistengrund — dunkle Tinte auf Gold wäre nicht zu lesen.
-//
-// ACHTUNG nicht LEISTE_GRUND umdefinieren: der färbt auch die Leiste selbst
-// (zeichneRegisterleiste weiter unten), und die soll hell bleiben.
-const LEISTE_REITER_ZU_GRUND = hexZuRgb(ROUTE_COLOR);
 // Senkrechte Trennlinie zwischen den beiden Hälften des Balkens. Eigener,
 // heller Ton statt der Legendentinte: die Linie ordnet nur, sie benennt
 // nichts — in Tintenstärke las sie sich als Rahmen und nahm den Gruppen
@@ -1188,16 +1186,17 @@ function reiterBreite(titel) {
 // sonst zeichnete sie sich mit voller Deckung als Rechteck darauf ab.
 function zeichneReiter(name, x, oben, titel, breite, offen, negativ = false) {
   let mitte = oben - LEISTE_REITER_H / 2;
-  // negativ heisst: der Reiter sitzt schon auf einer dunklen Fläche, es wird
-  // keine Platte gezeichnet — dort trägt dieselbe helle Schrift wie beim
-  // offenen Reiter. Nur der geschlossene mit eigener Platte steht auf Gold.
-  let tinte = (offen || negativ) ? LEISTE_AKTIV_TINTE : LEISTE_GRUND;
+  // Blaue Platte mit heller Schrift, offen wie geschlossen — nur der
+  // Doppelpfeil unten dreht sich.
+  //
+  // ACHTUNG negativ heisst, er sitzt schon auf der dunklen Info-Fläche. Dort
+  // wird keine Platte gezeichnet und die Schrift ist eine andere.
+  let tinte = negativ ? LEISTE_AKTIV_TINTE : LEISTE_GRUND;
   letzteReiterLagen.push({ name, x0: x, y0: oben - LEISTE_REITER_H, x1: x + breite, y1: oben });
   push();
   noStroke();
   if (!negativ) {
-    let grund = offen ? LEGENDE_TINTE_RGB : LEISTE_REITER_ZU_GRUND;
-    fill(grund.r, grund.g, grund.b);
+    fill(LEGENDE_TINTE_RGB.r, LEGENDE_TINTE_RGB.g, LEGENDE_TINTE_RGB.b);
     rect(x, oben - LEISTE_REITER_H, breite, LEISTE_REITER_H);
   }
   fill(tinte.r, tinte.g, tinte.b);
