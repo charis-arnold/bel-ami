@@ -12,7 +12,7 @@ Wohnung-Sammelpunkt-Tricks wie bei Kapitel 1. Diese Verfeinerungen kommen
 (wie bei Kapitel 1) in späteren Sitzungen Schritt für Schritt.
 
 Input:  ../03 output/kapitel-XX-final.json  (XX = 04..18)
-Output: <projekt-root>/kapitelXX-stationen.json
+Output: <projekt-root>/json/kapitelXX-stationen.json
 
 Zwei Felder fehlen in kapitel-XX-final.json komplett und werden hier selbst
 deterministisch berechnet (siehe kategorie_fuer_annotation() und die
@@ -56,10 +56,10 @@ import osmnx as ox
 # ── Pfade ──────────────────────────────────────────────────────────────────
 SKRIPT_ORDNER = os.path.dirname(os.path.abspath(__file__))       # .../data-prep/05 bereinigen
 DATA_PREP_ORDNER = os.path.dirname(SKRIPT_ORDNER)                  # .../data-prep
-PROJEKT_ROOT = os.path.dirname(DATA_PREP_ORDNER)                   # Projekt-Root (dort liegen kapitelXX-stationen.json)
+PROJEKT_ROOT = os.path.dirname(DATA_PREP_ORDNER)                   # Projekt-Root
 
 INPUT_DIR = os.path.join(DATA_PREP_ORDNER, "03 output")
-OUTPUT_DIR = PROJEKT_ROOT
+OUTPUT_DIR = os.path.join(PROJEKT_ROOT, "json")   # dort liegen kapitelXX-stationen.json
 
 ox.settings.use_cache = True
 ox.settings.cache_folder = os.path.join(DATA_PREP_ORDNER, "cache")

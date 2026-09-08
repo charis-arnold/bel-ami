@@ -41,6 +41,7 @@ SKRIPT = os.path.dirname(os.path.abspath(__file__))
 DATA_PREP = os.path.dirname(SKRIPT)
 ROOT = os.path.dirname(DATA_PREP)
 KARTEN = os.path.join(ROOT, "bilder-karten")
+JSON_ORDNER = os.path.join(ROOT, "json")
 BASIS = os.path.join(DATA_PREP, "00 qgis-quellen", "cas scrollytelling - paris kapitelkarte.png")
 
 # EPSG:3857, wie aus QGIS exportiert
@@ -109,7 +110,7 @@ FEINJUSTIERUNG = {
 
 
 def route_ausdehnung_3857(nr):
-    with open(os.path.join(ROOT, f"kapitel{nr}-stationen.json"), encoding="utf-8") as f:
+    with open(os.path.join(JSON_ORDNER, f"kapitel{nr}-stationen.json"), encoding="utf-8") as f:
         d = json.load(f)
     p = [x for x in (d.get("routenPfadDetail") or d["routenPunkte"])
          if isinstance(x, (list, tuple)) and len(x) == 2]

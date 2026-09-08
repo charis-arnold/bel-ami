@@ -93,7 +93,9 @@ Zwei Dinge deshalb bei jeder Änderung mitprüfen —
 
 ## Ladereihenfolge
 
-`index.html` lädt zuerst zwei externe Bibliotheken, dann zwölf eigene Dateien:
+`index.html` liegt im Projektstamm; die zwölf eigenen Skripte liegen in `js/`,
+alle Eingangsdaten in `json/`. Geladen werden zuerst zwei externe Bibliotheken,
+dann die zwölf eigenen Dateien (`<script src="js/…">`):
 
 | # | Datei | Rolle |
 |---|---|---|
@@ -557,10 +559,17 @@ Wahrnehmung».
 
 | Datei | Variable | Inhalt |
 |---|---|---|
-| `kapitelXX-stationen.json` (18×, Kapitel 01–18) | `stationenData` (01), `kapitel03Data` (03), `weitereKapitelDaten[nr]` | Annotationen, Route, ortRuns je Kapitel |
-| `kapitel-routen-uebersicht.json` | `uebersichtsRouten` | Strassenrouten aller Kapitel für den Übersichtsakt |
-| `fotomarker.json` | `fotoMarkerListe` | Koordinaten und Metadaten der Fotobank-Marker |
+| `json/kapitelXX-stationen.json` (18×, Kapitel 01–18) | `stationenData` (01), `kapitel03Data` (03), `weitereKapitelDaten[nr]` | Annotationen, Route, ortRuns je Kapitel |
+| `json/kapitel-routen-uebersicht.json` | `uebersichtsRouten` | Strassenrouten aller Kapitel für den Übersichtsakt |
+| `json/fotomarker.json` | `fotoMarkerListe` | Koordinaten und Metadaten der Fotobank-Marker |
 | `bilder-karten/kapitelXX-bbox.json` (17×) | `kapitelKarten[nr].bboxRaw` | Georeferenz des jeweiligen Kartenausschnitts |
+
+**ACHTUNG die bbox-Dateien bleiben bei den Bildern**, nicht in `json/`: Sie
+gehören zum jeweiligen Kartenausschnitt und werden von der Python-Pipeline
+zusammen mit ihm erzeugt. JSON liegt im Projekt deshalb an zwei Orten —
+`json/` für die Eingangsdaten, `bilder-karten/` für die Georeferenzen.
+`loadJSON()`-Pfade sind relativ zu `index.html`, nicht zur aufrufenden
+JS-Datei; sie lauten darum `json/…` und nicht `../json/…`.
 
 Kapitel 1 hat **kein** `bbox.json`: seine Georeferenz steht als Literal
 `ch1ImgBbox` in `geo-projektion.js`. Die Kapitelkarten 02–18 samt ihren
@@ -618,11 +627,11 @@ die Graph-Animation über `grafikSpielt` (`spine-horizontal.js:143`).
 graph TD
     TXT["data-prep/01 texte<br/>Kapiteltexte"] --> PY["data-prep/02, 05<br/>Python-Pipeline"]
     QGIS["data-prep/00 qgis-quellen<br/>QGIS-Projekte und Vorlagen"] --> PY
-    PY --> JSON["kapitelXX-stationen.json<br/>kapitel-routen-uebersicht.json"]
+    PY --> JSON["json/kapitelXX-stationen.json<br/>json/kapitel-routen-uebersicht.json"]
     PY --> BILD["bilder-karten/<br/>Kartenbilder und bbox.json"]
-    JSON --> PRE["preload() in sketch.js"]
+    JSON --> PRE["preload() in js/sketch.js"]
     BILD --> PRE
-    PRE --> BER["bereinigeEingangsdaten()<br/>datenbereinigung.js"]
+    PRE --> BER["bereinigeEingangsdaten()<br/>js/datenbereinigung.js"]
     BER --> DRAW["draw() — auf Anlass, nicht je Frame"]
     DRAW --> CANVAS["p5-Canvas"]
 ```
@@ -633,7 +642,7 @@ graph TD
 
 Die Angaben sind aus dem Code erhoben, nicht aus den Kommentaren übernommen:
 
-- **Ladereihenfolge:** direkt aus den `<script src="…">`-Tags in `index.html`.
+- **Ladereihenfolge:** direkt aus den `<script src="js/…">`-Tags in `index.html`.
 - **Funktionen und Variablen:** Top-Level-Deklarationen je Datei, auf
   kommentarbereinigtem Quelltext gezählt (inklusive `async function`).
 - **Ladezeit-Abhängigkeiten:** jedes Modul einzeln in JavaScriptCore geladen —

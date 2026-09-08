@@ -36,7 +36,7 @@ DATA_PREP_ORDNER = os.path.dirname(SKRIPT_ORDNER)
 PROJEKT_ROOT = os.path.dirname(DATA_PREP_ORDNER)
 
 INPUT_DIR = os.path.join(DATA_PREP_ORDNER, "04 geojson.geojson")
-OUTPUT_DIR = PROJEKT_ROOT
+OUTPUT_DIR = os.path.join(PROJEKT_ROOT, "json")   # dort liegen kapitelXX-stationen.json
 
 ox.settings.use_cache = True
 ox.settings.cache_folder = os.path.join(DATA_PREP_ORDNER, "cache")

@@ -195,16 +195,16 @@ function preload() {
   ];
 
   kapitelDatenDateien.forEach(({ nr, ziel }) => {
-    const datei = `kapitel${nr}-stationen.json`;
+    const datei = `json/kapitel${nr}-stationen.json`;
     if (ziel === 'stationenData') stationenData = loadJSON(datei);
     else if (ziel === 'kapitel03Data') kapitel03Data = loadJSON(datei);
     else weitereKapitelDaten[ziel] = loadJSON(datei);
   });
 
-  fotoMarkerListe = loadJSON('fotomarker.json');
-  uebersichtsRouten = loadJSON('kapitel-routen-uebersicht.json');
+  fotoMarkerListe = loadJSON('json/fotomarker.json');
+  uebersichtsRouten = loadJSON('json/kapitel-routen-uebersicht.json');
 
-  // Nicht hier, und das mit Absicht: kreisvergleich-orte.json im Projektstamm
+  // Nicht hier, und das mit Absicht: json/kreisvergleich-orte.json
   // ist ein Prüf-Artefakt der Python-Pipeline (baue-sammelpunkte-handkuriert.py
   // vergleicht dagegen), keine Eingangsdatei. Nicht löschen.
 

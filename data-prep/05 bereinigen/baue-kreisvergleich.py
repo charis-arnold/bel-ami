@@ -34,8 +34,8 @@ oder "Folies Bergère"/"Folies-Bergère"):
                                            Platz derselben Örtlichkeit)
     Redaktion                            — "redaktion"
 
-Input:  <projekt-root>/kapitelXX-stationen.json (XX = 01..18)
-Output: <projekt-root>/kreisvergleich-orte.json
+Input:  <projekt-root>/json/kapitelXX-stationen.json (XX = 01..18)
+Output: <projekt-root>/json/kreisvergleich-orte.json
 """
 
 import json
@@ -46,6 +46,7 @@ import unicodedata
 SKRIPT_ORDNER = os.path.dirname(os.path.abspath(__file__))
 DATA_PREP_ORDNER = os.path.dirname(SKRIPT_ORDNER)
 PROJEKT_ROOT = os.path.dirname(DATA_PREP_ORDNER)
+JSON_ORDNER = os.path.join(PROJEKT_ROOT, "json")
 
 KAPITEL_NUMMERN = [f"{i:02d}" for i in range(1, 19)]
 
@@ -101,7 +102,7 @@ def main():
     treffer_report = {name: {} for name, _ in ORTE_DEFINITIONEN}
 
     for nr in KAPITEL_NUMMERN:
-        pfad = os.path.join(PROJEKT_ROOT, f"kapitel{nr}-stationen.json")
+        pfad = os.path.join(JSON_ORDNER, f"kapitel{nr}-stationen.json")
         if not os.path.exists(pfad):
             continue
         with open(pfad, encoding="utf-8") as f:
@@ -128,7 +129,7 @@ def main():
             kapitel_liste.append({"nr": nr, "bandCounts": eintrag["bandCounts"]})
         ergebnis.append({"name": name, "kapitel": kapitel_liste})
 
-    out_pfad = os.path.join(PROJEKT_ROOT, "kreisvergleich-orte.json")
+    out_pfad = os.path.join(JSON_ORDNER, "kreisvergleich-orte.json")
     with open(out_pfad, "w", encoding="utf-8") as f:
         json.dump(ergebnis, f, ensure_ascii=False, indent=2)
 

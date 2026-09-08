@@ -50,8 +50,8 @@ Annotationen ausserhalb 0–5 (station ist null oder >=100 — letzteres
 scheint eine andere Zählung zu sein, z.B. Gedanken-Spalte) fliessen hier
 NICHT ein; siehe Report am Skriptende für die genaue Anzahl.
 
-Input:  <projekt-root>/kapitel01-stationen.json
-Output: <projekt-root>/kapitel01-sonifikation.json
+Input:  <projekt-root>/json/kapitel01-stationen.json
+Output: <projekt-root>/json/kapitel01-sonifikation.json
 """
 
 import json
@@ -62,6 +62,7 @@ from collections import Counter
 SKRIPT_ORDNER = os.path.dirname(os.path.abspath(__file__))
 DATA_PREP_ORDNER = os.path.dirname(SKRIPT_ORDNER)
 PROJEKT_ROOT = os.path.dirname(DATA_PREP_ORDNER)
+JSON_ORDNER = os.path.join(PROJEKT_ROOT, "json")
 
 STATIONEN_NUMMERN = list(range(6))  # 0..5, siehe Moduldocstring
 
@@ -101,7 +102,7 @@ def strecke_m(punkte, von_idx, bis_idx, kx, ky):
 
 
 def main():
-    quelle_pfad = os.path.join(PROJEKT_ROOT, "kapitel01-stationen.json")
+    quelle_pfad = os.path.join(JSON_ORDNER, "kapitel01-stationen.json")
     with open(quelle_pfad, encoding="utf-8") as f:
         daten = json.load(f)
 
@@ -170,7 +171,7 @@ def main():
         "stationen": stationen,
     }
 
-    ziel_pfad = os.path.join(PROJEKT_ROOT, "kapitel01-sonifikation.json")
+    ziel_pfad = os.path.join(JSON_ORDNER, "kapitel01-sonifikation.json")
     with open(ziel_pfad, "w", encoding="utf-8") as f:
         json.dump(ausgabe, f, ensure_ascii=False, indent=2)
 

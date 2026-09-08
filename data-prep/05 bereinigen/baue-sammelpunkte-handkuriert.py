@@ -38,7 +38,7 @@ hinweg mehrfach weiterwächst — genau wie "Rue Constantinople 127" in
 Kapitel 9. Deshalb ist die Blockliste unten eine LAUFENDE Folge (mit
 Wiederholungen), die ortRuns-Liste daraus die eindeutige Namensmenge.
 
-Ein-/Ausgabe (in-place):  <projekt-root>/kapitelXX-stationen.json
+Ein-/Ausgabe (in-place):  <projekt-root>/json/kapitelXX-stationen.json
 Neu geschrieben werden:   annotationen[].ortBasis, ortRuns, routenPunkte,
                           routenPfadDetail, routenPfadKumulativ, route
 Unangetastet bleiben:     annotationen[].ort (die feine LLM-Ortsangabe),
@@ -66,6 +66,7 @@ import osmnx as ox
 SKRIPT_ORDNER = os.path.dirname(os.path.abspath(__file__))       # .../data-prep/05 bereinigen
 DATA_PREP_ORDNER = os.path.dirname(SKRIPT_ORDNER)                  # .../data-prep
 PROJEKT_ROOT = os.path.dirname(DATA_PREP_ORDNER)                   # Projekt-Root
+JSON_ORDNER = os.path.join(PROJEKT_ROOT, "json")                   # dort liegen die Kapiteldaten
 
 ox.settings.use_cache = True
 ox.settings.cache_folder = os.path.join(DATA_PREP_ORDNER, "cache")
@@ -729,7 +730,7 @@ def wende_ausschluss_an(nr, daten, bloecke):
 
 # ── Hauptarbeit ────────────────────────────────────────────────────────────
 def verarbeite_kapitel(nr):
-    pfad = os.path.join(PROJEKT_ROOT, f"kapitel{nr}-stationen.json")
+    pfad = os.path.join(JSON_ORDNER, f"kapitel{nr}-stationen.json")
     with open(pfad, encoding="utf-8") as f:
         daten = json.load(f)
 
@@ -924,7 +925,7 @@ def normalisiere(ort):
 
 
 def aktualisiere_kreisvergleich(nr, daten):
-    pfad = os.path.join(PROJEKT_ROOT, "kreisvergleich-orte.json")
+    pfad = os.path.join(JSON_ORDNER, "kreisvergleich-orte.json")
     if not os.path.exists(pfad):
         return
     beitrag = {}

@@ -74,6 +74,7 @@ import osmnx as ox
 SKRIPT_ORDNER = os.path.dirname(os.path.abspath(__file__))        # .../data-prep/05 bereinigen
 DATA_PREP_ORDNER = os.path.dirname(SKRIPT_ORDNER)                   # .../data-prep
 PROJEKT_ROOT = os.path.dirname(DATA_PREP_ORDNER)                    # Projekt-Root
+JSON_ORDNER = os.path.join(PROJEKT_ROOT, "json")                    # Kapiteldaten
 KARTEN_ORDNER = os.path.join(PROJEKT_ROOT, "bilder-karten")
 
 ox.settings.use_cache = True
@@ -229,7 +230,7 @@ ROUTENANTEIL_KNAPP = 0.85  # darüber: kein Rand mehr, aber noch sichtbar
 def pruefe_routenanteil(nr: str, bbox: dict) -> list:
     """Warnt, wenn die Route im Browser beschnitten würde. Gibt eine Liste von
     Meldungen zurück (leer = in Ordnung)."""
-    pfad = os.path.join(PROJEKT_ROOT, f"kapitel{nr}-stationen.json")
+    pfad = os.path.join(JSON_ORDNER, f"kapitel{nr}-stationen.json")
     if not os.path.exists(pfad):
         return []
     with open(pfad, encoding="utf-8") as f:

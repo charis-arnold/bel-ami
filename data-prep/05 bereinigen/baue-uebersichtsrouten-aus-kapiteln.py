@@ -22,8 +22,8 @@ unverändert heraus, statt sie ein zweites Mal zu berechnen. Übersichts- und
 Kapitelroute sind dadurch per Konstruktion identisch und können nicht mehr
 auseinanderlaufen; OSMnx/Overpass wird nicht gebraucht.
 
-Input:  ../../kapitelXX-stationen.json  (Kapitel 02–18)
-Output: ../../kapitel-routen-uebersicht.json
+Input:  ../../json/kapitelXX-stationen.json  (Kapitel 02–18)
+Output: ../../json/kapitel-routen-uebersicht.json
         { "02": [[lon,lat], ...], "03": [...], ... }
 """
 
@@ -32,7 +32,8 @@ import os
 
 SKRIPT_ORDNER = os.path.dirname(os.path.abspath(__file__))
 APP_ORDNER = os.path.dirname(os.path.dirname(SKRIPT_ORDNER))
-AUSGABE = os.path.join(APP_ORDNER, "kapitel-routen-uebersicht.json")
+JSON_ORDNER = os.path.join(APP_ORDNER, "json")
+AUSGABE = os.path.join(JSON_ORDNER, "kapitel-routen-uebersicht.json")
 
 KAPITEL_NUMMERN = [f"{n:02d}" for n in range(2, 19)]  # 01 hat seine eigene Route
 
@@ -41,7 +42,7 @@ def lade_route(nr):
     """routenPfadDetail eines Kapitels — die Linie, die auch die
     Kapitelansicht zeichnet. Fällt auf routenPunkte zurück, falls ein
     Kapitel (noch) keinen Detailpfad hat."""
-    pfad = os.path.join(APP_ORDNER, f"kapitel{nr}-stationen.json")
+    pfad = os.path.join(JSON_ORDNER, f"kapitel{nr}-stationen.json")
     with open(pfad, encoding="utf-8") as f:
         daten = json.load(f)
     punkte = daten.get("routenPfadDetail") or daten.get("routenPunkte") or []
