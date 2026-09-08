@@ -99,6 +99,12 @@ let letzterZoomKapitel = null; // bleibt waehrend des Ausblendens gesetzt, siehe
 // Uhr des Kapitel-Einstiegstexts, gesetzt von starteKapitelEinstieg().
 let kapitelEinstiegsStartMillis = null;
 
+// Welche Annotation steht gerade in der Box. draw() schreibt den Text nur bei
+// einem Wechsel, nicht in jedem Frame — sonst überschriebe es 60-mal je
+// Sekunde alles, was der Browser in die Box gesetzt hat, etwa seine
+// automatische Übersetzung.
+let zuletztGezeigteAnnotation = null;
+
 // --- Register «Legende» und «Info» am unteren Rand -------------------------
 
 // Die beiden Register am unteren Fensterrand (docs/Legende.pdf). Eingeklappt
@@ -585,7 +591,11 @@ function draw() {
   if (amKapitelEnde) aktuelleAnnotation = null;
 
   if (aktuelleAnnotation) {
-    annotationText.textContent = '«' + aktuelleAnnotation.text + '»';
+    if (zuletztGezeigteAnnotation !== aktuelleAnnotation) {
+      zuletztGezeigteAnnotation = aktuelleAnnotation;
+      annotationText.textContent = '«' + aktuelleAnnotation.text + '»';
+      annotationTag.textContent = CATEGORY_LABELS[aktuelleAnnotation.category] || '';
+    }
     annotationText.style.opacity = 1;
     annotationInner.style.opacity = 1;
     annotationInner.style.background = 'rgba(226, 230, 225, 0.85)';
@@ -594,11 +604,13 @@ function draw() {
     annotationBar.style.background = aktuelleAnnotation.hasFwert
       ? `linear-gradient(90deg, ${catColor}, ${fwertColor})`
       : catColor;
-    annotationTag.textContent = CATEGORY_LABELS[aktuelleAnnotation.category] || '';
   } else {
+    if (zuletztGezeigteAnnotation !== null) {
+      zuletztGezeigteAnnotation = null;
+      annotationTag.textContent = '';
+    }
     annotationText.style.opacity = 0;
     annotationInner.style.opacity = 0;
-    annotationTag.textContent = '';
   }
 
   // Kapitelregister: in jeder Kapitel-Ansicht und in beiden
