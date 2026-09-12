@@ -131,9 +131,9 @@ const ELEMENT_FWERT_INSTRUMENT = { sound: 'vibraphone_soft', oktave: 4, name: 'V
 const ELEMENT_FWERT_SOUND = ELEMENT_FWERT_INSTRUMENT.sound;
 const ELEMENT_FWERT_OKTAVE = ELEMENT_FWERT_INSTRUMENT.oktave;
 const ELEMENT_FWERT_GRAD = {
-  ort_loest_emotion_aus: 0,
+  ort_loest_emotion_aus: 4,
   emotion_faerbt_raum: 2,
-  koerper_als_sensor: 4,
+  koerper_als_sensor: 0,
   persoenliche_sehnsucht: 7,
 };
 
