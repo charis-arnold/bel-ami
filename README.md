@@ -116,16 +116,17 @@ aufeinander wirken:
 
 | Wert | Bedeutung | Anzahl | Darstellung |
 |---|---|---|---|
-| `ort_loest_emotion_aus` | Der Raum löst das Gefühl aus | 710 | Vibraphon Grundton, kleiner Punkt |
+| `ort_loest_emotion_aus` | Der Raum löst das Gefühl aus | 710 | Vibraphon Quinte, kleiner Punkt |
 | `emotion_faerbt_raum` | Das Gefühl färbt die Raumwahrnehmung | 146 | Vibraphon Terz, mittlerer Punkt |
-| `koerper_als_sensor` | Der Körper ist der Wahrnehmungsmodus | 100 | Vibraphon Quinte, grosser Punkt |
+| `koerper_als_sensor` | Der Körper ist der Wahrnehmungsmodus | 100 | Vibraphon Grundton, grosser Punkt |
 
 Das Verhältnis ist das inhaltliche Ergebnis des Projekts: In drei von vier
 Fällen geht die Wirkung vom Ort aus.
 
-Das Factsheet ordnet Grundton, Terz und Quinte anders zu. Massgeblich ist
-`ELEMENT_FWERT_GRAD` in [js/sonifikation.js](js/sonifikation.js) — dort steht
-die aktuell klingende Zuordnung.
+Die Tonstufen stehen in `ELEMENT_FWERT_GRAD`
+([js/sonifikation.js](js/sonifikation.js)) als Skalenstufen, also 0 für den
+Grundton, 2 für die Terz und 4 für die Quinte. Sie stimmen mit dem Factsheet
+überein.
 
 ### Quantifizierung
 
@@ -463,8 +464,14 @@ Nachannotieren einzelner Kapitel.
 | Strudel `@strudel/web` 1.0.3 | Klangsynthese — über unpkg |
 | Schrift | Source Sans 3 und Source Serif 4 über Google Fonts |
 
-Sonst nichts. **Weder D3.js noch Leaflet sind im Einsatz** — das Factsheet
-nennt sie, der Code verwendet sie nicht. Die Karten sind statische
+Sonst nichts. **Weder D3.js noch Leaflet sind im Einsatz.** D3 war früher
+eingebunden, aus `d3js.org` im Kopf von `index.html`, und wurde an einer
+einzigen Stelle benutzt: `d3.group()` in `versetzeKollidierendePunkte()`.
+Mit dieser Funktion fiel auch die Abhängigkeit weg, nachzulesen in Schritt 12
+von [docs/cleanup-log.md](docs/cleanup-log.md). Das geschah vor dem ersten
+Commit dieses Repositorys, die dort genannten Commits liegen nicht in dieser
+Historie. In der Python-Pipeline kam D3 nie vor; sie zeichnet ihre
+Kontrollkarten mit matplotlib. Die Karten sind statische
 PNG-Exporte aus QGIS, und die Projektion von Längen- und Breitengrad auf
 Bildschirmpunkte rechnet `lonLatToScreen()` in
 [js/geo-projektion.js](js/geo-projektion.js) selbst, per Dreisatz über die
@@ -488,6 +495,7 @@ Datei lesen.**
 | OSMnx + NetworkX | Fusswegnetz, kürzeste Wege, POI-Beschriftungen |
 | QGIS | Kartenexporte, Georeferenz in EPSG:3857 |
 | pandas | Auswertung und POI-Auswahl |
+| matplotlib, GeoPandas, rasterio | Kontrollkarten in `belami-pipeline.py` |
 
 **Klang**
 
@@ -518,8 +526,6 @@ Kartenbild mit eigener Bbox-Datei und zusätzlich die Graph-Ansicht.
   Wiederholungslauf eine Kopie anlegen.
 - **`baue-uebersichtsrouten.py` ist überholt** und liegt nur noch als
   Dokumentation des früheren Wegs.
-- **Uncommittete Änderung** in `js/sonifikation.js`: Grundton und Quinte
-  sind in `ELEMENT_FWERT_GRAD` getauscht.
 
 **Drei Dinge in `docs/`, die absichtlich so sind — nicht «aktualisieren»:**
 
