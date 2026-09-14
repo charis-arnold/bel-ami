@@ -80,7 +80,7 @@ body {
    ACHTUNG visibility statt opacity: draw() schreibt die Deckkraft der
    Begleit- und Einstiegstexte jeden Frame als Inline-Stil: eine
    opacity-Regel im Stylesheet käme dagegen nicht an. */
-body.projekttext-offen #scrollyStage > *:not(canvas),
+body.projekttext-offen #scrollyStage>*:not(canvas),
 body.projekttext-offen #grafikPlayButton {
   visibility: hidden;
   pointer-events: none;
@@ -92,7 +92,7 @@ body.projekttext-offen #grafikPlayButton {
    verschwindet (.kapitel-register-rahmen weiter unten), und die
    Annotationsbox, die weiterlesbar bleiben soll und stattdessen über den
    Balken rückt (siehe Abschnitt 7). */
-body.legende-offen #scrollyStage > *:not(canvas):not(#annotationBox),
+body.legende-offen #scrollyStage>*:not(canvas):not(#annotationBox),
 body.legende-offen #grafikPlayButton {
   visibility: hidden;
   pointer-events: none;
@@ -790,7 +790,8 @@ body.legende-offen .annotation-box.pos-unten-links {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8vh 8vw 16vh; /* unten Platz für den Scrollen-Hinweis */
+  padding: 8vh 8vw 16vh;
+  /* unten Platz für den Scrollen-Hinweis */
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -814,9 +815,10 @@ body.legende-offen .annotation-box.pos-unten-links {
    Die font-size muss mit .begleittext mitwandern, damit beide Spalten im
    selben Verhältnis mit dem Fenster wachsen. */
 .projekttext-inner {
-  font-size: clamp(16px, 3vw, 30px);
+  font-size: clamp(20px, 3vw, 30px);
   max-width: 50ch;
-  max-height: 76vh; /* 100vh minus beide Polster von .projekttext */
+  max-height: 76vh;
+  /* 100vh minus beide Polster von .projekttext */
   overflow-y: auto;
   scrollbar-width: none;
   pointer-events: auto;
@@ -852,51 +854,61 @@ body.legende-offen .annotation-box.pos-unten-links {
    siehe .projekttext-inner oben. */
 .projekttext-inner p {
   font-family: var(--serif-text);
-  font-size: clamp(16px, 1.5vw, 22px);
+  font-size: clamp(18px, 1vw, 20px);
   line-height: 1.65;
   text-align: left;
   color: #E2E6E1;
 }
 
-.projekttext-inner p + p {
+.projekttext-inner p+p {
   margin-top: 1.1em;
 }
 
-/* Titel und Untertitel wie im Factsheet: halbfett, der Titel in Versalien. */
+/* Titel und Untertitel wie im Factsheet: halbfett und je grösser als der
+   Lauftext, der Titel zusätzlich in Versalien. */
 .projekttext-inner p.projekttext-titel,
 .projekttext-inner p.projekttext-untertitel {
   font-weight: 600;
 }
 
 .projekttext-inner p.projekttext-titel {
+  font-size: clamp(28px, 2.1vw, 30px);
+  line-height: 1.25;
   text-transform: uppercase;
+  
 }
 
 .projekttext-inner p.projekttext-untertitel {
+  font-size: clamp(12px, 1.4vw, 22px);
+  font-weight: 300;
+  line-height: 1.4;
   margin-top: 0;
+    padding-bottom: 2.5em;
+
 }
 
 /* Rubriken in der Etikettenschrift (siehe .annotation-tag); der Text darunter
    rückt an seine Rubrik heran. */
 .projekttext-inner p.projekttext-rubrik {
-  margin-top: 2em;
+    font-size: clamp(13px, 2.1vw, 16px);
+  margin-top: 2.5em;
 }
 
-.projekttext-inner p.projekttext-rubrik + p {
+.projekttext-inner p.projekttext-rubrik+p {
   margin-top: 0.4em;
 }
 
 /* Randspalte des Factsheets am Schluss: kleiner und ruhiger als der
    Fliesstext, damit sie ihn nicht überstimmt. Die Linie trennt sie ab. */
 .projekttext-inner p.projekttext-rand {
-  font-size: clamp(13px, 1.1vw, 16px);
-  line-height: 1.5;
-  margin-top: 0.7em;
+  font-size: clamp(12px, 1.1vw, 15px);
+  line-height: 1.7;
+  margin-top: 0.6em;
 }
 
 .projekttext-inner p.projekttext-rand-beginn {
   margin-top: 2em;
-  padding-top: 1.4em;
+  padding-top: 2.5em;
   border-top: 1px solid rgba(226, 230, 225, 0.25);
 }
 
