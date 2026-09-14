@@ -254,7 +254,7 @@ h2 {
   border: none;
   color: #ffffff;
   cursor: pointer;
-  transition: opacity 0.25s ease, background-color 0.3s ease;
+  transition: opacity 0.25s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Aufgehellte Fläche statt Rahmenwechsel — der Knopf hat keinen Rahmen mehr.
@@ -282,6 +282,13 @@ h2 {
 
 .intro-ton[aria-pressed="true"] .intro-ton-zeichen {
   background: currentColor;
+}
+
+/* Läuft der Ton (der Knopf zeigt «Ton aus»), steht er negativ: keine Fläche,
+   Schrift und Ring in Gold. Unter dem Zeiger bekommt er die Fläche zurück. */
+.intro-ton[aria-pressed="true"]:not(:hover) {
+  background: transparent;
+  color: var(--gold);
 }
 
 /* Blendet mit der dunklen Karte weg; gesetzt aus draw(). pointer-events aus,
