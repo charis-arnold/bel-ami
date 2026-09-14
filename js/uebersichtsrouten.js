@@ -298,12 +298,11 @@ function scrolleZuKapitel1() {
   window.scrollTo(0, trackEl.offsetHeight * SCROLL_MEILENSTEINE.zoomEnd);
 }
 
-// Setzt Ansichtsmodus und Play-Animation zurück, damit jede Kapitel-Ansicht
-// in der Kartenansicht startet. Kein Guard, anders als setzeKapitelAnsichtModus.
+// Setzt Play-Animation und Einstiegs-Uhr zurück, den Ansichtsmodus nicht:
+// ein Kapitelwechsel behält Plan oder Graph bei.
 function setzeKapitelAnsichtZurueck() {
   // Jedes Modul setzt seinen eigenen Zustand zurück. Ton stoppt in
   // setzeGrafikZurueck() mit.
-  setzeAnsichtsModus('karte');   // sketch.js
   setzeGrafikZurueck();          // spine-horizontal.js
   // Startzeit für den Einstiegstext-Fade, bei jedem Kapitelwechsel neu.
   starteKapitelEinstieg();       // sketch.js
@@ -345,13 +344,15 @@ function springeZuKapitelZoom(nr) {
   oeffneKapitelZoom(nr);
 }
 
-// "Alle"-Button und "Plan" in der Übersicht. Zielt auf den Anfang des Akts:
-// die Überblickskarte beginnt immer bei 0, die Routen wachsen von dort.
+// "Alle" und Plan/Graph in der Übersicht. Zielt auf den Anfang der Ansicht, die
+// der Modus vorgibt: Überblickskarte bei 0, Ortsvergleich auf seiner Klemme.
 function springeZurUebersicht() {
   let trackEl = document.querySelector('.scroll-track');
   loeseKapitel1Klemme(); // sonst zöge draw() sofort ans Kapitel-1-Ende zurück
-  window.scrollTo(0, trackEl.offsetHeight * SCROLL_MEILENSTEINE.uebersichtRoutenStart);
-  schliesseKapitelZoom(); // setzt den Modus auf 'karte' zurück
+  let marke = kapitelAnsichtsModus === 'grafik'
+    ? SCROLL_MEILENSTEINE.uebersichtRoutenEnd : SCROLL_MEILENSTEINE.uebersichtRoutenStart;
+  window.scrollTo(0, trackEl.offsetHeight * marke);
+  schliesseKapitelZoom();
 }
 
 // Läuft gerade der Ortsvergleich? Übersicht (kein Kapitel offen, Klemme
@@ -359,17 +360,6 @@ function springeZurUebersicht() {
 // Klemme und die Abspieldauer in spine-horizontal.js fragen alle hier.
 function laeuftOrtsvergleich() {
   return !zoomedKapitel && !kapitel1Geklemmt && kapitelAnsichtsModus === 'grafik';
-}
-
-// "Graph" in der Übersicht. Der Ortsvergleich hat keine eigene Scrollstrecke:
-// er sitzt auf der Klemme und läuft über den Play-Knopf. Nur aus
-// waehleAnsichtsModus gerufen, also nie mit offenem Kapitel und nie mit
-// stehender Klemme — beides muss hier deshalb nicht gelöst werden.
-function springeZumOrtsvergleich() {
-  let trackEl = document.querySelector('.scroll-track');
-  window.scrollTo(0, trackEl.offsetHeight * SCROLL_MEILENSTEINE.uebersichtRoutenEnd);
-  setzeAnsichtsModus('grafik'); // sketch.js
-  setzeGrafikZurueck();         // spine-horizontal.js — Play beginnt bei 0
 }
 
 // Menübalken "Plan"/"Graph": im Kapitel schaltet er zwischen Kartenausschnitt
@@ -383,6 +373,6 @@ function waehleAnsichtsModus(modus) {
     return;
   }
   if (kapitelAnsichtsModus === modus) return; // schon da, nur gelesen
-  if (modus === 'grafik') springeZumOrtsvergleich();
-  else springeZurUebersicht();
+  setzeAnsichtsModus(modus); // sketch.js
+  springeZurUebersicht();    // Sprungziel folgt dem Modus, Play beginnt bei 0
 }

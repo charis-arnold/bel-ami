@@ -215,7 +215,7 @@ eigenen Header-Abschnitt aus.
 | 7 | `fotomarker.js` | 180 | `zeichneFotoMarker`, `merkeKartenlage`, `oeffneFotoPopup`, `schliesseFotoPopup` | `fotoMarkerListe`, `letzteActiveBbox`, `letzterFotoOffsetX/Y`, `FOTO_MARKER_TREFFER_RADIUS`. Zeichnet einen Punkt mit hellem Kern; Grösse abgeleitet aus `FWERT_PUNKT_DURCHMESSER`, Beschriftung über `zeichneKreisLabels` |
 | 8 | `annotationsbox.js` | 98 | `annotationBoxPosition` | `ANNOTATION_BOX_POSITIONEN` — intern u. a. `annotationBoxPositionCache` |
 | 9 | `dom-aufbau.js` | 99 | `baueKapitelRegister`, `baueKartenMarkierungen`, `baueStationsMarker`, `baueZwischenMarker` | — (baut nur DOM, hält keinen Zustand) |
-| 10 | `uebersichtsrouten.js` | 388 | `zeichneUebersichtsrouten`, `kapitelScheiben`, `aktualisiereKapitelZoom`, `springeZuKapitelZoom`, `scrolleZuKapitel1`, `waehleAnsichtsModus` | `zoomedKapitel`, `kapitelZoomAmount`, `kapitelHover` — alle drei nur hier geschrieben, von aussen nur gelesen; intern u. a. `kapitelHitze`, `oeffneKapitelZoom`, `scheibenCache` |
+| 10 | `uebersichtsrouten.js` | 378 | `zeichneUebersichtsrouten`, `kapitelScheiben`, `aktualisiereKapitelZoom`, `springeZuKapitelZoom`, `scrolleZuKapitel1`, `waehleAnsichtsModus` | `zoomedKapitel`, `kapitelZoomAmount`, `kapitelHover` — alle drei nur hier geschrieben, von aussen nur gelesen; intern u. a. `kapitelHitze`, `oeffneKapitelZoom`, `scheibenCache` |
 | 11 | `sketch.js` | 1093 | `preload`, `setup`, `draw`, `mousePressed`, `windowResized`, `datenFuerKapitel`, `kapitelHatEigeneAnsicht`, `setzeAnsichtsModus`, `starteKapitelEinstieg` | `stationenData`, `uebersichtsRouten`, `kapitelAnsichtsModus`, `kapitel1Geklemmt`/`kapitel1ZoomAmount`, 9 DOM-Handles; intern u. a. `kapitelKarten`, `bgImage`/`bgImage2`/`ch1Image`, der Zustand beider Register (`legendenLeisteOffen`, `legendeAus`, `infoAus`) |
 | 12 | `sonifikation.js` | 857 | `spieleSonifikationFuer`, `beendeSonifikationAudio` | `SONIFIKATION_GESAMTDAUER_SEK`, `sonifikationSpieltGerade` — von 60 Top-Level-Namen gehen 9 nach aussen, die übrigen 51 (u. a. `baueElementStimmen`, `elementZeiten`, `elementCache`) sind modulintern |
 
@@ -352,6 +352,13 @@ Spine. In der Übersicht springt sie stattdessen zwischen den beiden Strecken,
 weil dort mit dem Modus auch die Scrollposition wechseln muss. In `draw()`
 teilen sich beide Graph-Ansichten die Übermalung des Frames: die Spine für ein
 Kapitel, `zeichneOrtsveraenderung()` für die Übersicht.
+
+**Der Modus überdauert jeden Kapitelwechsel.** Geschrieben wird er nur über
+„Plan"/„Graph"; `setzeKapitelAnsichtZurueck()` setzt beim Öffnen und Schliessen
+eines Kapitels allein Play und Einstiegs-Uhr zurück. Wer im Graph ein anderes
+Kapitel wählt, landet in dessen Spine, „Alle" von dort im Ortsvergleich:
+`springeZurUebersicht()` zielt je nach Modus auf die Überblickskarte oder auf
+die zweite Klemme.
 
 **Der Ortsvergleich ordnet die sieben Orte auf einer Linie an**, in der
 Reihenfolge ihres ersten Auftretens im Buch — nicht mehr geografisch. Weil
