@@ -249,13 +249,11 @@ function zeichneHalbkreis(cx, cy, r, winkelMitte, farbeRgb, alphaSkala = 1) {
 // -HALF_PI für die Ortsveränderung). radiusSkala/maxRadius nur dort genutzt.
 
 // Sammelt nur, zeichnet nicht — über die Reihenfolge entscheidet
-// zeichneKreisFormen() für alle Orte zusammen. nurHaelften: Kategorien, die
-// nur ihre Valenzhälften beisteuern, ohne Schraffur; der Aussenradius wächst
-// dadurch nicht mit.
+// zeichneKreisFormen() für alle Orte zusammen.
 //
 // ACHTUNG kein Rückgabewert. Den Radius holt groessterKreisRadius() — dessen
 // letzte zwei Parameter stehen UMGEKEHRT zu denen hier.
-function sammleKreisFormen(cx, cy, bandCounts, alphaSkala = 1, winkel = -HALF_PI, radiusSkala = 1, maxRadius = 100, nurHaelften = null) {
+function sammleKreisFormen(cx, cy, bandCounts, alphaSkala = 1, winkel = -HALF_PI, radiusSkala = 1, maxRadius = 100) {
   let formen = [];
   let neu = (art, r, farbe) => formen.push({ art, r, farbe, cx, cy, winkel, alphaSkala });
 
@@ -273,13 +271,6 @@ function sammleKreisFormen(cx, cy, bandCounts, alphaSkala = 1, winkel = -HALF_PI
     // Neutrale Nennungen bekommen keine eigene Fläche. Als ganzer Kreis legten
     // sie sich über beide Hälften und machten die Mitte unlesbar. Gezählt
     // werden sie trotzdem: in der Schraffur, und damit in der Kreisgrösse.
-  });
-
-  (nurHaelften || []).forEach(e => {
-    let negR = kreisRadius((e.bc && e.bc.neg) || 0, maxRadius) * radiusSkala;
-    let posR = kreisRadius((e.bc && e.bc.pos) || 0, maxRadius) * radiusSkala;
-    if (negR > 0) neu('unten', negR, e.kat.farbe);
-    if (posR > 0) neu('oben', posR, e.kat.farbe);
   });
 
   // Gleich viele Annotationen ergeben denselben Radius; deckungsgleiche Formen
@@ -328,8 +319,8 @@ function zeichneMittelpunkt(cx, cy, alphaSkala = 1) {
 // Ein einzelner Ort: sammeln und gleich zeichnen. Für alle Ansichten, die
 // jeweils nur einen Kreis auf einmal setzen (Legendenaufbau, Ortsvergleich,
 // Spine). Die Karte geht über sammleKreisFormen(), siehe zeichneKreiseOrtRuns.
-function zeichneKreiseFuerRun(cx, cy, bandCounts, alphaSkala = 1, winkel = -HALF_PI, radiusSkala = 1, maxRadius = 100, nurHaelften = null) {
-  zeichneKreisFormen(sammleKreisFormen(cx, cy, bandCounts, alphaSkala, winkel, radiusSkala, maxRadius, nurHaelften));
+function zeichneKreiseFuerRun(cx, cy, bandCounts, alphaSkala = 1, winkel = -HALF_PI, radiusSkala = 1, maxRadius = 100) {
+  zeichneKreisFormen(sammleKreisFormen(cx, cy, bandCounts, alphaSkala, winkel, radiusSkala, maxRadius));
   if (groessterKreisRadius(bandCounts, maxRadius, radiusSkala) > 0) zeichneMittelpunkt(cx, cy, alphaSkala);
 }
 
@@ -409,10 +400,10 @@ function zeichneFwertPunkte(cx, cy, radius, fwertAnnotationen, alphaSkala = 1) {
 // das negative Band eines anderen die untere Hälfte auf und die Ausbauchung
 // ist nicht mehr zu sehen.
 //
-// ACHTUNG auch die pos-Werte müssen sich unterscheiden (8/6/4). Der
-// Legendenaufbau zeigt je Kategorie nur die beiden Valenzhälften, und deren
-// Radius hängt allein an pos bzw. neg — bei gleichem pos-Wert läge der neue
-// Halbkreis genau auf dem vorigen, und der Schritt wäre nicht zu sehen.
+// ACHTUNG auch die pos-Werte müssen sich unterscheiden (8/6/4). Der Radius
+// einer Valenzhälfte hängt allein an pos bzw. neg — bei gleichem pos-Wert
+// lägen die oberen Halbkreise zweier Bänder nur KREIS_GLEICHSTAND_VERSATZ
+// auseinander, und die Bänder wären nicht mehr zu unterscheiden.
 const DEMO_BAND_COUNTS = {
   raum_umwelt: { pos: 8, neg: 3, neutral: 3, unrated: 2 },
   stimmung_emotion: { pos: 6, neg: 1, neutral: 2, unrated: 1 },
@@ -592,7 +583,7 @@ function fwertZeilenMitKlang(alpha) {
 
 // Der Kreis differenziert sich mit der Legende: erst
 // gestreift, dann mit Valenzhälften, dann mit den drei Bändern.
-function stufenBandCounts(bandCounts, valenzen) {
+function stufenBandCounts(bandCounts, kategorien, valenzen) {
   // Was noch keine Stufe benannt hat, bleibt Schraffur: der Kreis wächst nicht
   // mehr, es füllt sich nur, was schon erklärt ist.
   let aufteilen = bc => {
@@ -605,29 +596,22 @@ function stufenBandCounts(bandCounts, valenzen) {
     return raus;
   };
 
-  // Mit Kategorie: das erste Band echt. Die weiteren kommen nicht hierher,
-  // sondern als blosse Valenzhälften dazu (nurHaelften) — bei
-  // DEMO_BAND_COUNTS ist das erste zugleich das grösste, der Aussenradius
-  // bleibt dadurch über alle Stufen stehen.
-  let erste = KREIS_KATEGORIEN[0];
-  return bandCounts[erste.key] ? { [erste.key]: aufteilen(bandCounts[erste.key]) } : {};
+  // Die ersten `kategorien` Bänder, jedes ganz; vor der ersten Kategorie-Stufe
+  // steht das erste allein. Es ist bei DEMO_BAND_COUNTS zugleich das grösste,
+  // der Aussenradius bleibt dadurch über alle Stufen stehen.
+  let baender = {};
+  KREIS_KATEGORIEN.slice(0, Math.max(1, kategorien)).forEach(kat => {
+    if (bandCounts[kat.key]) baender[kat.key] = aufteilen(bandCounts[kat.key]);
+  });
+  return baender;
 }
 
-// Ein Zustand des Demo-Kreises: das erste Band ganz, jedes weitere nur mit
-// seinen Valenzhälften (VALENZEN) — kein Schraffurkreis, keine neutrale
-// Fläche, sonst lägen bei drei Bändern acht Kreise übereinander.
-// kategorien 0 = noch keines. Winkel wie in zeichneKreiseFuerRun (winkel PI):
-// positiv oben, negativ unten.
+// Ein Zustand des Demo-Kreises: die ersten `kategorien` Bänder, jedes mit
+// Schraffur und Valenzhälften wie auf der Karte. Winkel PI: positiv oben.
 function zeichneDemoStufe(cx, cy, bandCounts, kategorien, valenzen, alphaSkala, skala) {
   if (alphaSkala <= LEGENDE_SICHTBAR) return;
-  // Die weiteren Bänder gehen als reine Hälften in DENSELBEN Aufruf — nur so
-  // greifen Grössenordnung und Versatz bei gleichem Radius. Eine eigene
-  // Schleife danach legte zwei gleich grosse Hälften deckungsgleich übereinander.
-  let weitere = KREIS_KATEGORIEN.slice(1, kategorien)
-    .map(kat => ({ kat, bc: bandCounts[kat.key] }))
-    .filter(e => e.bc);
-  zeichneKreiseFuerRun(cx, cy, stufenBandCounts(bandCounts, valenzen),
-    alphaSkala, PI, skala, DEMO_MAX_RADIUS, weitere);
+  zeichneKreiseFuerRun(cx, cy, stufenBandCounts(bandCounts, kategorien, valenzen),
+    alphaSkala, PI, skala, DEMO_MAX_RADIUS);
 }
 
 // Schrift aller Canvas-Beschriftungen: wie .annotation-tag (var(--sans)),

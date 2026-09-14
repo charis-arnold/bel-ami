@@ -206,9 +206,9 @@ eigenen Header-Abschnitt aus.
 
 | # | Modul | Zeilen | Hauptfunktionen | Wichtigste eigene Variablen |
 |---|---|---|---|---|
-| 1 | `datenbereinigung.js` | 456 | `bereinigeStationenDaten`, `baueSpineDaten`, `sammleAnnotationenNachOrtBasis`, `zaehleBandCounts`, `zaehleAnnotationenLiveNachOrtBasis`, `ortRunsFuerSpine`, `ortRunSichtbar`, `kreisRadius`, `groessterKreisRadius`, `hexZuRgb` | `KREIS_KATEGORIEN`, `SCROLL_MEILENSTEINE`, `ROUTE_COLOR_RGB`, `FWERT_COLOR`/`FWERT_COLOR_RGB`, `FWERT_PUNKTGROESSE`, `FWERT_PUNKT_DURCHMESSER`, beide `FOTO_MARKER_*_RGB`, `KAPITEL_MIT_SPINE_PANEL`, `WOHNUNG_SAMMELPUNKT_ANKER`, `SCHRIFT_SANS`/`SCHRIFT_SERIF`, `hexZuRgb`/`rgbZuHex`, die Legendenbegriffe aus dem PDF (`WAHRNEHMUNG_LABELS`, `LEGENDE_BLOCK_TITEL`, `LEGENDE_KREISGROESSE`, `LEGENDE_VALENZ`, `LEGENDE_ORTSBESCHRIFTUNG`, `LEGENDE_TITEL`/`LEGENDE_UNTERTITEL`) — die grösste Schnittstelle im Projekt, 39 Namen werden von aussen gelesen. Nur intern: alle drei `GEDANKEN_*`, die übrigen drei `WOHNUNG_*` und `valenzBucket` |
+| 1 | `datenbereinigung.js` | 453 | `bereinigeStationenDaten`, `baueSpineDaten`, `sammleAnnotationenNachOrtBasis`, `zaehleBandCounts`, `zaehleAnnotationenLiveNachOrtBasis`, `ortRunsFuerSpine`, `ortRunSichtbar`, `kreisRadius`, `groessterKreisRadius`, `hexZuRgb` | `KREIS_KATEGORIEN`, `SCROLL_MEILENSTEINE`, `ROUTE_COLOR_RGB`, `FWERT_COLOR`/`FWERT_COLOR_RGB`, `FWERT_PUNKTGROESSE`, `FWERT_PUNKT_DURCHMESSER`, beide `FOTO_MARKER_*_RGB`, `KAPITEL_MIT_SPINE_PANEL`, `WOHNUNG_SAMMELPUNKT_ANKER`, `SCHRIFT_SANS`/`SCHRIFT_SERIF`, `hexZuRgb`/`rgbZuHex`, die Legendenbegriffe aus dem PDF (`WAHRNEHMUNG_LABELS`, `LEGENDE_BLOCK_TITEL`, `LEGENDE_KREISGROESSE`, `LEGENDE_VALENZ`, `LEGENDE_ORTSBESCHRIFTUNG`, `LEGENDE_TITEL`/`LEGENDE_UNTERTITEL`) — die grösste Schnittstelle im Projekt, 39 Namen werden von aussen gelesen. Nur intern: alle drei `GEDANKEN_*`, die übrigen drei `WOHNUNG_*` und `valenzBucket` |
 | 2 | `geo-projektion.js` | 171 | `lonLatToScreen`, `coverCrop`, `cropToBbox`, `bboxToImgCrop`, `passeBboxInRahmen` | `startBbox`, `uebersichtBbox`, `ch1ImgBbox`, `UEBERSICHT_SCHNITT_BBOX`, `mapOffsetX`, `mapOffsetY` |
-| 3 | `kreisgrafik.js` | 1432 | `zeichneKreiseOrtRuns`, `zeichneKreiseFuerRun`, `zeichneFwertPunkte`, `zeichneKreisLabels`, `zeichneDemoKreisgrafik`, `zeichneSchleier`, `kategorieZeileGetroffen`, `zeichneRegisterleiste`, `zeichneInfoLeiste`, `reiterGetroffen`, `legendenLeisteHoehe`, `registerHoehe`, `leereBandCounts` | 13 Namen werden von aussen gelesen; die übrigen (u. a. `HATCH_SPACING`, `schraffiere`, alle `DEMO_*`, `LEGENDE_*` und `LEISTE_*`) sind modulintern. Beherbergt seit dem Onboarding-Umbau auch den neunstufigen Legendenaufbau (`demoLegende` und seine Zeichenroutinen) und beide Register am unteren Rand |
+| 3 | `kreisgrafik.js` | 1416 | `zeichneKreiseOrtRuns`, `zeichneKreiseFuerRun`, `zeichneFwertPunkte`, `zeichneKreisLabels`, `zeichneDemoKreisgrafik`, `zeichneSchleier`, `kategorieZeileGetroffen`, `zeichneRegisterleiste`, `zeichneInfoLeiste`, `reiterGetroffen`, `legendenLeisteHoehe`, `registerHoehe`, `leereBandCounts` | 13 Namen werden von aussen gelesen; die übrigen (u. a. `HATCH_SPACING`, `schraffiere`, alle `DEMO_*`, `LEGENDE_*` und `LEISTE_*`) sind modulintern. Beherbergt seit dem Onboarding-Umbau auch den neunstufigen Legendenaufbau (`demoLegende` und seine Zeichenroutinen) und beide Register am unteren Rand |
 | 4 | `kartendekor.js` | 234 | `zeichneRoute`, `zeichneMassstabsleiste`, `zeichneScrollFortschritt` | — von aussen gebraucht werden nur die drei Zeichenfunktionen; intern `haversineMeter`, `MASSSTAB_SCHRITTE`, der Routenpuffer und seine Helfer (`routenPufferBereit`, `routenStufenZuege`, `routenStufenAlpha`, alle `ROUTE_*`). `zeichneScrollFortschritt` liegt hier und nicht im DOM, weil die Reiter der Register an derselben Stelle sitzen und davor liegen müssen |
 | 5 | `ortsveraenderung.js` | 479 | `zeichneOrtsveraenderung` | **Drei Namen gehen nach aussen**: die Zeichenfunktion, `ortsvergleichAnnotationen` für `sonifikation.js` und `OV_KAPITEL_ZAHL`, aus der `spine-horizontal.js` die Abspieldauer rechnet. Die Ansicht bringt Reihenfolge, Linienlayout und gemeinsame Kreis-Skala (`ovBerechneLayout`) selbst mit, `draw()` übergibt nur `grafikFortschritt`. Alles Übrige ist modulintern |
 | 6 | `spine-horizontal.js` | 342 | `zeichneSpineHorizontal`, `toggleGrafikPlay`, `setzeKapitelAnsichtModus`, `setzeGrafikZurueck`, `stelleSpineDatenBereit`, `spineEintraegeFuer`, `aktuelleGrafikAnimationDauer`, `aktualisiereGrafikFortschritt` | `grafikSpielt`, `grafikFortschritt`, `grafikPlayAusblendStart` — intern: beide Spine-Caches, alle `SPINE_*`, `spineLayout` |
@@ -216,7 +216,7 @@ eigenen Header-Abschnitt aus.
 | 8 | `annotationsbox.js` | 98 | `annotationBoxPosition` | `ANNOTATION_BOX_POSITIONEN` — intern u. a. `annotationBoxPositionCache` |
 | 9 | `dom-aufbau.js` | 116 | `baueKapitelRegister`, `baueKapitelZeilen`, `kapitelBezeichnung`, `baueKartenMarkierungen`, `baueStationsMarker`, `baueZwischenMarker` | — (baut nur DOM, hält keinen Zustand) |
 | 10 | `uebersichtsrouten.js` | 384 | `zeichneUebersichtsrouten`, `kapitelScheiben`, `aktualisiereKapitelZoom`, `springeZuKapitelZoom`, `scrolleZuKapitel1`, `waehleAnsichtsModus` | `zoomedKapitel`, `kapitelZoomAmount`, `kapitelHover` — alle drei nur hier geschrieben, von aussen nur gelesen; intern u. a. `kapitelHitze`, `oeffneKapitelZoom`, `scheibenCache` |
-| 11 | `sketch.js` | 1111 | `preload`, `setup`, `draw`, `mousePressed`, `windowResized`, `datenFuerKapitel`, `kapitelHatEigeneAnsicht`, `setzeAnsichtsModus`, `starteKapitelEinstieg` | `stationenData`, `uebersichtsRouten`, `kapitelAnsichtsModus`, `kapitel1Geklemmt`/`kapitel1ZoomAmount`, 9 DOM-Handles; intern u. a. `kapitelKarten`, `bgImage`/`bgImage2`/`ch1Image`, der Zustand beider Register (`legendenLeisteOffen`, `legendeAus`, `infoAus`) |
+| 11 | `sketch.js` | 1114 | `preload`, `setup`, `draw`, `mousePressed`, `windowResized`, `datenFuerKapitel`, `kapitelHatEigeneAnsicht`, `setzeAnsichtsModus`, `starteKapitelEinstieg` | `stationenData`, `uebersichtsRouten`, `kapitelAnsichtsModus`, `kapitel1Geklemmt`/`kapitel1ZoomAmount`, 9 DOM-Handles; intern u. a. `kapitelKarten`, `bgImage`/`bgImage2`/`ch1Image`, der Zustand beider Register (`legendenLeisteOffen`, `legendeAus`, `infoAus`) |
 | 12 | `sonifikation.js` | 857 | `spieleSonifikationFuer`, `beendeSonifikationAudio` | `SONIFIKATION_GESAMTDAUER_SEK`, `sonifikationSpieltGerade` — von 60 Top-Level-Namen gehen 9 nach aussen, die übrigen 51 (u. a. `baueElementStimmen`, `elementZeiten`, `elementCache`) sind modulintern |
 
 `dom-aufbau.js` ist das einzige Modul ohne eigene Top-Level-Variablen: es baut
@@ -437,25 +437,28 @@ um den Demo-Kreis auf, eine je PDF-Seite: Ortsbeschriftung (noch ohne Kreis),
 Kreisgrösse, Anteil positiver Gefühle (mit «Raum und Umwelt»), Anteil negativer
 Gefühle, «Stimmung und Emotion», «Gesellschaft und Soziales», dann die drei
 Wahrnehmungen positiv, negativ, neutral. Jede Stufe hängt am Fenster ihres
-`data-demo-gruppe`-Textes in `index.html`, blendet über
+`data-demo-gruppe`-Absatzes in `index.html`, blendet über
 `legendenSchrittDeckkraft()` ein und bleibt dann stehen — der Aufbau ist
 kumulativ wie im PDF.
 
-Gestaffelt ist nicht nur die Beschriftung, sondern der Kreis selbst: `stufenBandCounts()`
-rechnet dieselben Mengen auf ein einziges Band herunter, einmal ganz als
-Schraffur `zeichneDemoStufe()` zeichnet dazu fünf Zustände derselben Mengen, von grob nach
-fein: ein tonloses Band ganz als Schraffur (PDF-Seite 2), dasselbe mit oberer
+**ACHTUNG** `draw()` zählt die Stufen nach Position in der Liste, nicht nach dem
+`data-demo-gruppe`-Wert, und `demoLegende()` erwartet genau neun. Fehlt ein
+Absatz, rutschen alle späteren eine Stufe vor, und die letzte erscheint nie.
+Deshalb hat «Gesellschaft und Soziales» (Stufe 5) einen leeren Absatz: das Band
+kommt ohne eigenen Text, braucht aber sein Fenster.
+
+Gestaffelt ist nicht nur die Beschriftung, sondern der Kreis selbst:
+`zeichneDemoStufe()` zeichnet fünf Zustände derselben Mengen, von grob nach
+fein — das erste Band ganz als Schraffur (PDF-Seite 2), dasselbe mit oberer
 Hälfte (Seite 3), mit beiden Hälften (Seite 4), dann je ein weiteres Band
 (Seiten 5 und 6). `zeichneDemoKreisgrafik()` blendet sie nacheinander
 ineinander; höchstens zwei überlappen sich.
 
-**Nur das erste Band wird ganz gezeichnet** (`stufenBandCounts()` → `zeichneKreiseFuerRun`).
-Jedes weitere bringt allein seine beiden Valenzhälften mit
-(`zeichneKategorieHaelften()`) — kein Schraffurkreis, keine neutrale Fläche.
-Mit drei vollen Bändern lägen in der Mitte acht Kreise übereinander, und der
-Aufbau wäre nicht mehr zu lesen. Auf der Karte zeichnet `zeichneKreiseFuerRun()`
-unverändert alle Ringe. Heruntergerechnet statt summiert, weil die Summe einen
-grösseren Kreis ergäbe — alle drei Zustände sollen denselben Aussenradius haben.
+**Jedes benannte Band kommt ganz**, mit Schraffur und Valenzhälften wie auf der
+Karte (`stufenBandCounts()` → `zeichneKreiseFuerRun()`). Neutrale Nennungen
+bekommen auch hier keine eigene Fläche: `stufenBandCounts()` rechnet sie in die
+Schraffur ein, statt sie als eigenes Band zu summieren. Weil das erste Band das
+grösste ist, behalten alle fünf Zustände denselben Aussenradius.
 
 **ACHTUNG** die Stufen kommen monoton in `zeichneDemoKreisgrafik()` an, der
 Schleier getrennt daneben: er blendet am Ende nur die Beschriftungen weg. Wären

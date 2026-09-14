@@ -831,6 +831,9 @@ function draw() {
   // ein — er nimmt am Ende die Beschriftungen mit, nicht aber die
   // Differenzierung des Kreises. Sonst fiele die Grafik beim Ausblenden auf
   // den schlichten Streifenkreis der ersten Stufe zurück.
+  //
+  // ACHTUNG gezählt wird nach Position, nicht nach dem data-Wert: demoLegende()
+  // erwartet genau neun Stufen. Fehlt ein Absatz, rutschen alle späteren vor.
   let legendeSchritte = demoGruppenTexte.map(el =>
     legendenSchrittDeckkraft(progress, parseFloat(el.dataset.von), parseFloat(el.dataset.bis)));
 

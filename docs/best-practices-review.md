@@ -654,7 +654,7 @@ bleibt eine eigene Entscheidung.
 
 Die Winkel-Logik ist **nicht** dupliziert, sondern sauber zentralisiert. Die
 Aufteilung Halbkreis/F-Wert-Punkte liegt vollständig in `kreisgrafik.js`
-(`:258` und `:331`, jeweils Parameter `winkel`, dazu `nurHaelften`;
+(`:258` und `:331`, jeweils Parameter `winkel`;
 Gruppenmitten `:343-344`). Alle Aufrufer übergeben nur Werte: `PI` aus Karte
 und Graph (`kreisgrafik.js:137`, `spine-horizontal.js:290`), sonst gilt der
 Default `-HALF_PI`. Eigene Trigonometrie ausserhalb von `kreisgrafik.js` gibt
