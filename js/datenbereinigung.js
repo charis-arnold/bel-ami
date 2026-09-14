@@ -146,7 +146,7 @@ const LEGENDE_KREISGROESSE = [
   'Anzahl Gefühlsäusserungen',
   'an diesem Ort',
   'Der Kreis wächst mit jedem',
-  'geäusserten Gefühl.',
+  'geäusserten Gefühl',
 ];
 const LEGENDE_VALENZ = { pos: 'Anteil positiver Gefühle', neg: 'Anteil negativer Gefühle' };
 const LEGENDE_ORTSBESCHRIFTUNG = 'ORTSBESCHRIFTUNG';
