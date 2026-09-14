@@ -212,18 +212,18 @@ eigenen Header-Abschnitt aus.
 | 4 | `kartendekor.js` | 234 | `zeichneRoute`, `zeichneMassstabsleiste`, `zeichneScrollFortschritt` | — von aussen gebraucht werden nur die drei Zeichenfunktionen; intern `haversineMeter`, `MASSSTAB_SCHRITTE`, der Routenpuffer und seine Helfer (`routenPufferBereit`, `routenStufenZuege`, `routenStufenAlpha`, alle `ROUTE_*`). `zeichneScrollFortschritt` liegt hier und nicht im DOM, weil die Reiter der Register an derselben Stelle sitzen und davor liegen müssen |
 | 5 | `ortsveraenderung.js` | 479 | `zeichneOrtsveraenderung` | **Drei Namen gehen nach aussen**: die Zeichenfunktion, `ortsvergleichAnnotationen` für `sonifikation.js` und `OV_KAPITEL_ZAHL`, aus der `spine-horizontal.js` die Abspieldauer rechnet. Die Ansicht bringt Reihenfolge, Linienlayout und gemeinsame Kreis-Skala (`ovBerechneLayout`) selbst mit, `draw()` übergibt nur `grafikFortschritt`. Alles Übrige ist modulintern |
 | 6 | `spine-horizontal.js` | 342 | `zeichneSpineHorizontal`, `toggleGrafikPlay`, `setzeKapitelAnsichtModus`, `setzeGrafikZurueck`, `stelleSpineDatenBereit`, `spineEintraegeFuer`, `aktuelleGrafikAnimationDauer`, `aktualisiereGrafikFortschritt` | `grafikSpielt`, `grafikFortschritt`, `grafikPlayAusblendStart` — intern: beide Spine-Caches, alle `SPINE_*`, `spineLayout` |
-| 7 | `fotomarker.js` | 180 | `zeichneFotoMarker`, `merkeKartenlage`, `oeffneFotoPopup`, `schliesseFotoPopup` | `fotoMarkerListe`, `letzteActiveBbox`, `letzterFotoOffsetX/Y`, `FOTO_MARKER_TREFFER_RADIUS`. Zeichnet einen Punkt mit hellem Kern; Grösse abgeleitet aus `FWERT_PUNKT_DURCHMESSER`, Beschriftung über `zeichneKreisLabels` |
+| 7 | `fotomarker.js` | 181 | `zeichneFotoMarker`, `merkeKartenlage`, `oeffneFotoPopup`, `schliesseFotoPopup` | `fotoMarkerListe`, `letzteActiveBbox`, `letzterFotoOffsetX/Y`, `FOTO_MARKER_TREFFER_RADIUS`. Zeichnet einen Punkt mit hellem Kern; Grösse abgeleitet aus `FWERT_PUNKT_DURCHMESSER`, Beschriftung über `zeichneKreisLabels` |
 | 8 | `annotationsbox.js` | 98 | `annotationBoxPosition` | `ANNOTATION_BOX_POSITIONEN` — intern u. a. `annotationBoxPositionCache` |
 | 9 | `dom-aufbau.js` | 116 | `baueKapitelRegister`, `baueKapitelZeilen`, `kapitelBezeichnung`, `baueKartenMarkierungen`, `baueStationsMarker`, `baueZwischenMarker` | — (baut nur DOM, hält keinen Zustand) |
 | 10 | `uebersichtsrouten.js` | 384 | `zeichneUebersichtsrouten`, `kapitelScheiben`, `aktualisiereKapitelZoom`, `springeZuKapitelZoom`, `scrolleZuKapitel1`, `waehleAnsichtsModus` | `zoomedKapitel`, `kapitelZoomAmount`, `kapitelHover` — alle drei nur hier geschrieben, von aussen nur gelesen; intern u. a. `kapitelHitze`, `oeffneKapitelZoom`, `scheibenCache` |
-| 11 | `sketch.js` | 1114 | `preload`, `setup`, `draw`, `mousePressed`, `windowResized`, `datenFuerKapitel`, `kapitelHatEigeneAnsicht`, `setzeAnsichtsModus`, `starteKapitelEinstieg` | `stationenData`, `uebersichtsRouten`, `kapitelAnsichtsModus`, `kapitel1Geklemmt`/`kapitel1ZoomAmount`, 9 DOM-Handles; intern u. a. `kapitelKarten`, `bgImage`/`bgImage2`/`ch1Image`, der Zustand beider Register (`legendenLeisteOffen`, `legendeAus`, `infoAus`) |
+| 11 | `sketch.js` | 1118 | `preload`, `setup`, `draw`, `mousePressed`, `windowResized`, `datenFuerKapitel`, `kapitelHatEigeneAnsicht`, `setzeAnsichtsModus`, `starteKapitelEinstieg` | `stationenData`, `uebersichtsRouten`, `kapitelAnsichtsModus`, `kapitel1Geklemmt`/`kapitel1ZoomAmount`, 9 DOM-Handles; intern u. a. `kapitelKarten`, `bgImage`/`bgImage2`/`ch1Image`, der Zustand beider Register (`legendenLeisteOffen`, `legendeAus`, `infoAus`) |
 | 12 | `sonifikation.js` | 857 | `spieleSonifikationFuer`, `beendeSonifikationAudio` | `SONIFIKATION_GESAMTDAUER_SEK`, `sonifikationSpieltGerade` — von 60 Top-Level-Namen gehen 9 nach aussen, die übrigen 51 (u. a. `baueElementStimmen`, `elementZeiten`, `elementCache`) sind modulintern |
 
 `dom-aufbau.js` ist das einzige Modul ohne eigene Top-Level-Variablen: es baut
 DOM-Knoten und schreibt sie in Handles, die `sketch.js` hält.
 
-Von `sketch.js`' 57 Top-Level-Variablen werden **25 in `setup()` über
-`document.getElementById()` befüllt** — fünf davon (`fotoPopup` und die vier
+Von `sketch.js`' 57 Top-Level-Variablen werden **26 in `setup()` über
+`document.getElementById()` befüllt** — sechs davon (`fotoPopup` und die fünf
 `fotoPopup*`-Unterelemente) sind in `fotomarker.js` deklariert und werden hier
 nur gefüllt.
 

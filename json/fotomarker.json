@@ -30,5 +30,77 @@
     "lon": 2.331073,
     "lat": 48.870452,
     "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.bbaehug6/d70c078f3b815a8806eaa5f5243371cd35787cf1?content-disposition=inline"
+  },
+  {
+    "titel": "GARE DU NORD",
+    "plz": "75010",
+    "beschreibung": "Immeubles parisiens. Place Napoléon III. Gare du Nord. Vue perspective du boulevard de Denain vers la gare, prise à l'intersection de la rue Lafayette. Paris (Xème). Photographie de Charles Lansiaux (1855-1939). Plaque de verre, 17 août 1920.",
+    "lon": 2.3571815,
+    "lat": 48.8792550,
+    "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.317eq02f/c8b559f3493401fc03a81e08bc0dd8e5b5106b1c?content-disposition=inline"
+  },
+  {
+    "titel": "GARE DU L'EST",
+    "plz": "75010",
+    "beschreibung": "Immeubles parisiens. Place du 11 novembre 1918. Gare de l'Est. Façade. Paris (Xème arr.). Photographie de Charles Lansiaux (1855-1939). Plaque de verre, 20 juillet 1920. Département Histoire de l'Architecture et Archéologie de Paris.",
+    "lon": 2.3587316,
+    "lat": 48.8759660,
+    "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.811enk81/c8a3fea3b776fa1117d7c441a3c1227bfed38240?content-disposition=inline"
+  },
+  {
+    "titel": "GARE DU L'EST",
+    "plz": "75010",
+    "beschreibung": "Immeubles parisiens. Place du 11 novembre 1918. Gare de l'Est. Vue d'ensemble des voies. Paris (Xème arr.). Photographie de Charles Lansiaux (1855-1939). Plaque de verre, 26 juillet 1920. Département Histoire de l'Architecture et Archéologie de Paris",
+    "lon": 2.3581737,
+    "lat": 48.8776997,
+    "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.811enk81/5f431436ae9436ce879396ebcf96167e59976578?content-disposition=inline"
+  },
+  {
+    "titel": "GARE SAINT-LAZARE",
+    "plz": "75008",
+    "beschreibung": "Immeubles parisiens. Gare Saint-Lazare. Cour du Havre. Paris (VIIIème arr.). Photographie de Charles Lansiaux (1855-1939). Plaque de verre, 02 septembre 1919. Département Histoire de l'Architecture et Archéologie de Paris.",
+    "lon": 2.325662,
+    "lat": 48.875727,
+    "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.bbaehug6/79cce5437a9733ee070713d955c49803a1c17e82?content-disposition=inline"
+  },
+  {
+    "titel": "PARC MONCEAU",
+    "plz": "75008",
+    "beschreibung": "Immeubles parisiens. Parc Monceau. Pièce d'eau et colonnade. Paris (VIIIème arr.). Photographie de Charles Lansiaux (1855-1939). Plaque de verre, 12 août 1919. Département Histoire de l'Architecture et Archéologie de Paris.",
+    "lon": 2.310869,
+    "lat": 48.880278,
+    "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.bbaehug6/c418f8913d481369442833ad4b12736df4615411?content-disposition=inline"
+  },
+  {
+    "titel": "PLACE DE L'ÉTOILE",
+    "plz": "75008",
+    "beschreibung": "Immeubles parisiens. Place de l'Étoile. Vue panoramique prise du haut de l'Arc de Triomphe. Paris (VIIIème arr.), Paris (XVIème arr.), Paris (XVIIème arr.). Photographie de Charles Lansiaux (1855-1939). Plaque de verre, 24 septembre 1920.",
+    "lon": 2.294439,
+    "lat": 48.873782,
+    "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.6da63pt3/02509e51344923594262a1d1ff691db81b26dba3?content-disposition=inline"
+  },
+    {
+    "titel": "JARDIN DES TUILERIES",
+    "plz": "75001",
+    "beschreibung": "Jardin des Tuileries et façades des immeubles de la rue de Rivoli. Paris (Ier arr.). Photographie d'Edouard Desprez. Plaque de verre, 1926-1927. Département Histoire de l'Architecture et Archéologie de Paris.",
+    "lon": 2.332135,
+    "lat": 48.863563,
+    "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.fd3ay9zt/a2a7684e2cbd70f70d969692909c32867dfe16de?content-disposition=inline"
+  },
+   {
+    "titel": "ÉGLISE DE LA TRINITÉ",
+    "plz": "75009",
+    "beschreibung": "Immeubles parisiens. Place d'Estienne d'Orves. Église de la Trinité. Façade principale avec le square au premier plan. Paris (IXème arr.). Photographie de Charles Lansiaux (1855-1939). Plaque de verre, 23 septembre 1919. Département Histoire de l'Architecture et Archéologie de Paris.",
+    "lon": 2.332323,
+    "lat": 48.876315,
+    "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.bbaehug6/9dffcdc040459a1c2bc5fb4a591a197150d3bba6?content-disposition=inline"
+  },
+   {
+    "titel": "PORTE SAINT-DENIS",
+    "plz": "75002",
+    "beschreibung": "Immeubles parisiens. Porte Saint-Denis. Vue de face vers la rue du Faubourg Saint-Denis. Paris (Xème arr.). Photographie de Charles Lansiaux (1855-1939). Plaque de verre, 24 juin 1920. Département Histoire de l'Architecture et Archéologie de Paris.",
+    "lon": 2.352717,
+    "lat": 48.869831,
+    "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.811enk81/711232b87bdd7cbd4e92b2fe604b1724ce80c784?content-disposition=inline"
   }
 ]

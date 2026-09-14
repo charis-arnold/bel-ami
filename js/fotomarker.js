@@ -12,7 +12,7 @@
 
 // --- DOM-Referenzen des Popups, in setup() geholt -------------------------
 
-let fotoPopup, fotoPopupTitel, fotoPopupPlz, fotoPopupBild, fotoPopupBeschreibung;
+let fotoPopup, fotoPopupTitel, fotoPopupPlz, fotoPopupBild, fotoPopupLink, fotoPopupBeschreibung;
 
 // --- Markerdaten, in preload() geladen ------------------------------------
 
@@ -171,6 +171,7 @@ function oeffneFotoPopup(f) {
   fotoPopupPlz.textContent = f.plz || '';
   fotoPopupBild.src = f.fotoUrl;
   fotoPopupBild.alt = f.titel || '';
+  fotoPopupLink.href = f.fotoUrl; // dieselbe Datei, im neuen Tab in voller Grösse
   fotoPopupBeschreibung.textContent = f.beschreibung || '';
   fotoPopup.classList.add('offen');
 }

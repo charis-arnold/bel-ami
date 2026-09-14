@@ -297,8 +297,12 @@ function setup() {
   fotoPopupTitel = document.getElementById('fotoPopupTitel');
   fotoPopupPlz = document.getElementById('fotoPopupPlz');
   fotoPopupBild = document.getElementById('fotoPopupBild');
+  fotoPopupLink = document.getElementById('fotoPopupLink');
   fotoPopupBeschreibung = document.getElementById('fotoPopupBeschreibung');
   document.getElementById('fotoPopupClose').addEventListener('click', schliesseFotoPopup);
+  // Klicks im Popup bleiben im Popup, sonst träfe p5 darunter einen Fotomarker
+  // oder Kapitelpunkt. Das Schliessen daneben hängt am click und bleibt.
+  haltKlickAuf(fotoPopup);
   fotoPopup.addEventListener('click', e => { if (e.target === fotoPopup) schliesseFotoPopup(); });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {

@@ -1047,6 +1047,13 @@ body.legende-offen .annotation-box.pos-unten-links {
   border-radius: 4px;
 }
 
+/* Das Foto ist ein Link auf dieselbe Datei, die im neuen Tab in voller
+   Auflösung aufgeht (oeffneFotoPopup in fotomarker.js). */
+.foto-popup-link {
+  display: block;
+  cursor: zoom-in;
+}
+
 .foto-popup-beschreibung {
   font-family: var(--sans);
   font-size: 13px;
