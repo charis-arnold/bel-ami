@@ -15,6 +15,15 @@ let kapitelHover = null;       // Kapitelnummer unter der Maus (fürs Cursor/Hig
 // gezoomtes Kapitel rechnet unten mit kapitelZoomAmount dagegen.
 const ROUTEN_ALPHA = 180;
 
+// Startpunkte der Routen: Punkt in Ruhe und unter der Maus, Abstand der Nummer
+// von der Punktmitte. Die Nummer selbst steht in LABEL_GROESSE (kreisgrafik.js).
+const STARTPUNKT_DURCHMESSER = 10;
+const STARTPUNKT_DURCHMESSER_HOVER = 13;
+const STARTPUNKT_NUMMER_ABSTAND = 9;
+// Radius, auf dem geteilte Startpunkte um den echten Ort liegen. Nicht grösser:
+// sonst trifft die Nummer 15 bei 600 px Fensterhöhe auf die 03.
+const STARTPUNKT_GRUPPEN_VERSATZ = 10;
+
 // Teilt den Übersichtsakt in eine Scheibe je Kapitel, nach Routenlänge
 // gewichtet (sonst 27-fache Tempo-Schwankung) plus festem Grundanteil.
 const KAPITEL_SCHEIBE_GRUNDANTEIL = 0.45; // Anteil des Akts, der gleichmässig verteilt wird
@@ -156,10 +165,8 @@ function zeichneUebersichtsrouten(bbox, fortschritt, imAkt) {
   // Startpunkt und Kapitelnummer je Route. Kapitel mit eigener Ansicht sind
   // klickbar (kapitelHatEigeneAnsicht).
   noStroke();
-  textFont(SCHRIFT_SANS); // wie .annotation-tag (var(--sans)) und die Kreis-Labels
-  textStyle(BOLD); // .annotation-tag ist font-weight: 700
+  beschriftungsSchrift(LABEL_GROESSE); // kreisgrafik.js, wie Ortsnamen und Legende
   textAlign(LEFT, CENTER);
-  textSize(11);
   kapitelHover = null;
 
   // Mehrere Kapitel teilen sich Startpunkte (02/10, 07/11 — echte Orte,
@@ -215,11 +222,10 @@ function zeichneUebersichtsrouten(bbox, fortschritt, imAkt) {
     let labelLinks = false; // Nummer nach links statt rechts setzen
     if (dupGruppe.length > 1) {
       let dupWinkel = (dupGruppe.indexOf(kapitelNr) / dupGruppe.length) * TWO_PI;
-      const dupVersatz = 13; // px
       dupAnker = start; // echter Routenanfang, für die Verbindungslinie unten
       start = {
-        x: start.x + cos(dupWinkel) * dupVersatz,
-        y: start.y + sin(dupWinkel) * dupVersatz,
+        x: start.x + cos(dupWinkel) * STARTPUNKT_GRUPPEN_VERSATZ,
+        y: start.y + sin(dupWinkel) * STARTPUNKT_GRUPPEN_VERSATZ,
       };
       // Nummer auf die Aussenseite, sonst steht sie bei den linken Badges
       // quer über der Gruppenmitte.
@@ -252,17 +258,17 @@ function zeichneUebersichtsrouten(bbox, fortschritt, imAkt) {
     else fill(lerp(LABEL_TINTE.r, FWERT_COLOR_RGB.r, hitze),
       lerp(LABEL_TINTE.g, FWERT_COLOR_RGB.g, hitze),
       lerp(LABEL_TINTE.b, FWERT_COLOR_RGB.b, hitze), labelAlpha);
-    ellipse(start.x, start.y, hover ? 11 : 8, hover ? 11 : 8);
+    ellipse(start.x, start.y, hover ? STARTPUNKT_DURCHMESSER_HOVER : STARTPUNKT_DURCHMESSER);
     // p5s text() bleibt beim Scrollen manchmal unsichtbar — direkt über den
     // Canvas-Context, fillStyle kommt vom fill() oben.
     if (labelLinks) {
       textAlign(RIGHT, CENTER);
       drawingContext.textAlign = 'right';
-      drawingContext.fillText(kapitelNr, start.x - 8, start.y);
+      drawingContext.fillText(kapitelNr, start.x - STARTPUNKT_NUMMER_ABSTAND, start.y);
       textAlign(LEFT, CENTER);
       drawingContext.textAlign = 'left';
     } else {
-      drawingContext.fillText(kapitelNr, start.x + 8, start.y);
+      drawingContext.fillText(kapitelNr, start.x + STARTPUNKT_NUMMER_ABSTAND, start.y);
     }
   });
 
@@ -275,8 +281,8 @@ function zeichneUebersichtsrouten(bbox, fortschritt, imAkt) {
     if (ch1Hover) kapitelHover = '01';
     if (ch1Hover) fill(FWERT_COLOR_RGB.r, FWERT_COLOR_RGB.g, FWERT_COLOR_RGB.b, ch1Alpha); // #C2511C
     else fill(LABEL_TINTE.r, LABEL_TINTE.g, LABEL_TINTE.b, ch1Alpha);
-    ellipse(ch1Start.x, ch1Start.y, ch1Hover ? 11 : 8, ch1Hover ? 11 : 8);
-    drawingContext.fillText('01', ch1Start.x + 8, ch1Start.y); // siehe Kommentar oben (p5s text()-Bug)
+    ellipse(ch1Start.x, ch1Start.y, ch1Hover ? STARTPUNKT_DURCHMESSER_HOVER : STARTPUNKT_DURCHMESSER);
+    drawingContext.fillText('01', ch1Start.x + STARTPUNKT_NUMMER_ABSTAND, ch1Start.y); // siehe Kommentar oben (p5s text()-Bug)
   }
 
   textStyle(NORMAL);
