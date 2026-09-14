@@ -309,7 +309,7 @@ bel-ami/
 │   ├── spine-horizontal.js        6 · Graph-Ansicht und Play-Steuerung
 │   ├── fotomarker.js              7 · Foto-Marker und Bild-Popup
 │   ├── annotationsbox.js          8 · Positionswahl der Annotationsbox
-│   ├── dom-aufbau.js              9 · Kapitelregister und Marker-Ebenen
+│   ├── dom-aufbau.js              9 · Kapitelregister, Kapitelzeilen, Marker-Ebenen
 │   ├── uebersichtsrouten.js      10 · Übersichtsakt und Kapitel-Navigation
 │   ├── sketch.js                 11 · Orchestrierung: preload/setup/draw
 │   └── sonifikation.js           12 · Tonspur über Strudel

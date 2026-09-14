@@ -302,6 +302,7 @@ function setup() {
   ({ modusZeile, planEintrag, graphEintrag, leerzeile, alleEintrag } = baueKapitelRegister());
   baueStationsMarker();
   baueZwischenMarker();
+  baueKapitelZeilen();
 
   // Ab hier zeichnet draw() nicht mehr von selbst 60-mal je Sekunde, sondern
   // nur noch auf Anforderung. Jede Stelle, die etwas verändert, muss deshalb

@@ -1,9 +1,10 @@
 /* =============================================================================
    dom-aufbau.js — Aufbau der HTML-Bedienelemente
 
-   Alles, was beim Start EINMAL an DOM-Knoten erzeugt wird: das Kapitelregister
-   und die drei Marker-Ebenen der Kapitel-1-Ansicht. Hier wird nur gebaut — die
-   Bildschirmposition bekommen die Knoten erst in draw().
+   Alles, was beim Start EINMAL an DOM-Knoten erzeugt wird: das Kapitelregister,
+   die Kapitelzeilen der Einstiegstexte und die drei Marker-Ebenen der
+   Kapitel-1-Ansicht. Hier wird nur gebaut — die Bildschirmposition bekommen
+   die Marker erst in draw().
 ============================================================================= */
 
 // Kapitelregister links: Plan/Graph, Leerzeile, "Alle", dann 01–18.
@@ -48,7 +49,7 @@ function baueKapitelRegister() {
     let eintrag = document.createElement('button');
     eintrag.type = 'button';
     eintrag.className = 'kapitel-register-item';
-    eintrag.textContent = 'Kapitel ' + parseInt(nr, 10);
+    eintrag.textContent = kapitelBezeichnung(nr);
     eintrag.addEventListener('click', nr === '01' ? scrolleZuKapitel1 : () => springeZuKapitelZoom(nr));
     kapitelRegister.appendChild(eintrag);
     // Wird nur befüllt, nie neu zugewiesen — die Referenz bleibt stabil.
@@ -56,6 +57,22 @@ function baueKapitelRegister() {
   });
 
   return { modusZeile, planEintrag, graphEintrag, leerzeile, alleEintrag };
+}
+
+// "02" -> "Kapitel 2", für Register und Einstiegstexte. Versalien setzt CSS.
+function kapitelBezeichnung(nr) {
+  return 'Kapitel ' + parseInt(nr, 10);
+}
+
+// Kapitelzeile über jedem Einstiegstext, erkannt an data-kapitel: Kapitel 1s
+// Begleittext und 02–18. Lage und Schrift in style.css (.kapitel-zeile).
+function baueKapitelZeilen() {
+  document.querySelectorAll('[data-kapitel]').forEach(text => {
+    let zeile = document.createElement('span');
+    zeile.className = 'kapitel-zeile';
+    zeile.textContent = kapitelBezeichnung(text.dataset.kapitel);
+    text.prepend(zeile);
+  });
 }
 
 // Ein Markerknoten: Punkt und Beschriftung in einem Wrapper, gleich an die

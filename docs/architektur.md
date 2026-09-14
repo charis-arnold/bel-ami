@@ -109,7 +109,7 @@ dann die zwölf eigenen Dateien (`<script src="js/…">`):
 | 6 | `spine-horizontal.js` | Graph-Ansicht: waagrechte Zeitleiste + Play |
 | 7 | `fotomarker.js` | Foto-Marker und Bild-Popup |
 | 8 | `annotationsbox.js` | Positionswahl der Annotationsbox |
-| 9 | `dom-aufbau.js` | Kapitelregister und Marker-Ebenen |
+| 9 | `dom-aufbau.js` | Kapitelregister, Kapitelzeilen und Marker-Ebenen |
 | 10 | `uebersichtsrouten.js` | Übersichtsakt und Kapitel-Navigation |
 | 11 | `sketch.js` | Orchestrierung: `preload`/`setup`/`draw`/`mousePressed` |
 | 12 | `sonifikation.js` | Tonspur, synchron zur Graph-Animation |
@@ -214,9 +214,9 @@ eigenen Header-Abschnitt aus.
 | 6 | `spine-horizontal.js` | 342 | `zeichneSpineHorizontal`, `toggleGrafikPlay`, `setzeKapitelAnsichtModus`, `setzeGrafikZurueck`, `stelleSpineDatenBereit`, `spineEintraegeFuer`, `aktuelleGrafikAnimationDauer`, `aktualisiereGrafikFortschritt` | `grafikSpielt`, `grafikFortschritt`, `grafikPlayAusblendStart` — intern: beide Spine-Caches, alle `SPINE_*`, `spineLayout` |
 | 7 | `fotomarker.js` | 180 | `zeichneFotoMarker`, `merkeKartenlage`, `oeffneFotoPopup`, `schliesseFotoPopup` | `fotoMarkerListe`, `letzteActiveBbox`, `letzterFotoOffsetX/Y`, `FOTO_MARKER_TREFFER_RADIUS`. Zeichnet einen Punkt mit hellem Kern; Grösse abgeleitet aus `FWERT_PUNKT_DURCHMESSER`, Beschriftung über `zeichneKreisLabels` |
 | 8 | `annotationsbox.js` | 98 | `annotationBoxPosition` | `ANNOTATION_BOX_POSITIONEN` — intern u. a. `annotationBoxPositionCache` |
-| 9 | `dom-aufbau.js` | 99 | `baueKapitelRegister`, `baueKartenMarkierungen`, `baueStationsMarker`, `baueZwischenMarker` | — (baut nur DOM, hält keinen Zustand) |
+| 9 | `dom-aufbau.js` | 116 | `baueKapitelRegister`, `baueKapitelZeilen`, `kapitelBezeichnung`, `baueKartenMarkierungen`, `baueStationsMarker`, `baueZwischenMarker` | — (baut nur DOM, hält keinen Zustand) |
 | 10 | `uebersichtsrouten.js` | 384 | `zeichneUebersichtsrouten`, `kapitelScheiben`, `aktualisiereKapitelZoom`, `springeZuKapitelZoom`, `scrolleZuKapitel1`, `waehleAnsichtsModus` | `zoomedKapitel`, `kapitelZoomAmount`, `kapitelHover` — alle drei nur hier geschrieben, von aussen nur gelesen; intern u. a. `kapitelHitze`, `oeffneKapitelZoom`, `scheibenCache` |
-| 11 | `sketch.js` | 1093 | `preload`, `setup`, `draw`, `mousePressed`, `windowResized`, `datenFuerKapitel`, `kapitelHatEigeneAnsicht`, `setzeAnsichtsModus`, `starteKapitelEinstieg` | `stationenData`, `uebersichtsRouten`, `kapitelAnsichtsModus`, `kapitel1Geklemmt`/`kapitel1ZoomAmount`, 9 DOM-Handles; intern u. a. `kapitelKarten`, `bgImage`/`bgImage2`/`ch1Image`, der Zustand beider Register (`legendenLeisteOffen`, `legendeAus`, `infoAus`) |
+| 11 | `sketch.js` | 1094 | `preload`, `setup`, `draw`, `mousePressed`, `windowResized`, `datenFuerKapitel`, `kapitelHatEigeneAnsicht`, `setzeAnsichtsModus`, `starteKapitelEinstieg` | `stationenData`, `uebersichtsRouten`, `kapitelAnsichtsModus`, `kapitel1Geklemmt`/`kapitel1ZoomAmount`, 9 DOM-Handles; intern u. a. `kapitelKarten`, `bgImage`/`bgImage2`/`ch1Image`, der Zustand beider Register (`legendenLeisteOffen`, `legendeAus`, `infoAus`) |
 | 12 | `sonifikation.js` | 857 | `spieleSonifikationFuer`, `beendeSonifikationAudio` | `SONIFIKATION_GESAMTDAUER_SEK`, `sonifikationSpieltGerade` — von 60 Top-Level-Namen gehen 9 nach aussen, die übrigen 51 (u. a. `baueElementStimmen`, `elementZeiten`, `elementCache`) sind modulintern |
 
 `dom-aufbau.js` ist das einzige Modul ohne eigene Top-Level-Variablen: es baut
@@ -468,8 +468,9 @@ Kapitelnummern an den Routen-Startpunkten gleichermassen.
 Zeichnen auseinanderlaufen, stimmte die Zentrierung der Blöcke nicht mehr.
 
 **ACHTUNG** `LABEL_GROESSE` und die `font-size` von `.annotation-tag` in
-`style.css` führen denselben Wert — die Kategorienzeile der Annotationsbox ist
-DOM, alles andere Canvas. Beide Stellen tragen einen Gegenhinweis; wird der eine
+`style.css` führen denselben Wert — die Kategorienzeile der Annotationsbox und
+die Kapitelzeile über den Einstiegstexten (`.kapitel-zeile`, dieselbe Regel)
+sind DOM, alles andere Canvas. Beide Stellen tragen einen Gegenhinweis; wird der eine
 Wert geändert, muss der andere mit.
 
 **Die F-Wert-Punkte einer Gruppe wachsen aus der Mitte ihres Bogenabschnitts
