@@ -931,7 +931,7 @@ body.legende-offen .annotation-box.pos-unten-links {
    ACHTUNG absolut positioniert, sonst würde sie als Flex-Element das Play-
    Zeichen aus der Mitte des Knopfes schieben. */
 .grafik-play-button::before {
-  content: 'Sound on';
+  content: 'Ton an';
   position: absolute;
   bottom: 100%;
   left: 50%;
