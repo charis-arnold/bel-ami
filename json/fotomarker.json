@@ -79,7 +79,7 @@
     "lat": 48.873782,
     "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.6da63pt3/02509e51344923594262a1d1ff691db81b26dba3?content-disposition=inline"
   },
-    {
+  {
     "titel": "JARDIN DES TUILERIES",
     "plz": "75001",
     "beschreibung": "Jardin des Tuileries et façades des immeubles de la rue de Rivoli. Paris (Ier arr.). Photographie d'Edouard Desprez. Plaque de verre, 1926-1927. Département Histoire de l'Architecture et Archéologie de Paris.",
@@ -87,7 +87,7 @@
     "lat": 48.863563,
     "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.fd3ay9zt/a2a7684e2cbd70f70d969692909c32867dfe16de?content-disposition=inline"
   },
-   {
+  {
     "titel": "ÉGLISE DE LA TRINITÉ",
     "plz": "75009",
     "beschreibung": "Immeubles parisiens. Place d'Estienne d'Orves. Église de la Trinité. Façade principale avec le square au premier plan. Paris (IXème arr.). Photographie de Charles Lansiaux (1855-1939). Plaque de verre, 23 septembre 1919. Département Histoire de l'Architecture et Archéologie de Paris.",
@@ -95,12 +95,36 @@
     "lat": 48.876315,
     "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.bbaehug6/9dffcdc040459a1c2bc5fb4a591a197150d3bba6?content-disposition=inline"
   },
-   {
+  {
     "titel": "PORTE SAINT-DENIS",
     "plz": "75002",
     "beschreibung": "Immeubles parisiens. Porte Saint-Denis. Vue de face vers la rue du Faubourg Saint-Denis. Paris (Xème arr.). Photographie de Charles Lansiaux (1855-1939). Plaque de verre, 24 juin 1920. Département Histoire de l'Architecture et Archéologie de Paris.",
     "lon": 2.352717,
     "lat": 48.869831,
     "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.811enk81/711232b87bdd7cbd4e92b2fe604b1724ce80c784?content-disposition=inline"
+  },
+  {
+    "titel": "GARE DE LYON",
+    "plz": "75002",
+    "beschreibung": "4-8 place Louis Armand. Gare de Lyon. Façade. Paris (XIIème arr.). Photographie de Charles Lansiaux (1855-1939). Plaque de verre, 28 juin 1921. Département Histoire de l'Architecture et Archéologie de Paris.",
+    "lon": 2.373409,
+    "lat": 48.843719,
+    "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.6da63pt3/40f20875d82821e0bdc004590dfba47ee207a66a?content-disposition=inline"
+  },
+    {
+    "titel": "MUSÉE D'ORSAY",
+    "plz": "75007",
+    "beschreibung": "7-9 quai Anatole France, 60-62 rue de Lille. Musée d'Orsay. Façade sur le quai. Paris (VIIème arr.). Plaque de verre. Photographie de Charles Lansiaux (1855-1939), 15 février 1918. Département Histoire de l'Architecture et Archéologie de Paris.",
+    "lon": 2.326305,
+    "lat": 48.860170,
+    "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.d9ebxi2d/90de03a8b97a0dd3093db06a1c26c312c416f36f?content-disposition=inline"
+  },
+      {
+    "titel": "BOURSE DU COMMERCE ET COLONNE MÉDICIS",
+    "plz": "75001",
+    "beschreibung": "Bourse du Commerce et Colonne Médicis. 21 rue de Viarmes. Paris (Ier arr.). Photographie d'Édouard Desprez. Plaque de verre, 1934. Département Histoire de l'Architecture et Archéologie de Paris.",
+    "lon": 2.343056,
+    "lat": 48.863068,
+    "fotoUrl": "https://api.nakala.fr/data/10.34847/nkl.eccc97q7/03fe58418a60b88bb1dbf21e10c9b23e711d09d2?content-disposition=inline"
   }
 ]
