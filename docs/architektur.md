@@ -216,7 +216,7 @@ eigenen Header-Abschnitt aus.
 | 8 | `annotationsbox.js` | 98 | `annotationBoxPosition` | `ANNOTATION_BOX_POSITIONEN` — intern u. a. `annotationBoxPositionCache` |
 | 9 | `dom-aufbau.js` | 116 | `baueKapitelRegister`, `baueKapitelZeilen`, `kapitelBezeichnung`, `baueKartenMarkierungen`, `baueStationsMarker`, `baueZwischenMarker` | — (baut nur DOM, hält keinen Zustand) |
 | 10 | `uebersichtsrouten.js` | 384 | `zeichneUebersichtsrouten`, `kapitelScheiben`, `aktualisiereKapitelZoom`, `springeZuKapitelZoom`, `scrolleZuKapitel1`, `waehleAnsichtsModus` | `zoomedKapitel`, `kapitelZoomAmount`, `kapitelHover` — alle drei nur hier geschrieben, von aussen nur gelesen; intern u. a. `kapitelHitze`, `oeffneKapitelZoom`, `scheibenCache` |
-| 11 | `sketch.js` | 1094 | `preload`, `setup`, `draw`, `mousePressed`, `windowResized`, `datenFuerKapitel`, `kapitelHatEigeneAnsicht`, `setzeAnsichtsModus`, `starteKapitelEinstieg` | `stationenData`, `uebersichtsRouten`, `kapitelAnsichtsModus`, `kapitel1Geklemmt`/`kapitel1ZoomAmount`, 9 DOM-Handles; intern u. a. `kapitelKarten`, `bgImage`/`bgImage2`/`ch1Image`, der Zustand beider Register (`legendenLeisteOffen`, `legendeAus`, `infoAus`) |
+| 11 | `sketch.js` | 1111 | `preload`, `setup`, `draw`, `mousePressed`, `windowResized`, `datenFuerKapitel`, `kapitelHatEigeneAnsicht`, `setzeAnsichtsModus`, `starteKapitelEinstieg` | `stationenData`, `uebersichtsRouten`, `kapitelAnsichtsModus`, `kapitel1Geklemmt`/`kapitel1ZoomAmount`, 9 DOM-Handles; intern u. a. `kapitelKarten`, `bgImage`/`bgImage2`/`ch1Image`, der Zustand beider Register (`legendenLeisteOffen`, `legendeAus`, `infoAus`) |
 | 12 | `sonifikation.js` | 857 | `spieleSonifikationFuer`, `beendeSonifikationAudio` | `SONIFIKATION_GESAMTDAUER_SEK`, `sonifikationSpieltGerade` — von 60 Top-Level-Namen gehen 9 nach aussen, die übrigen 51 (u. a. `baueElementStimmen`, `elementZeiten`, `elementCache`) sind modulintern |
 
 `dom-aufbau.js` ist das einzige Modul ohne eigene Top-Level-Variablen: es baut
@@ -404,6 +404,13 @@ die DOM-Ebene wird umgekehrt schon bei `> 0.01` gesperrt
 (`body.projekttext-offen`), weil sie über dem Canvas liegt und sonst hell auf
 der heraufziehenden Fläche stünde.
 
+**ACHTUNG** solange `projekttextOffen` gilt, fängt ein `wheel`-Listener am
+Fenster (`setup()`) das Rad ab und scrollt damit die Textspalte, die keinen
+eigenen Balken zeigt. Ohne ihn liefe die Scrollstrecke weiter — und mit ihr
+die Geschichte hinter der Fläche. Dass der Text weiterläuft, zeigt stattdessen
+«Scrollen» unter der Spalte (`#projekttextHinweis`); ein `scroll`-Listener an
+der Spalte blendet ihn am Textende über die Klasse `am-ende` aus.
+
 **Der Info-Reiter zeichnet sich selbst, nach seiner Fläche.** Deshalb liegt er
 in `zeichneInfoLeiste()` und nicht bei seinem Nachbarn in
 `zeichneRegisterleiste()`: über der dunklen Fläche erscheint er negativ (keine
@@ -468,9 +475,9 @@ Kapitelnummern an den Routen-Startpunkten gleichermassen.
 Zeichnen auseinanderlaufen, stimmte die Zentrierung der Blöcke nicht mehr.
 
 **ACHTUNG** `LABEL_GROESSE` und die `font-size` von `.annotation-tag` in
-`style.css` führen denselben Wert — die Kategorienzeile der Annotationsbox und
-die Kapitelzeile über den Einstiegstexten (`.kapitel-zeile`, dieselbe Regel)
-sind DOM, alles andere Canvas. Beide Stellen tragen einen Gegenhinweis; wird der eine
+`style.css` führen denselben Wert — die Kategorienzeile der Annotationsbox, die
+Kapitelzeile über den Einstiegstexten und die Rubriken im Projekttext
+(dieselbe Regel) sind DOM, alles andere Canvas. Beide Stellen tragen einen Gegenhinweis; wird der eine
 Wert geändert, muss der andere mit.
 
 **Die F-Wert-Punkte einer Gruppe wachsen aus der Mitte ihres Bogenabschnitts

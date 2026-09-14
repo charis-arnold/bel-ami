@@ -264,8 +264,25 @@ function setup() {
   haltKlickAuf(document.getElementById('kapitelEndeUebersicht'), springeZurUebersicht);
 
   projekttextEl = document.getElementById('projekttext');
+  let projekttextInnerEl = document.getElementById('projekttextInner');
   // Klicks im Text bleiben im Text — daneben schliesst p5 den Einblender.
-  haltKlickAuf(document.getElementById('projekttextInner'));
+  haltKlickAuf(projekttextInnerEl);
+  // Solange der Text offen ist, scrollt das Rad ihn statt der Geschichte: die
+  // Spalte zeigt keinen eigenen Balken, die Scrollstrecke bleibt stehen.
+  window.addEventListener('wheel', ev => {
+    if (!projekttextOffen) return;
+    ev.preventDefault();
+    // deltaMode 1 = Zeilen (Firefox am Mausrad), 2 = ganze Seiten
+    let einheit = ev.deltaMode === 1 ? 16 : ev.deltaMode === 2 ? projekttextInnerEl.clientHeight : 1;
+    projekttextInnerEl.scrollTop += ev.deltaY * einheit;
+  }, { passive: false });
+  // «Scrollen» unter dem Text, solange noch etwas folgt; am Ende blendet er aus.
+  let projekttextHinweisEl = document.getElementById('projekttextHinweis');
+  let pruefeTextende = () => projekttextHinweisEl.classList.toggle('am-ende',
+    projekttextInnerEl.scrollTop + projekttextInnerEl.clientHeight >= projekttextInnerEl.scrollHeight - 2);
+  projekttextInnerEl.addEventListener('scroll', pruefeTextende, { passive: true });
+  window.addEventListener('resize', pruefeTextende);
+  pruefeTextende();
   annotationBoxEl = document.getElementById('annotationBox');
   annotationText = document.getElementById('annotationText');
   annotationInner = document.getElementById('annotationInner');

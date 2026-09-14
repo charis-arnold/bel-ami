@@ -168,9 +168,12 @@ h2 {
   font-size: clamp(15px, 5.2vw, 22px);
 }
 
-.scroll-hinweis {
+/* «Scrollen» mit Pfeil: auf der Bühne zu Beginn jedes Akts, im Projekttext
+   unter der Spalte (.projekttext-hinweis). Beide wippen um ihre Mitte, darauf
+   ist scroll-hinweis-bounce gebaut. */
+.scroll-hinweis,
+.projekttext-hinweis {
   position: absolute;
-  top: 88%;
   left: 50%;
   display: flex;
   flex-direction: column;
@@ -178,10 +181,14 @@ h2 {
   gap: 0px;
   text-align: center;
   transform: translate(-50%, -50%);
-  z-index: 5;
-  color: var(--gold);
   pointer-events: none;
   animation: scroll-hinweis-bounce 1.8s ease-in-out infinite;
+}
+
+.scroll-hinweis {
+  top: 88%;
+  z-index: 5;
+  color: var(--gold);
 }
 
 .scroll-hinweis-arrow {
@@ -593,15 +600,17 @@ body.legende-offen .annotation-box.pos-unten-links {
   width: 100%;
 }
 
-/* Etikettenschrift: die Kategorienzeile der Annotationsbox und die Kapitelzeile
-   über den Einstiegstexten (baueKapitelZeilen in dom-aufbau.js). Die Farbe
-   erbt die Kapitelzeile von ihrem Text, der ebenfalls in --label steht.
+/* Etikettenschrift: die Kategorienzeile der Annotationsbox, die Kapitelzeile
+   über den Einstiegstexten (baueKapitelZeilen in dom-aufbau.js) und die
+   Rubriken im Projekttext. Die Farbe steht nicht hier: die beiden letzten
+   erben sie von ihrem Text — dunkel auf der Karte, hell auf der Info-Fläche.
 
    ACHTUNG font-size führt LABEL_GROESSE in kreisgrafik.js als denselben Wert:
    die Ortsnamen auf der Karte und die Legende zeichnen mit ihm im Canvas,
    diese Zeilen hier sind DOM. Wird der eine geändert, muss der andere mit. */
 .annotation-tag,
-.kapitel-zeile {
+.kapitel-zeile,
+.projekttext-inner p.projekttext-rubrik {
   font-family: var(--sans);
   font-size: 13px;
   font-weight: 700;
@@ -773,7 +782,9 @@ body.legende-offen .annotation-box.pos-unten-links {
    kreisgrafik.js) — hier steht nur der Text darauf. Der Container fängt
    bewusst KEINE Klicks (pointer-events: none), damit ein Klick neben den
    Text bei p5 ankommt und den Einblender schliesst; nur die Textspalte
-   selbst nimmt Klicks an, damit man darin scrollen und markieren kann.
+   selbst nimmt Klicks an, damit man darin markieren kann. Gescrollt wird sie
+   ohne eigenen Balken mit dem Mausrad, überall im Fenster (setup() in
+   sketch.js) — die Scrollstrecke der Geschichte bleibt dabei stehen.
    ========================= */
 .projekttext {
   position: fixed;
@@ -785,7 +796,7 @@ body.legende-offen .annotation-box.pos-unten-links {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10vh 8vw;
+  padding: 8vh 8vw 16vh; /* unten Platz für den Scrollen-Hinweis */
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -797,28 +808,53 @@ body.legende-offen .annotation-box.pos-unten-links {
   visibility: visible;
 }
 
-/* Spalte genau so breit wie .begleittext / .kapitel-einstiegstext.
+/* Spalte etwas breiter als .begleittext / .kapitel-einstiegstext (dort 42ch):
+   der Projekttext ist lang, breitere Zeilen sparen Scrollweg.
 
    ACHTUNG die font-size hier ist KEINE Textgrösse — dieser Knoten zeigt selbst
    keinen Text, die Absätze darunter setzen ihre eigene. Sie steht nur da,
    damit ch dieselbe Bezugsgrösse bekommt wie dort: ch misst in Zeichen der
    Schriftgrösse des Elements, an dem max-width hängt. Ohne diese Zeile
-   rechnete 42ch gegen die kleinere Absatzschrift und die Spalte fiele
-   schmaler aus als die Einstiegstexte.
-   Beide Werte gehören zusammen und müssen mit .begleittext mitwandern. */
+   rechnete 50ch gegen die kleinere Absatzschrift und die Spalte fiele
+   deutlich schmaler aus.
+   Die font-size muss mit .begleittext mitwandern, damit beide Spalten im
+   selben Verhältnis mit dem Fenster wachsen. */
 .projekttext-inner {
   font-size: clamp(16px, 3vw, 30px);
-  max-width: 42ch;
-  max-height: 80vh;
+  max-width: 50ch;
+  max-height: 76vh; /* 100vh minus beide Polster von .projekttext */
   overflow-y: auto;
+  scrollbar-width: none;
   pointer-events: auto;
+}
+
+.projekttext-inner::-webkit-scrollbar {
+  display: none;
+}
+
+/* Der Scrollen-Hinweis steht im unteren Polster, solange unter der Spalte noch
+   Text folgt, und blendet am Textende aus (am-ende, setup() in sketch.js).
+   Pfeil und Schrift wie auf der Bühne, weiss auf dem dunklen Grund. */
+.projekttext-hinweis {
+  top: 92%;
+  transition: opacity 0.35s ease;
+}
+
+.projekttext-hinweis.am-ende {
+  opacity: 0;
+}
+
+/* Im Polster zählt jeder Pixel: ohne die Zeilenhöhe 1 wäre der Pfeil 75 px hoch,
+   und «Scrollen» wippte bei 720 px Fensterhöhe unter den Rand. */
+.projekttext-hinweis .scroll-hinweis-arrow {
+  line-height: 1;
 }
 
 /* Helle Serifenschrift auf dunklem Grund — derselbe Ton wie der Intro-Crawl
    am Anfang, auf den der Projekttext bewusst zurückverweist. */
 /* Eigene, kleinere Schrift als die Einstiegstexte: die stehen als einzelner
-   Satz über der Karte, hier laufen drei Absätze am Stück — dafür kleinerer
-   Grad und lockerer Zeilenabstand. Nur die Spaltenbreite ist gemeinsam,
+   Satz über der Karte, hier laufen mehrere Absätze am Stück — dafür kleinerer
+   Grad und lockerer Zeilenabstand. Die Spaltenbreite leitet sich von dort ab,
    siehe .projekttext-inner oben. */
 .projekttext-inner p {
   font-family: var(--serif-text);
@@ -832,15 +868,39 @@ body.legende-offen .annotation-box.pos-unten-links {
   margin-top: 1.1em;
 }
 
-/* Quellenangaben am Schluss: kleiner und ruhiger als der Fliesstext, damit
-   sie ihn nicht überstimmen. Die Linie trennt sie vom Projekttext. */
-.projekttext-inner p.projekttext-quellen {
+/* Titel und Untertitel wie im Factsheet: halbfett, der Titel in Versalien. */
+.projekttext-inner p.projekttext-titel,
+.projekttext-inner p.projekttext-untertitel {
+  font-weight: 600;
+}
+
+.projekttext-inner p.projekttext-titel {
+  text-transform: uppercase;
+}
+
+.projekttext-inner p.projekttext-untertitel {
+  margin-top: 0;
+}
+
+/* Rubriken in der Etikettenschrift (siehe .annotation-tag); der Text darunter
+   rückt an seine Rubrik heran. */
+.projekttext-inner p.projekttext-rubrik {
+  margin-top: 2em;
+}
+
+.projekttext-inner p.projekttext-rubrik + p {
+  margin-top: 0.4em;
+}
+
+/* Randspalte des Factsheets am Schluss: kleiner und ruhiger als der
+   Fliesstext, damit sie ihn nicht überstimmt. Die Linie trennt sie ab. */
+.projekttext-inner p.projekttext-rand {
   font-size: clamp(13px, 1.1vw, 16px);
   line-height: 1.5;
   margin-top: 0.7em;
 }
 
-.projekttext-inner p.projekttext-quellen-erste {
+.projekttext-inner p.projekttext-rand-beginn {
   margin-top: 2em;
   padding-top: 1.4em;
   border-top: 1px solid rgba(226, 230, 225, 0.25);

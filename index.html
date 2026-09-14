@@ -102,25 +102,52 @@
 
   <div class="projekttext" id="projekttext">
     <div class="projekttext-inner" id="projekttextInner">
-      <p>Wer durch eine fremde Stadt läuft, trägt bald eine zweite Karte in sich. Nicht die gedruckte, sondern die eigene: aus Gerüchen, Geräuschen, Stimmungen, zufälligen Begegnungen.</p>
-      <p>Wer liest, betritt einen Ort. Das Buch gibt das Tempo vor, führt durch Strassen, Plätze, Innenräume. Zwischen den Zeilen entsteht eine Karte aus dem Beschriebenen und der Wahrnehmung der literarischen Figuren.</p>
-      <p>«Topografie der Gefühle» ist ein «lesendes Gehen» und ein «emotionaler Transekt»: eine Annäherung an die Wahrnehmung von Raum und wie wir darin leben.</p>
+      <p class="projekttext-titel">Topografie der Gefühle</p>
+      <p class="projekttext-untertitel">Lesendes Gehen als generative Zeichnung städtischen Raums</p>
 
-      <p class="projekttext-quellen projekttext-quellen-erste"><strong>Quellen</strong><br>
-        Projekt Gutenberg<br>
-        OpenStreetMap</p>
+      <p class="projekttext-rubrik">Eine literarische Kartografie von Guy de Maupassants «Bel-Ami»</p>
+      <p>Wer ein Buch liest, betritt einen fremden Ort. Zum Beispiel die Stadt Paris in der zweiten Hälfte des 19. Jahrhunderts, in der Guy de Maupassants Roman «Bel-Ami» spielt. Das Projekt «Topografie der Gefühle» folgt Maupassants Hauptfigur Georges Duroy und legt seinen Aufstieg vom Habenichts an die Spitze der Pariser Presse auf den echten Stadtplan. Dafür wurden alle 18 Kapitel Textstelle für Textstelle annotiert. Nicht von Hand, sondern mit der Claude API. Wo hält Duroy sich auf? Was nimmt er wahr? Wie wirkt der Ort auf ihn und seine Gefühle – und umgekehrt?</p>
+      <p>Beim Scrollen durch die einzelnen Kapitel folgt der User Duroys Route auf einem Pariser Stadtplan. Jeder Ort, an dem er sich aufhält, ist dabei mit einem Kreis markiert: Je öfter der Ort auf Duroy wirkt, desto grösser der Kreis. Um die Gefühle des Aufsteigers zusätzlich zu betonen, sind deren Ausformungen mit entsprechenden Klängen unterlegt. Maupassants Roman wird begeh-, fühl- und hörbar.</p>
 
-      <p class="projekttext-quellen">Fotos: Pauline Rossi, <span lang="fr">Chargée d’études</span></p>
+      <p class="projekttext-rubrik">LLM-Lektüre und Datengrundlage</p>
+      <p>Wie liest eigentlich ein LLM einen Roman und erst noch einen der wichtigsten der Literaturgeschichte? Wie wird aus einem Buch eine Karte? Und wie macht man die Gefühlswelt einer literarischen Figur nicht nur sichtbar, sondern spürbar? Diese Fragen beantwortet «Topografie der Gefühle» anhand von 2902 Annotationen, 957 Textstellen mit Wirkungsrichtung; wobei sich 58 Prozent aller Nennungen an 10 Orten festmachen lassen. Aber nicht nur wo etwas geschieht, ist entscheidend, sondern wie es sich anfühlt.</p>
 
-      <p class="projekttext-quellen" lang="fr">Responsable des Archives de la Commission du Vieux Paris<br>
+      <p class="projekttext-rubrik">Human Data</p>
+      <p>Anders als in der klassischen Linguistik analysiert «Topografie der Gefühle» einen Roman nicht nach quantitativen, sondern qualitativen Kriterien. Nicht die Anzahl Verben oder Adjektive, nicht die Grammatik und die Erzählkonstruktion interessieren: Gezeigt wird, was die Hauptfigur Duroy fühlt. Diese Daten sind – obschon es sich bei einem Roman um ein künstliches Werk handelt – Human Data. Die grafische Darstellung folgt vorab definierten Kategorien (siehe Legende).</p>
+
+      <p class="projekttext-rubrik">Erkenntnis</p>
+      <p>Der Aufstieg fühlt sich nicht wie einer an. Duroy steigt Kapitel für Kapitel die Karriereleiter hoch, doch trägt er immer schwerer an der Last der Stadt, durch die er geht. Fast zwei Drittel aller eindeutig gefärbten emotionalen Momente sind negativ. Der Raum führt, nicht das Gefühl. Nicht Duroy bestimmt, wie sich Paris anfühlt – die Stadt bestimmt, wie er sich fühlt. In drei von vier Fällen geht die Wirkung vom Ort aus, nicht von Körper oder Gefühl.</p>
+
+      <p class="projekttext-rubrik">Anwendung</p>
+      <p>«Topografie der Gefühle» richtet sich an Leserinnen und Leser, die einen Roman einmal anders lesen wollen: «Bel-Ami» ist hier keine klassische Aufsteigergeschichte, sondern die Geschichte einer Stadt, die einen ihrer mächtigsten Männer erdrückt.</p>
+
+      <p class="projekttext-rubrik projekttext-rand-beginn">Umsetzung</p>
+      <p class="projekttext-rand"><strong>Format</strong> Generatives Scrollytelling im Browser</p>
+      <p class="projekttext-rand"><strong>Technik</strong> Python • QGIS • p5.js • Strudel</p>
+
+      <p class="projekttext-rubrik">Quelle</p>
+      <p class="projekttext-rand"><strong>Text</strong> Guy de Maupassant, «Bel-Ami» (1885) • Übersetzung: Fürst N. Obolensky • Projekt Gutenberg • 18 Kapitel als Rohtext</p>
+      <p class="projekttext-rand"><strong>Karten</strong> Eigene QGIS-Exporte • Start-, Überblicks- und 18 Kapitelkarten • je mit Bbox</p>
+      <p class="projekttext-rand"><strong>Geo</strong> OpenStreetMap • Nominatim (Ortsauflösung) • OSMnx (Fusswegnetz)</p>
+      <p class="projekttext-rand"><strong>Fotos</strong> DHAAP — <span lang="fr">Photographies de la Commission du Vieux Paris</span></p>
+      <p class="projekttext-rand">Pauline Rossi, <span lang="fr">Chargée d’études</span></p>
+      <p class="projekttext-rand" lang="fr">Responsable des Archives de la Commission du Vieux Paris<br>
         Département d’histoire de l’architecture et d’archéologie (DHAAP)<br>
         Direction des Affaires culturelles<br>
         Commission du Vieux Paris</p>
+      <p class="projekttext-rand">11 rue du Pré, 75018 Paris</p>
+      <p class="projekttext-rand"><strong>Schrift</strong> Google Font</p>
 
-      <p class="projekttext-quellen" lang="fr">Photographies de la Commission du Vieux Paris</p>
+      <p class="projekttext-rubrik">Erhebung</p>
+      <p class="projekttext-rand"><strong>Annotieren</strong> Claude API • Perspektive Figur/Erzähler • 15 Inhalts-Tags • Kategorien: Raum und Umwelt / Stimmung und Emotion / Gesellschaft und Soziales</p>
+      <p class="projekttext-rand"><strong>Quantifizieren</strong> Valenz (−1/0/+1) • Intensität (1–3) • 3 Wirkungsrichtungen: Körper spürt / Emotion beeinflusst Raumwahrnehmung / Raum löst Emotion aus</p>
+      <p class="projekttext-rand"><strong>Geocodieren</strong> Nominatim • Unsichere Nennungen bleiben ohne Koordinaten und werden über den Kontext interpoliert</p>
+      <p class="projekttext-rand"><strong>Routen</strong> OSMnx • kürzester Fussweg zwischen aufeinanderfolgenden Bewegungsstellen</p>
+      <p class="projekttext-rand"><strong>Kuratieren</strong> Händisch • Sammelpunkt: Weg steht still, solange die Szene am Ort bleibt</p>
 
-      <p class="projekttext-quellen">11 rue du Pré, 75018 Paris</p>
+      <p class="projekttext-rand projekttext-rand-beginn"><strong>CAS Generative Data Design</strong> Charis Arnold • September 2026</p>
     </div>
+    <div class="projekttext-hinweis" id="projekttextHinweis"><span class="scroll-hinweis-arrow">&#8964;</span><span class="scroll-hinweis-text">Scrollen</span></div>
   </div>
 
 
