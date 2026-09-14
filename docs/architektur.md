@@ -229,10 +229,10 @@ nur gefüllt.
 
 **Scrollgebundene Canvas-Beschriftungen hängen an einem Begleittext.** Ein
 `<p class="begleittext">` in `index.html` trägt das Scroll-Fenster, ein
-`data-*`-Attribut macht daraus zusätzlich eine Zeichenanweisung: die drei
-`data-demo-gruppe`-Texte steuern die Beschriftungen am Demo-Kreis, der
-`data-foto-hinweis`-Text steuert den Bedienhinweis am Fotomarker und nennt
-zugleich dessen Titel. So gibt es je Fenster nur eine Zahl, nicht zwei.
+`data-*`-Attribut macht daraus zusätzlich eine Zeichenanweisung: die neun
+`data-demo-gruppe`-Absätze steuern die Stufen am Demo-Kreis, der
+`data-foto-hinweis`-Absatz den Bedienhinweis am Fotomarker und nennt zugleich
+dessen Titel. Beide dürfen leer sein, wenn nur ihr Fenster zählt. So gibt es je Fenster nur eine Zahl, nicht zwei.
 
 **Die Route wird in einen eigenen Puffer gezeichnet, nicht direkt aufs
 Canvas** (`zeichneRoute` in `kartendekor.js`). Grund ist der Verlauf: halbdurchsichtige Striche addieren nach

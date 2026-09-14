@@ -802,8 +802,8 @@ function draw() {
     : inKapitel1Kartenausschnitt;
   let fotoMarkerSichtbar = aufKapitelkarte && !inKapitelGrafikAnsicht && !imOrtsvergleich;
   merkeKartenlage(fotoMarkerSichtbar ? activeBbox : null, fotoOffsetX, fotoOffsetY);
-  // Der Bedienhinweis teilt sich das Scroll-Fenster mit seinem Kommentartext,
-  // damit beide zusammen erscheinen und wieder gehen.
+  // Der Bedienhinweis nimmt sein Scroll-Fenster von einem leeren Begleittext
+  // (data-foto-hinweis in index.html), der selbst nichts zeigt.
   let fotoHinweis = fotoHinweisText ? {
     titel: fotoHinweisText.dataset.fotoHinweis,
     text: FOTO_HINWEIS_TEXT,

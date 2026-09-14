@@ -403,8 +403,8 @@ h2 {
   color: var(--label);
 }
 
-/* Der Text am Kapitelende steht höher als die übrigen: auf denselben 42 %
-   wie der hochgesetzte Begleittext (.begleittext-hoch), nicht auf 72 %.
+/* Der Text am Kapitelende steht höher als die übrigen: auf 42 % statt
+   auf 72 %.
    Versalien wie bei den übrigen Bedienelementen; im HTML steht der Text
    deshalb in normaler Schreibweise. */
 .kapitel-ende-text {
@@ -489,19 +489,6 @@ h2 {
    schiebt sich der Text in die Grafik. */
 .begleittext[data-demo-gruppe] {
   top: 78%;
-}
-
-/* Höher als die übrigen Begleittexte: auf 64 % läge der Text genau dort, wo
-   während der Route der Bedienhinweis am Fotomarker steht (siehe
-   data-foto-hinweis in index.html und zeichneFotoMarker).
-
-   Ohne festen Kasten: dieser Text steht allein in seinem Scroll-Fenster,
-   überblendet also mit keinem zweiten und hat vom gemeinsamen Zeilenraster
-   nichts. Seine Höhe ist gegen den Bedienhinweis eingemessen — ein Kasten
-   würde ihn ohne Gegenwert um eine halbe Zeile anheben. */
-.begleittext.begleittext-hoch {
-  top: 42%;
-  min-height: 0;
 }
 
 
