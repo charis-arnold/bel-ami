@@ -12,33 +12,26 @@
 const VERGLEICHS_KNOTEN = [
   { label: 'Redaktion La Vie Française',
     text: 'Zwölf Kapitel führen hierher. Hier wird geschrieben, was Paris für wahr hält — und hier misst sich, wer er geworden ist. Der einzige Ort, der ihn weder hebt noch senkt.',
-    daten: ['12 Kapitel', '240 Annotationen', '19 neg / 19 pos', '37 F-Werte'],
     namen: ['Redaktion La Vie Française'] },
   { label: 'Wohnung Duroy/Madeleine (17 Rue Fontaine)',
     text: 'Er zieht in die Räume des Toten, an seinen Schreibtisch, zu seiner Frau. Was als Erbe beginnt, wird zur Zelle — am Ende zählt dieser Ort nur noch Verletzungen.',
-    daten: ['9 Kapitel', '314 Annotationen', '+0.12 → −1.00', '72 F-Werte'],
     namen: ['Wohnung Forestier (17 Rue Fontaine)', 'Wohnung Duroy/Madeleine (17 Rue Fontaine)'] },
   { label: 'Rue Constantinople 127',
     text: 'Die Wohnung, die niemand kennt. Erst gehört sie der Lust, dann der Berechnung — dieselben vier Wände, in denen er Clotilde empfängt und Madeleine stellt.',
-    daten: ['8 Kapitel', '166 Annotationen', '43 neg / 17 pos', '43 F-Werte'],
     namen: ['Rue Constantinople 127', 'Wohnung Du Roy (Rue Constantinople 127)'] },
   { label: 'Palais Walter, Faubourg Saint-Honoré',
     text: 'Der Gipfel, auf den er zielt, zieht selbst um — vom Boulevard ins Palais. Hier wird das Vermögen gemacht, das ihn trägt, und hier bricht Frau Walter vor einem Bild zusammen, das sein Gesicht hat.',
-    daten: ['6 Kapitel', '251 Annotationen', '44 neg / 23 pos', '72 F-Werte'],
     namen: ['Boulevard Malesherbes (Walters Haus)', 'Palais Walter, Faubourg Saint-Honoré'] },
   { label: 'Georges Duroys Wohnung (Rue Boursault)',
     text: 'Ein Zimmer, das nach Armut riecht. Kein Ort des Romans wird härter empfunden — und keiner verschwindet so vollständig: Nach Kapitel 7 kehrt er nie zurück.',
-    daten: ['5 Kapitel', '227 Annotationen', '86 neg / 27 pos', '98 F-Werte'],
     namen: ['Georges Duroys Wohnung (Rue Boursault)'] },
   { label: 'Place de la Madeleine',
     text: 'Am Anfang geht er hungrig an den Terrassen vorbei und zählt seine Münzen. Am Ende läutet dieselbe Kirche für seine Hochzeit. Kein zweiter Ort kehrt sein Vorzeichen so vollständig um.',
-    daten: ['2 Kapitel', '106 Annotationen', '−1.00 → +0.71', '52 F-Werte'],
     namen: ['Place de la Madeleine', 'Église de la Madeleine, Paris'] },
   // Sammelt die kapitelweise verschiedenen Boulevard-Namen zu einer Achse.
   // Label ist als einziges kein Kapitelname — die Gruppe hat keinen.
   { label: 'Grands Boulevards',
     text: 'Die Bühne der Stadt. Erst steht er davor und sieht zu, wie andere sitzen; später sitzt er selbst, bestellt und wird gesehen.',
-    daten: ['7 Kapitel', '114 Annotationen', '−0.50 → +0.50', '36 F-Werte'],
     namen: ['Boulevard des Italiens', 'Boulevard des Capucines', 'Boulevard Poissonnière',
       'Café Riche, Boulevard des Italiens, Paris', 'Café Tortoni, Boulevard des Italiens',
       'Café am Boulevard (Näherung Boulevard Poissonière)', 'Café-Chantant am Boulevard des Capucines',
@@ -65,6 +58,8 @@ const OV_LABEL_MAX_BREITE = 200; // ab dieser Breite wird zweizeilig gesetzt
 const OV_LABEL_ZEILE = 15;
 const OV_LABEL_ABSTAND = 34;     // Luft zwischen Kreisrand und Beschriftung
 const OV_KAPITEL_ABSTAND = 16;   // Luft zwischen Beschriftung und Kapitelzeile
+const OV_LABEL_REIHEN_LUFT = 10; // Luft zwischen den beiden Beschriftungsreihen
+const OV_TEXT_REIHEN_LUFT = 10;  // dasselbe für die Textblöcke über den Kreisen
 // Die Kapitelzeile steht zurückgenommen unter dem Ortsnamen.
 const OV_KAPITELZEILE_TINTE = hexZuRgb('#5A5A5A');
 
@@ -75,10 +70,6 @@ const OV_TEXT_BREITE = 180;      // schmaler als die Spalte, sonst stossen sie a
 const OV_TEXT_ABSTAND = 30;      // Luft zwischen Kreisrand und Textblock
 
 // Datenzeile im Stil von .annotation-tag: serifenlos, fett, versal, gesperrt.
-const OV_DATEN_GROESSE = 9.5;
-const OV_DATEN_ZEILE = 14;
-const OV_DATEN_ABSTAND = 12;     // Luft zwischen Fliesstext und Datenzeile
-const OV_DATEN_TRENNER = '  ·  ';
 
 // --- Vorberechnete Daten je Knoten ----------------------------------------
 
@@ -285,32 +276,22 @@ function ovBerechneLayout() {
   textFont(SCHRIFT_SERIF);
   textSize(OV_TEXT_GROESSE);
   let textZeilen = VERGLEICHS_KNOTEN.map(k => ovTextUmbruch(k.text, OV_TEXT_BREITE));
-  textFont(SCHRIFT_SANS);
-  textStyle(BOLD);
-  textSize(OV_DATEN_GROESSE);
-  // Zwei feste Zeilen: Kapitel/Annotationen oben, Valenz/F-Werte darunter —
-  // so steht die Gefühlsangabe bei jedem Ort an derselben Stelle.
-  let datenZeilen = VERGLEICHS_KNOTEN.map(k => {
-    if (!k.daten || !k.daten.length) return [];
-    let oben = k.daten.slice(0, 2).join(OV_DATEN_TRENNER).toUpperCase();
-    let unten = k.daten.slice(2).join(OV_DATEN_TRENNER).toUpperCase();
-    return ovTextUmbruch(oben, OV_TEXT_BREITE).concat(unten ? ovTextUmbruch(unten, OV_TEXT_BREITE) : []);
-  });
-  textStyle(NORMAL);
 
   let n = VERGLEICHS_KNOTEN.length;
   let startX = OV_RAND_LINKS;
   let abstand = Math.max(1, width - OV_RAND_LINKS - OV_RAND_RECHTS) / (n - 1);
 
   // Höhe der Blöcke über und unter der Linie, ohne den Kreis selbst.
-  let textHoehe = 0;
-  let labelHoehe = 0;
-  VERGLEICHS_KNOTEN.forEach((k, i) => {
-    let daten = datenZeilen[i].length ? OV_DATEN_ABSTAND + datenZeilen[i].length * OV_DATEN_ZEILE : 0;
-    textHoehe = Math.max(textHoehe, OV_TEXT_ABSTAND + textZeilen[i].length * OV_TEXT_ZEILE + daten);
-    labelHoehe = Math.max(labelHoehe,
-      OV_LABEL_ABSTAND + labelZeilen[i].length * OV_LABEL_ZEILE + OV_KAPITEL_ABSTAND);
-  });
+  // Textblöcke über den Kreisen und Beschriftungen darunter stehen je in zwei
+  // Reihen, abwechselnd von Ort zu Ort: auf einer Höhe stiessen die Blöcke
+  // benachbarter Kreise aneinander.
+  let textBlock = Math.max(...textZeilen.map(z => z.length)) * OV_TEXT_ZEILE;
+  let textReihe = textBlock + OV_TEXT_REIHEN_LUFT;
+  let textHoehe = OV_TEXT_ABSTAND + textReihe + textBlock;
+
+  let labelBlock = Math.max(...labelZeilen.map(z => z.length)) * OV_LABEL_ZEILE + OV_KAPITEL_ABSTAND;
+  let labelReihe = labelBlock + OV_LABEL_REIHEN_LUFT;
+  let labelHoehe = OV_LABEL_ABSTAND + labelReihe + labelBlock;
 
   // Gemeinsame Kreis-Skala, zwei Bedingungen: waagrecht dürfen sich Nachbarn
   // nicht berühren, senkrecht muss der grösste Kreis zwischen Textblock und
@@ -327,13 +308,24 @@ function ovBerechneLayout() {
   // Linie so legen, dass oben der Textblock und unten die Beschriftung Platz
   // haben; passt beides, bleibt sie mittig.
   let maxRadius = maxRoh * kreisSkala;
+  // Beide Grundlinien hängen am GRÖSSTEN Kreis, nicht am eigenen: so stehen
+  // Texte und Beschriftungen beim Abspielen still, wie die Labels der Spine.
+  let labelBasis = maxRadius + OV_LABEL_ABSTAND;
+  let textBasis = maxRadius + OV_TEXT_ABSTAND;
   let linienY = constrain(height / 2,
     OV_RAND_OBEN + maxRadius + textHoehe,
     height - OV_RAND_UNTEN - maxRadius - labelHoehe);
 
   ovLayout = { breite: width, hoehe: height, startX, abstand, kreisSkala, linienY,
-    labelZeilen, textZeilen, datenZeilen };
+    labelBasis, labelReihe, textBasis, textReihe, labelZeilen, textZeilen };
   return ovLayout;
+}
+
+// Abstand eines Blocks von der Linie: gemeinsame Grundlinie, jeder zweite Ort
+// eine Reihe weiter weg. Beschriftung, Textblock und ihre Zuführungslinien
+// nehmen dieselbe Rechnung.
+function ovReihenAbstand(basis, reihe, ort) {
+  return basis + ort.reihe * reihe;
 }
 
 // p = Fortschritt der Play-Animation (0..1). Er zählt die Kapitel durch: die
@@ -376,6 +368,7 @@ function zeichneOrtsveraenderung(p) {
       knoten, alphaSkala, stand,
       x: layout.startX + r * layout.abstand,
       radius: groessterKreisRadius(stand.bandCounts, Infinity, layout.kreisSkala),
+      reihe: r % 2, // abwechselnd obere und untere Beschriftungsreihe
     });
   });
 
@@ -402,14 +395,18 @@ function zeichneOrtsveraenderung(p) {
 
     stroke(LABEL_TINTE.r, LABEL_TINTE.g, LABEL_TINTE.b, 110 * o.alphaSkala);
     strokeWeight(1);
-    line(o.x, layout.linienY + rand, o.x, layout.linienY + rand + OV_LABEL_ABSTAND - 8);
-    line(o.x, layout.linienY - rand, o.x, layout.linienY - rand - OV_TEXT_ABSTAND + 8);
+    // Nach unten bis kurz vor die feste Beschriftung: die Linie wächst mit dem
+    // Kreis, ihr Ende bleibt stehen.
+    line(o.x, layout.linienY + rand, o.x,
+      layout.linienY + ovReihenAbstand(layout.labelBasis, layout.labelReihe, o) - 8);
+    line(o.x, layout.linienY - rand, o.x,
+      layout.linienY - ovReihenAbstand(layout.textBasis, layout.textReihe, o) + 8);
     noStroke();
   });
 
-  // Beschriftung und Kapitelzeile unter dem Kreis.
+  // Beschriftung und Kapitelzeile unter dem Kreis, auf dem Endradius: sie stehen
+  // still, während der Kreis darüber wächst.
   orte.forEach(o => {
-    let rand = o.radius > 0 ? o.radius : 6;
     let zeilen = layout.labelZeilen[o.knoten];
     textFont(SCHRIFT_SANS);
     textStyle(BOLD);
@@ -419,7 +416,7 @@ function zeichneOrtsveraenderung(p) {
     // direkt in fillStyle und umgeht den Zwischenspeicher — der Ortsname
     // wurde dadurch rot, sobald sich seine Deckkraft nicht mehr änderte.
     drawingContext.fillStyle = `rgba(${LABEL_TINTE.r}, ${LABEL_TINTE.g}, ${LABEL_TINTE.b}, ${o.alphaSkala})`;
-    let labelY = layout.linienY + rand + OV_LABEL_ABSTAND;
+    let labelY = layout.linienY + ovReihenAbstand(layout.labelBasis, layout.labelReihe, o);
     zeilen.forEach((zeile, z) => drawingContext.fillText(zeile, o.x, labelY + z * OV_LABEL_ZEILE));
 
     textStyle(NORMAL);
@@ -429,30 +426,16 @@ function zeichneOrtsveraenderung(p) {
       o.x, labelY + (zeilen.length - 1) * OV_LABEL_ZEILE + OV_KAPITEL_ABSTAND);
   });
 
-  // Erläuterungstext über dem Kreis, darunter die Datenzeile. Von der
-  // Unterkante nach oben gesetzt, damit beide am Kreis hängen.
+  // Erläuterungstext über dem Kreis, von der Unterkante nach oben gesetzt.
   orte.forEach(o => {
     let erlaeuterung = layout.textZeilen[o.knoten];
-    let daten = layout.datenZeilen[o.knoten];
-    if (!erlaeuterung.length && !daten.length) return;
-    let unterkante = layout.linienY - (o.radius > 0 ? o.radius : 6) - OV_TEXT_ABSTAND;
-
-    textFont(SCHRIFT_SANS);
-    textStyle(BOLD);
-    textSize(OV_DATEN_GROESSE);
-    drawingContext.letterSpacing = '0.06em';
-    drawingContext.fillStyle = `rgba(${LABEL_TINTE.r}, ${LABEL_TINTE.g}, ${LABEL_TINTE.b}, ${o.alphaSkala * 0.7})`;
-    daten.forEach((zeile, z) => drawingContext.fillText(
-      zeile, o.x, unterkante - (daten.length - 1 - z) * OV_DATEN_ZEILE));
-    drawingContext.letterSpacing = '0px';
-    textStyle(NORMAL);
-
-    let textUnterkante = unterkante - (daten.length ? daten.length * OV_DATEN_ZEILE + OV_DATEN_ABSTAND : 0);
+    if (!erlaeuterung.length) return;
+    let unterkante = layout.linienY - ovReihenAbstand(layout.textBasis, layout.textReihe, o);
     textFont(SCHRIFT_SERIF);
     textSize(OV_TEXT_GROESSE);
     drawingContext.fillStyle = `rgba(${LABEL_TINTE.r}, ${LABEL_TINTE.g}, ${LABEL_TINTE.b}, ${o.alphaSkala * 0.85})`;
     erlaeuterung.forEach((zeile, z) => drawingContext.fillText(
-      zeile, o.x, textUnterkante - (erlaeuterung.length - 1 - z) * OV_TEXT_ZEILE));
+      zeile, o.x, unterkante - (erlaeuterung.length - 1 - z) * OV_TEXT_ZEILE));
   });
 
   textAlign(LEFT, CENTER); // zurücksetzen — andere Zeichenfunktionen erwarten das

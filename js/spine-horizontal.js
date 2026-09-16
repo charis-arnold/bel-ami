@@ -47,6 +47,11 @@ const SPINE_LABEL_ZEILEN_ABSTAND = 30;
 // Play-Button und Scroll-Fortschrittsbalken.
 const SPINE_RAND_OBEN = 24;
 const SPINE_RAND_UNTEN = 76;
+// Kapitel 4 bis 7 haben weit gespannte Rückkehrbögen und sässen deshalb auf vier
+// verschiedenen Höhen — beim Wechsel zwischen ihnen sprang die Grafik. Sie teilen
+// sich die tiefste dieser Höhen; die Beschriftungen rücken dafür nach unten.
+const SPINE_LINIE_GRUPPE = ['04', '05', '06', '07'];
+
 const spineLayoutCache = new WeakMap(); // eintraege-Array -> { breite, hoehe, versatz, breiten, linienY }
 
 // ---------------------------------------------------------------------------
@@ -146,7 +151,28 @@ function aktualisiereGrafikFortschritt() {
 // Spine zeichnen
 // ---------------------------------------------------------------------------
 
-function spineLayout(eintraege, daten, abstand, startX) {
+// Waagrechte Masse der Spine: fester Abstand je Ortspunkt, gestaucht wenn der
+// Platz nicht reicht, und der Startpunkt, der die Reihe mittig setzt.
+function spineMasse(n) {
+  let verfuegbareBreite = width - SPINE_RAND_LINKS - SPINE_RAND_RECHTS;
+  let abstand = n > 1 ? Math.min(SPINE_PUNKT_ABSTAND, verfuegbareBreite / (n - 1)) : SPINE_PUNKT_ABSTAND;
+  return { abstand, startX: SPINE_RAND_LINKS + (verfuegbareBreite - (n - 1) * abstand) / 2 };
+}
+
+// Eigene Linienhöhe eines Kapitels der Gruppe, ohne deren Ausgleich — sonst
+// riefe spineLayout() sich im Kreis. Baut die Spine-Daten bei Bedarf auf.
+function spineLinieVonKapitel(kapitelNr) {
+  stelleSpineDatenBereit(kapitelNr);
+  let daten = datenFuerKapitel(kapitelNr);
+  let eintraege = spineEintraegeFuer(kapitelNr);
+  if (!daten || !eintraege || !eintraege.length) return null;
+  let { abstand, startX } = spineMasse(eintraege.length);
+  return spineEigenesLayout(eintraege, daten, abstand, startX).linienY;
+}
+
+// Was ein Kapitel für sich fordert: Label-Zeilen, Breiten und die Linienhöhe aus
+// seinen eigenen Kreisen, Bögen und Beschriftungen. Gecacht je Fenstergrösse.
+function spineEigenesLayout(eintraege, daten, abstand, startX) {
   let vorhanden = spineLayoutCache.get(eintraege);
   if (vorhanden && vorhanden.breite === width && vorhanden.hoehe === height) return vorhanden;
 
@@ -208,15 +234,23 @@ function spineLayout(eintraege, daten, abstand, startX) {
   return ergebnis;
 }
 
+// Dasselbe, aber für die Kapitel aus SPINE_LINIE_GRUPPE auf deren gemeinsamer,
+// tiefster Linie. Die Label-Anordnung bleibt die eigene.
+function spineLayout(eintraege, daten, abstand, startX) {
+  let eigen = spineEigenesLayout(eintraege, daten, abstand, startX);
+  let nr = String(daten.kapitel).padStart(2, '0');
+  if (!SPINE_LINIE_GRUPPE.includes(nr)) return eigen;
+  let hoehen = SPINE_LINIE_GRUPPE.map(k => spineLinieVonKapitel(k)).filter(y => y !== null);
+  return { ...eigen, linienY: Math.max(eigen.linienY, ...hoehen) };
+}
+
 // Zentrierte Zeitleiste, per fortschritt (0..1) enthüllt. Alle Kreise teilen
 // einen Spielkopf; eine Rückkehr bekommt nur einen Bogen, keinen zweiten Kreis.
 function zeichneSpineHorizontal(eintraege, fortschritt, daten = stationenData) {
   if (!eintraege.length) return;
 
   let n = eintraege.length;
-  let verfuegbareBreite = width - SPINE_RAND_LINKS - SPINE_RAND_RECHTS;
-  let abstand = n > 1 ? Math.min(SPINE_PUNKT_ABSTAND, verfuegbareBreite / (n - 1)) : SPINE_PUNKT_ABSTAND;
-  let startX = SPINE_RAND_LINKS + (verfuegbareBreite - (n - 1) * abstand) / 2;
+  let { abstand, startX } = spineMasse(n);
   // Lage und Label-Anordnung kommen fertig aus spineLayout (gecacht).
   let layout = spineLayout(eintraege, daten, abstand, startX);
   let linieY = layout.linienY;

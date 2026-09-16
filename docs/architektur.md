@@ -210,8 +210,8 @@ eigenen Header-Abschnitt aus.
 | 2 | `geo-projektion.js` | 171 | `lonLatToScreen`, `coverCrop`, `cropToBbox`, `bboxToImgCrop`, `passeBboxInRahmen` | `startBbox`, `uebersichtBbox`, `ch1ImgBbox`, `UEBERSICHT_SCHNITT_BBOX`, `mapOffsetX`, `mapOffsetY` |
 | 3 | `kreisgrafik.js` | 1416 | `zeichneKreiseOrtRuns`, `zeichneKreiseFuerRun`, `zeichneFwertPunkte`, `zeichneKreisLabels`, `zeichneDemoKreisgrafik`, `zeichneSchleier`, `kategorieZeileGetroffen`, `zeichneRegisterleiste`, `zeichneInfoLeiste`, `reiterGetroffen`, `legendenLeisteHoehe`, `registerHoehe`, `leereBandCounts` | 13 Namen werden von aussen gelesen; die übrigen (u. a. `HATCH_SPACING`, `schraffiere`, alle `DEMO_*`, `LEGENDE_*` und `LEISTE_*`) sind modulintern. Beherbergt seit dem Onboarding-Umbau auch den neunstufigen Legendenaufbau (`demoLegende` und seine Zeichenroutinen) und beide Register am unteren Rand |
 | 4 | `kartendekor.js` | 234 | `zeichneRoute`, `zeichneMassstabsleiste`, `zeichneScrollFortschritt` | — von aussen gebraucht werden nur die drei Zeichenfunktionen; intern `haversineMeter`, `MASSSTAB_SCHRITTE`, der Routenpuffer und seine Helfer (`routenPufferBereit`, `routenStufenZuege`, `routenStufenAlpha`, alle `ROUTE_*`). `zeichneScrollFortschritt` liegt hier und nicht im DOM, weil die Reiter der Register an derselben Stelle sitzen und davor liegen müssen |
-| 5 | `ortsveraenderung.js` | 479 | `zeichneOrtsveraenderung` | **Drei Namen gehen nach aussen**: die Zeichenfunktion, `ortsvergleichAnnotationen` für `sonifikation.js` und `OV_KAPITEL_ZAHL`, aus der `spine-horizontal.js` die Abspieldauer rechnet. Die Ansicht bringt Reihenfolge, Linienlayout und gemeinsame Kreis-Skala (`ovBerechneLayout`) selbst mit, `draw()` übergibt nur `grafikFortschritt`. Alles Übrige ist modulintern |
-| 6 | `spine-horizontal.js` | 342 | `zeichneSpineHorizontal`, `toggleGrafikPlay`, `setzeKapitelAnsichtModus`, `setzeGrafikZurueck`, `stelleSpineDatenBereit`, `spineEintraegeFuer`, `aktuelleGrafikAnimationDauer`, `aktualisiereGrafikFortschritt` | `grafikSpielt`, `grafikFortschritt`, `grafikPlayAusblendStart` — intern: beide Spine-Caches, alle `SPINE_*`, `spineLayout` |
+| 5 | `ortsveraenderung.js` | 462 | `zeichneOrtsveraenderung` | **Drei Namen gehen nach aussen**: die Zeichenfunktion, `ortsvergleichAnnotationen` für `sonifikation.js` und `OV_KAPITEL_ZAHL`, aus der `spine-horizontal.js` die Abspieldauer rechnet. Die Ansicht bringt Reihenfolge, Linienlayout und gemeinsame Kreis-Skala (`ovBerechneLayout`) selbst mit, `draw()` übergibt nur `grafikFortschritt`. Alles Übrige ist modulintern |
+| 6 | `spine-horizontal.js` | 376 | `zeichneSpineHorizontal`, `toggleGrafikPlay`, `setzeKapitelAnsichtModus`, `setzeGrafikZurueck`, `stelleSpineDatenBereit`, `spineEintraegeFuer`, `aktuelleGrafikAnimationDauer`, `aktualisiereGrafikFortschritt` | `grafikSpielt`, `grafikFortschritt`, `grafikPlayAusblendStart` — intern: beide Spine-Caches, alle `SPINE_*`, `spineLayout` |
 | 7 | `fotomarker.js` | 181 | `zeichneFotoMarker`, `merkeKartenlage`, `oeffneFotoPopup`, `schliesseFotoPopup` | `fotoMarkerListe`, `letzteActiveBbox`, `letzterFotoOffsetX/Y`, `FOTO_MARKER_TREFFER_RADIUS`. Zeichnet einen Punkt mit hellem Kern; Grösse abgeleitet aus `FWERT_PUNKT_DURCHMESSER`, Beschriftung über `zeichneKreisLabels` |
 | 8 | `annotationsbox.js` | 98 | `annotationBoxPosition` | `ANNOTATION_BOX_POSITIONEN` — intern u. a. `annotationBoxPositionCache` |
 | 9 | `dom-aufbau.js` | 116 | `baueKapitelRegister`, `baueKapitelZeilen`, `kapitelBezeichnung`, `baueKartenMarkierungen`, `baueStationsMarker`, `baueZwischenMarker` | — (baut nur DOM, hält keinen Zustand) |
@@ -343,6 +343,17 @@ Achse, der Ortsvergleich als Kapitelzähler 1..18. Was gerade läuft, beantworte
 Regel, gelesen von der zweiten Klemme, von `draw()`, von der Abspieldauer und
 vom Ton, den der Ortsvergleich als einziger nicht hat.
 
+**Die Spine sitzt je Kapitel auf eigener Höhe.** `spineLayout()` drückt die
+Linie so weit nach unten, wie Kreise und Rückkehrbögen darüber Platz brauchen,
+und so weit nach oben, wie die Beschriftungszeilen darunter fordern; passt
+beides, bleibt sie mittig. **Die Kapitel aus `SPINE_LINIE_GRUPPE` (04 bis 07)
+teilen sich die tiefste ihrer vier Höhen**, weil die Grafik beim Wechsel zwischen
+ihnen sonst sprang: Ihre weit gespannten Rückkehrbögen fordern je eine andere
+Lage. `spineEigenesLayout()` rechnet, was ein Kapitel für sich braucht,
+`spineLayout()` legt den gemeinsamen Tiefstand darüber — getrennt, weil sonst
+jedes Gruppenkapitel die anderen im Kreis abfragte. In Kapitel 5 rücken dadurch
+die untersten Beschriftungen aus dem Bild.
+
 **„Plan"/„Graph" schaltet je nach Ort etwas anderes um**, und die
 Fallunterscheidung steht an genau einer Stelle: `waehleAnsichtsModus()` in
 `uebersichtsrouten.js`, dem einzigen Einstieg beider Knöpfe. Im Kapitel — auch
@@ -364,8 +375,14 @@ die zweite Klemme.
 Reihenfolge ihres ersten Auftretens im Buch — nicht mehr geografisch. Weil
 diese Reihenfolge nach Kapiteln aufsteigt, kommen die Orte beim Abspielen von
 links nach rechts dazu, wie die Einträge der Spine unter ihrem Playhead. Über
-dem Kreis stehen Erläuterung und Datenzeile, darunter Ortsname und die Nummer
-des Kapitels, in dem der Ort zuletzt vorkam (`ovStand().letztes`). Statt des
+dem Kreis steht die Erläuterung, darunter Ortsname und die Nummer des Kapitels,
+in dem der Ort zuletzt vorkam (`ovStand().letztes`). **Beide Blöcke hängen am grössten
+Kreis** (`textBasis` und `labelBasis` im Layout), nicht am eigenen, wachsenden:
+Sie stehen beim Abspielen still wie die Labels der Spine, und die
+Zuführungslinien wachsen zu ihnen hin. Oben wie unten stehen die Orte dabei
+abwechselnd in zwei Reihen (`textReihe`, `labelReihe`) — auf einer Höhe stiessen
+die Blöcke benachbarter Kreise aneinander. Den Abstand rechnet für alle vier
+Fälle `ovReihenAbstand()`. Statt des
 100-px-Deckels rechnet `ovBerechneLayout()` eine **gemeinsame `kreisSkala`**:
 alle sieben Bänder liegen zwischen 45 und 137 Annotationen und sässen sonst
 samt und sonders am Anschlag. Die Skala nimmt den schärferen von zwei Werten —
