@@ -712,7 +712,7 @@
       "intensitaet": 2,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 0
@@ -732,7 +732,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": false,
       "fWertType": null,
       "station": 0
@@ -813,7 +813,7 @@
       "intensitaet": 3,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 0
@@ -834,7 +834,7 @@
       "intensitaet": 3,
       "f_wert": "koerper_als_sensor",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "koerper_als_sensor",
       "station": 0
@@ -894,7 +894,7 @@
       "intensitaet": 2,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 0
@@ -915,7 +915,7 @@
       "intensitaet": 2,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 0
@@ -935,7 +935,7 @@
       "intensitaet": 2,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 0
@@ -1052,7 +1052,7 @@
       "intensitaet": 1,
       "f_wert": null,
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": false,
       "fWertType": null,
       "station": 0
@@ -1128,7 +1128,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 0
@@ -1147,7 +1147,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 0
@@ -1187,7 +1187,7 @@
       "intensitaet": 2,
       "f_wert": "koerper_als_sensor",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": true,
       "fWertType": "koerper_als_sensor",
       "station": 0
@@ -1207,7 +1207,7 @@
       "intensitaet": 3,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 0
@@ -1227,7 +1227,7 @@
       "intensitaet": null,
       "f_wert": null,
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": false,
       "fWertType": null,
       "station": 0
@@ -1247,7 +1247,7 @@
       "intensitaet": 2,
       "f_wert": "koerper_als_sensor",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "koerper_als_sensor",
       "station": 0
@@ -1286,7 +1286,7 @@
       "intensitaet": 3,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 0
@@ -1385,7 +1385,7 @@
       "intensitaet": 1,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": null
@@ -1424,7 +1424,7 @@
       "intensitaet": 1,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": null
@@ -1444,7 +1444,7 @@
       "intensitaet": 2,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": null
@@ -1519,7 +1519,7 @@
       "intensitaet": null,
       "f_wert": null,
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": false,
       "fWertType": null,
       "station": null
@@ -1540,7 +1540,7 @@
       "intensitaet": null,
       "f_wert": "emotion_faerbt_raum",
       "perspektive": "figur",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": true,
       "fWertType": "emotion_faerbt_raum",
       "station": null
@@ -1580,7 +1580,7 @@
       "intensitaet": null,
       "f_wert": "emotion_faerbt_raum",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "emotion_faerbt_raum",
       "station": 0
@@ -1619,7 +1619,7 @@
       "intensitaet": null,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 0
@@ -1701,7 +1701,7 @@
       "intensitaet": null,
       "f_wert": null,
       "perspektive": "figur",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 0
@@ -1759,7 +1759,7 @@
       "intensitaet": 1,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 0
@@ -1779,7 +1779,7 @@
       "intensitaet": null,
       "f_wert": "emotion_faerbt_raum",
       "perspektive": "figur",
-      "category": "stimmung_emotion",
+      "category": "raum_umwelt",
       "hasFwert": true,
       "fWertType": "emotion_faerbt_raum",
       "station": 100
@@ -1874,7 +1874,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 1
@@ -1894,7 +1894,7 @@
       "intensitaet": 3,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 1
@@ -1915,7 +1915,7 @@
       "intensitaet": null,
       "f_wert": "emotion_faerbt_raum",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": true,
       "fWertType": "emotion_faerbt_raum",
       "station": 1
@@ -2047,7 +2047,7 @@
       "intensitaet": 1,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 2
@@ -2085,7 +2085,7 @@
       "intensitaet": 1,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 2
@@ -2105,7 +2105,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 2
@@ -2143,7 +2143,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 2
@@ -2202,7 +2202,7 @@
       "intensitaet": 3,
       "f_wert": "koerper_als_sensor",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "koerper_als_sensor",
       "station": 2
@@ -2222,7 +2222,7 @@
       "intensitaet": 2,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 2
@@ -2452,7 +2452,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "stimmung_emotion",
+      "category": "raum_umwelt",
       "hasFwert": false,
       "fWertType": null,
       "station": null
@@ -2531,7 +2531,7 @@
       "intensitaet": 2,
       "f_wert": "koerper_als_sensor",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "koerper_als_sensor",
       "station": 2
@@ -2551,7 +2551,7 @@
       "intensitaet": null,
       "f_wert": null,
       "perspektive": "figur",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 2
@@ -2609,7 +2609,7 @@
       "intensitaet": 1,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": false,
       "fWertType": null,
       "station": 2
@@ -2649,7 +2649,7 @@
       "intensitaet": null,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 2
@@ -2691,7 +2691,7 @@
       "intensitaet": null,
       "f_wert": "emotion_faerbt_raum",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": true,
       "fWertType": "emotion_faerbt_raum",
       "station": 101
@@ -2846,7 +2846,7 @@
       "intensitaet": 1,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -2866,7 +2866,7 @@
       "intensitaet": 2,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 4
@@ -2885,7 +2885,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -2904,7 +2904,7 @@
       "intensitaet": 1,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -2925,7 +2925,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -3002,7 +3002,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -3021,7 +3021,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -3041,7 +3041,7 @@
       "intensitaet": null,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 4
@@ -3098,7 +3098,7 @@
       "intensitaet": 1,
       "f_wert": null,
       "perspektive": "figur",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -3155,7 +3155,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -3174,7 +3174,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -3194,7 +3194,7 @@
       "intensitaet": 2,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "stimmung_emotion",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 4
@@ -3214,7 +3214,7 @@
       "intensitaet": 1,
       "f_wert": "ort_loest_emotion_aus",
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": true,
       "fWertType": "ort_loest_emotion_aus",
       "station": 4
@@ -3234,7 +3234,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -3404,7 +3404,7 @@
       "intensitaet": 1,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -3463,7 +3463,7 @@
       "intensitaet": 1,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -3482,7 +3482,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -3520,7 +3520,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "raum_umwelt",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -3559,7 +3559,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -3596,7 +3596,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
@@ -3615,7 +3615,7 @@
       "intensitaet": 2,
       "f_wert": null,
       "perspektive": "erzaehler",
-      "category": "stimmung_emotion",
+      "category": "gesellschaft_soziales",
       "hasFwert": false,
       "fWertType": null,
       "station": 4
